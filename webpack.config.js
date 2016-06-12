@@ -7,15 +7,23 @@ var scssIncludePaths = [].concat(bourbon.includePaths).concat(neat.includePaths)
 
 
 module.exports = {
-    entry: [
-        'babel-polyfill',
-        './src/f3-demo/index.js'
-    ],
+    entry: {
+        demo: [
+            'babel-polyfill',
+            './src/f3-demo/index.js'
+        ]
+    },
     output: {
         publicPath: '/',
-        filename: './demo/demo.js'
+        filename: './demo/[name].js'
     },
     devtool: 'source-map',
+    devServer: {
+        host: 'localhost',
+        port: 8333,
+        historyApiFallback: true,
+        contentBase: 'demo'
+    },
     module: {
         loaders: [
             {
@@ -23,15 +31,21 @@ module.exports = {
                 test: /\.js$/,
                 include: path.join(__dirname, 'src'),
                 query: {
-                    plugins: ['transform-runtime'],
-                    presets: ['es2015', 'stage-0'],  
+                    plugins: [
+                        'transform-runtime',
+                        'transform-strict-mode'
+                    ],
+                    presets: [
+                        'es2015',
+                        'stage-0'
+                    ],
                 }
             },
             {
+                test: /\.scss$/,
                 loader: 'style!css!sass?' + JSON.stringify({
                     includePaths: scssIncludePaths
-                }),
-                test: /\.scss$/
+                })
             }
         ]
     },
