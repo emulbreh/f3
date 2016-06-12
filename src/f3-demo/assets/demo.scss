@@ -1,0 +1,19 @@
+@import 'bourbon';
+@import 'neat';
+
+html, body{
+	margin: 0px;
+	padding: 0px;
+	height: 100%;
+}
+
+.Root{
+	height: 100%;
+	@include outer-container();
+}
+
+.Window {
+	@include span-columns(12);
+	height: 100%;
+	border: 5px solid #ccc;
+}
