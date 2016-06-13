@@ -1,7 +1,7 @@
 import EventEmitter from 'wolfy87-eventemitter';
 import {ComponentStructureError} from './errors';
 import {identity} from './utils';
-import {toRenderer} from './adapters';
+import {toRenderer, toString} from './adapters';
 
 
 export class Component extends EventEmitter{
@@ -122,6 +122,7 @@ export class Root extends Container() {
         super({element: document.body, ...config});
     }
 }
+
 
 export class Window extends Container() {
     constructor({...config}={}) {

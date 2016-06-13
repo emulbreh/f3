@@ -8162,6 +8162,7 @@
 	
 	list.append(3.333);
 	list.append(4.444);
+	list.append(5.555);
 	list.removeAt(1);
 	list.reverse();
 	window.list = list;
@@ -8210,19 +8211,21 @@
 	f.foo = 55;
 	f.bar = 1;
 	console.log("xx", f.foo);
-	
-	var router = new f3.Router();
-	router.addRoute('/foo/', function (params) {
-	    return console.log('foo', params);
-	});
-	router.addRoute('/foo/{id}/', function (params) {
-	    return console.log('foo', params);
-	});
-	router.call('/foo/');
-	router.call('/foo/123/');
+	container.addComponent(new f3.Display({
+	    model: '<a href="/bar">/bar</a>'
+	}));
+	container.addComponent(new f3.Display({
+	    model: '<a href="/foo">/foo</a>'
+	}));
 	
 	var app = new f3.Application();
-	app.setPage(container);
+	app.addPage('/', new f3.Page({ root: container }));
+	app.addPage('/foo', new f3.Page({
+	    root: new f3.Display({ model: "foo page" })
+	}));
+	app.addPage('/bar', new f3.Page({
+	    root: new f3.Display({ model: "bar page" })
+	}));
 
 /***/ },
 /* 300 */
@@ -9934,6 +9937,12 @@
 	    return _application.Router;
 	  }
 	});
+	Object.defineProperty(exports, 'Page', {
+	  enumerable: true,
+	  get: function get() {
+	    return _application.Page;
+	  }
+	});
 
 /***/ },
 /* 388 */
@@ -10327,7 +10336,7 @@
 	
 	        var model = _ref3.model;
 	        var _ref3$renderer = _ref3.renderer;
-	        var renderer = _ref3$renderer === undefined ? toString : _ref3$renderer;
+	        var renderer = _ref3$renderer === undefined ? _adapters.toString : _ref3$renderer;
 	        var config = (0, _objectWithoutProperties3.default)(_ref3, ['model', 'renderer']);
 	        (0, _classCallCheck3.default)(this, Display);
 	
@@ -13358,7 +13367,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.Application = exports.Router = exports.NotFoundError = undefined;
+	exports.Application = exports.Router = exports.NotFoundError = exports.Page = undefined;
 	
 	var _typeof2 = __webpack_require__(328);
 	
@@ -13388,6 +13397,10 @@
 	
 	var _inherits3 = _interopRequireDefault(_inherits2);
 	
+	var _objectWithoutProperties2 = __webpack_require__(419);
+	
+	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+	
 	var _classCallCheck2 = __webpack_require__(326);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
@@ -13406,14 +13419,20 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Page = function () {
-	    function Page() {
+	var Page = exports.Page = function () {
+	    function Page(_ref) {
+	        var root = _ref.root;
+	        var config = (0, _objectWithoutProperties3.default)(_ref, ['root']);
 	        (0, _classCallCheck3.default)(this, Page);
+	
+	        this.root = root;
 	    }
 	
 	    (0, _createClass3.default)(Page, [{
 	        key: 'open',
-	        value: function open() {}
+	        value: function open(win, params) {
+	            win.content = this.root;
+	        }
 	    }]);
 	    return Page;
 	}();
@@ -13433,10 +13452,10 @@
 	    (0, _inherits3.default)(Router, _EventEmitter);
 	
 	    function Router() {
-	        var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	        var _ref2 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	
-	        var _ref$routes = _ref.routes;
-	        var routes = _ref$routes === undefined ? [] : _ref$routes;
+	        var _ref2$routes = _ref2.routes;
+	        var routes = _ref2$routes === undefined ? [] : _ref2$routes;
 	        (0, _classCallCheck3.default)(this, Router);
 	
 	        var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Router).call(this));
@@ -13485,6 +13504,7 @@
 	                var _loop = function _loop() {
 	                    var route = _step.value;
 	
+	                    console.log(url, route.regex, route.pattern);
 	                    var match = route.regex.exec(url);
 	                    if (match) {
 	                        var _ret2 = function () {
@@ -13535,7 +13555,7 @@
 	            var route = _match2[0];
 	            var params = _match2[1];
 	
-	            route.action(params);
+	            route.action(url, params);
 	        }
 	    }]);
 	    return Router;
@@ -13553,10 +13573,10 @@
 	    (0, _inherits3.default)(Application, _EventEmitter2);
 	
 	    function Application() {
-	        var _ref2 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	        var _ref3 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	
-	        var root = _ref2.root;
-	        var router = _ref2.router;
+	        var root = _ref3.root;
+	        var router = _ref3.router;
 	        (0, _classCallCheck3.default)(this, Application);
 	
 	        var _this4 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Application).call(this));
@@ -13565,13 +13585,39 @@
 	        _this4.router = router || new Router();
 	        _this4.window = new _components.Window();
 	        _this4.root.addComponent(_this4.window);
+	
+	        window.addEventListener('popstate', function (e) {
+	            try {
+	                _this4.router.call(window.location.pathname);
+	            } catch (e) {
+	                if (e instanceof NotFoundError) {
+	                    console.log(e);
+	                }
+	                throw e;
+	            }
+	            e.preventDefault();
+	        });
+	        window.addEventListener('click', function (e) {
+	            if (e.target.tagName == 'A') {
+	                e.preventDefault();
+	                _this4.router.call(e.target.pathname);
+	            }
+	        });
+	        window.addEventListener('load', function (e) {
+	            _this4.router.call(window.location.pathname);
+	        });
 	        return _this4;
 	    }
 	
 	    (0, _createClass3.default)(Application, [{
-	        key: 'setPage',
-	        value: function setPage(page) {
-	            this.window.content = page;
+	        key: 'addPage',
+	        value: function addPage(route, page) {
+	            var _this5 = this;
+	
+	            this.router.addRoute(route, function (url, params) {
+	                page.open(_this5.window, params);
+	                window.history.pushState(params, null, url);
+	            });
 	        }
 	    }]);
 	    return Application;
@@ -13696,7 +13742,7 @@
 	
 	
 	// module
-	exports.push([module.id, "html {\n  box-sizing: border-box; }\n\n*, *::after, *::before {\n  box-sizing: inherit; }\n\nhtml, body {\n  margin: 0px;\n  padding: 0px;\n  height: 100%; }\n\n.Root {\n  height: 100%;\n  max-width: 1200px;\n  margin-left: auto;\n  margin-right: auto; }\n  .Root::after {\n    clear: both;\n    content: \"\";\n    display: table; }\n\n.Window {\n  float: left;\n  display: block;\n  margin-right: 2.35765%;\n  width: 100%;\n  height: 100%;\n  border: 5px solid #ccc; }\n  .Window:last-child {\n    margin-right: 0; }\n", ""]);
+	exports.push([module.id, "html {\n  box-sizing: border-box; }\n\n*, *::after, *::before {\n  box-sizing: inherit; }\n\nhtml, body {\n  margin: 0px;\n  padding: 0px;\n  height: 100%;\n  background-color: #2D1429; }\n\n.Root {\n  height: 100%;\n  max-width: 1200px;\n  margin-left: auto;\n  margin-right: auto;\n  background-color: #fff; }\n  .Root::after {\n    clear: both;\n    content: \"\";\n    display: table; }\n\n.Window {\n  float: left;\n  display: block;\n  margin-right: 2.35765%;\n  width: 100%;\n  height: 100%;\n  border: 5px solid #f70; }\n  .Window:last-child {\n    margin-right: 0; }\n", ""]);
 	
 	// exports
 

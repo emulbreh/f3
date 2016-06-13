@@ -32,6 +32,7 @@ container.addComponent(new f3.List({
 
 list.append(3.333);
 list.append(4.444);
+list.append(5.555);
 list.removeAt(1);
 list.reverse();
 window.list = list;
@@ -63,12 +64,18 @@ f.on('PropertyChanged', (e) => console.log(e));
 f.foo = 55;
 f.bar = 1;
 console.log("xx", f.foo);
-
-let router = new f3.Router();
-router.addRoute('/foo/', (params) => console.log('foo', params));
-router.addRoute('/foo/{id}/', (params) => console.log('foo', params));
-router.call('/foo/');
-router.call('/foo/123/');
+container.addComponent(new f3.Display({
+    model: '<a href="/bar">/bar</a>'
+}));
+container.addComponent(new f3.Display({
+    model: '<a href="/foo">/foo</a>'
+}));
 
 let app = new f3.Application();
-app.setPage(container);
+app.addPage('/', new f3.Page({root: container}));
+app.addPage('/foo', new f3.Page({
+    root: new f3.Display({model: "foo page"})
+}));
+app.addPage('/bar', new f3.Page({
+    root: new f3.Display({model: "bar page"})
+}));

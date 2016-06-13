@@ -3,9 +3,13 @@ import {Root, Window} from './components';
 import {F3Error} from './errors';
 
 
-class Page {
-    open() {
+export class Page {
+    constructor({root, ...config}) {
+        this.root = root;
+    }
 
+    open(win, params) {
+        win.content = this.root;
     }
 }
 
@@ -52,6 +56,7 @@ export class Router extends EventEmitter {
 
     match(url) {
         for (let route of this.routes) {
+            console.log(url, route.regex, route.pattern);
             let match = route.regex.exec(url);
             if (match) {
                 let params = {};
@@ -66,7 +71,7 @@ export class Router extends EventEmitter {
 
     call(url) {
         let [route, params] = this.match(url);
-        route.action(params);
+        route.action(url, params);
     }
 }
 
@@ -78,10 +83,34 @@ export class Application extends EventEmitter {
         this.router = router || new Router();
         this.window = new Window();
         this.root.addComponent(this.window);
+
+        window.addEventListener('popstate', (e) => {
+            try {
+                this.router.call(window.location.pathname);
+            }
+            catch(e) {
+                if (e instanceof NotFoundError) {
+                    console.log(e);
+                }
+                throw e;
+            }
+            e.preventDefault();
+        });
+        window.addEventListener('click', (e) => {
+            if (e.target.tagName == 'A') {
+                e.preventDefault();
+                this.router.call(e.target.pathname);
+            }
+        });
+        window.addEventListener('load', (e) => {
+            this.router.call(window.location.pathname);
+        });
     }
 
-    setPage(page) {
-        this.window.content = page;
+    addPage(route, page) {
+        this.router.addRoute(route, (url, params) => {
+            page.open(this.window, params);
+            window.history.pushState(params, null, url);
+        });
     }
-
 }
