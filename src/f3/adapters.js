@@ -1,5 +1,6 @@
 import {F3Error} from './errors';
 import {Component} from './components';
+import {Action} from './actions';
 import {sprintf} from 'sprintf';
 
 export class AdapterError extends F3Error {
@@ -18,6 +19,19 @@ export function toRenderer(r) {
         return r
     }
     throw new AdapterError(`Cannot adapt ${r} to renderer`);
+}
+
+export function toAction(component, a) {
+    if (a instanceof Action) {
+        return a;
+    }
+    if (a instanceof Function) {
+        return new Action({action: a});
+    }
+    if (typeof(a) == 'string') {
+        return toAction(component, () => component.app.router.call(a));
+    }
+    throw new AdapterError(`Cannot adapt ${a} to action`);
 }
 
 export function toComponentFactory(f, args) {

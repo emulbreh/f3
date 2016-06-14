@@ -56,7 +56,6 @@ export class Router extends EventEmitter {
 
     match(url) {
         for (let route of this.routes) {
-            console.log(url, route.regex, route.pattern);
             let match = route.regex.exec(url);
             if (match) {
                 let params = {};
@@ -77,19 +76,20 @@ export class Router extends EventEmitter {
 
 
 export class Application extends EventEmitter {
-    constructor({root, router}={}) {
+    constructor({win, router}={}) {
         super();
-        this.root = root || new Root();
+        this.root = new Root({app: this});
         this.router = router || new Router();
-        this.window = new Window();
-        this.root.addComponent(this.window);
+        this.window = this.root.addComponent(win || new Window());
 
         window.addEventListener('popstate', (e) => {
+            console.log(e, window.location.pathname);
             try {
                 this.router.call(window.location.pathname);
             }
             catch(e) {
                 if (e instanceof NotFoundError) {
+                    // FIXME
                     console.log(e);
                 }
                 throw e;

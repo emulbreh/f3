@@ -64,11 +64,21 @@ f.on('PropertyChanged', (e) => console.log(e));
 f.foo = 55;
 f.bar = 1;
 console.log("xx", f.foo);
-container.addComponent(new f3.Display({
-    model: '<a href="/bar">/bar</a>'
+container.addComponent(new f3.Button({
+    label: 'Bar',
+    action: '/bar'
 }));
-container.addComponent(new f3.Display({
-    model: '<a href="/foo">/foo</a>'
+container.addComponent(new f3.Button({
+    label: 'Foo',
+    action: '/foo'
+}));
+container.addComponent(new f3.Button({
+    label: 'Show data',
+    action: new f3.Action({
+        action: () => {
+            console.log(form.value);
+        }
+    })
 }));
 
 let app = new f3.Application();

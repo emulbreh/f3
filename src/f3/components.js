@@ -1,7 +1,7 @@
 import EventEmitter from 'wolfy87-eventemitter';
 import {ComponentStructureError} from './errors';
 import {identity} from './utils';
-import {toRenderer, toString} from './adapters';
+import {toRenderer, toString, toAction} from './adapters';
 
 
 export class Component extends EventEmitter{
@@ -13,6 +13,17 @@ export class Component extends EventEmitter{
             el.style.cssText = cssText;
         }
         this.parent = null;
+    }
+
+    get root() {
+        if (!this.parent) {
+            throw new ComponentStructureError(`${this} doesn't have a root.`);
+        }
+        return this.parent.root;
+    }
+
+    get app() {
+        return this.root.app;
     }
 
     toString() {
@@ -48,7 +59,6 @@ export var Container = defineMixin((base=Component) => class Container extends b
     }
 
     *getComponents() {
-        console.log(this);
         yield* super.getComponents();
         yield* this.children;
     }
@@ -75,6 +85,7 @@ export var Container = defineMixin((base=Component) => class Container extends b
             this.children.splice(index, 0, component);
         }
         component.parent = this;
+        return component;
     }
 
     addComponents(components) {
@@ -118,8 +129,17 @@ export class Display extends Component {
 }
 
 export class Root extends Container() {
-    constructor({...config}={}) {
+    constructor({app, ...config}={}) {
         super({element: document.body, ...config});
+        this._app = app;
+    }
+
+    get app() {
+        return this._app;
+    }
+
+    get root() {
+        return this;
     }
 }
 
@@ -145,4 +165,20 @@ export class Window extends Container() {
         return this._component;
     }
 
+}
+
+
+export class Button extends Component {
+    constructor({action, label, ...config}) {
+        super({tagName: 'button', ...config});
+        this.action = toAction(this, action);
+        this.label = label;
+        this.element.addEventListener('click', (event) => {
+            this.action.perform({event});
+        });
+    }
+
+    set label(text) {
+        this.element.innerHTML = text;
+    }
 }

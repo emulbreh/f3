@@ -8135,7 +8135,7 @@
 	
 	var f3 = _interopRequireWildcard(_f);
 	
-	__webpack_require__(442);
+	__webpack_require__(443);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -8211,11 +8211,21 @@
 	f.foo = 55;
 	f.bar = 1;
 	console.log("xx", f.foo);
-	container.addComponent(new f3.Display({
-	    model: '<a href="/bar">/bar</a>'
+	container.addComponent(new f3.Button({
+	    label: 'Bar',
+	    action: '/bar'
 	}));
-	container.addComponent(new f3.Display({
-	    model: '<a href="/foo">/foo</a>'
+	container.addComponent(new f3.Button({
+	    label: 'Foo',
+	    action: '/foo'
+	}));
+	container.addComponent(new f3.Button({
+	    label: 'Show data',
+	    action: new f3.Action({
+	        action: function action() {
+	            console.log(form.value);
+	        }
+	    })
 	}));
 	
 	var app = new f3.Application();
@@ -9844,6 +9854,12 @@
 	    return _components.Display;
 	  }
 	});
+	Object.defineProperty(exports, 'Button', {
+	  enumerable: true,
+	  get: function get() {
+	    return _components.Button;
+	  }
+	});
 	
 	var _inputs = __webpack_require__(428);
 	
@@ -9943,6 +9959,15 @@
 	    return _application.Page;
 	  }
 	});
+	
+	var _actions = __webpack_require__(442);
+	
+	Object.defineProperty(exports, 'Action', {
+	  enumerable: true,
+	  get: function get() {
+	    return _actions.Action;
+	  }
+	});
 
 /***/ },
 /* 388 */
@@ -10003,7 +10028,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.Window = exports.Root = exports.Display = exports.Panel = exports.Container = exports.Component = undefined;
+	exports.Button = exports.Window = exports.Root = exports.Display = exports.Panel = exports.Container = exports.Component = undefined;
 	
 	var _extends2 = __webpack_require__(382);
 	
@@ -10122,6 +10147,19 @@
 	                }
 	            }, getComponents, this);
 	        })
+	    }, {
+	        key: 'root',
+	        get: function get() {
+	            if (!this.parent) {
+	                throw new _errors.ComponentStructureError(this + ' doesn\'t have a root.');
+	            }
+	            return this.parent.root;
+	        }
+	    }, {
+	        key: 'app',
+	        get: function get() {
+	            return this.root.app;
+	        }
 	    }]);
 	    return Component;
 	}(_wolfy87Eventemitter2.default);
@@ -10163,13 +10201,12 @@
 	                    while (1) {
 	                        switch (_context3.prev = _context3.next) {
 	                            case 0:
-	                                console.log(this);
-	                                return _context3.delegateYield((0, _get3.default)((0, _getPrototypeOf2.default)(Container.prototype), 'getComponents', this).call(this), 't0', 2);
+	                                return _context3.delegateYield((0, _get3.default)((0, _getPrototypeOf2.default)(Container.prototype), 'getComponents', this).call(this), 't0', 1);
+	
+	                            case 1:
+	                                return _context3.delegateYield(this.children, 't1', 2);
 	
 	                            case 2:
-	                                return _context3.delegateYield(this.children, 't1', 3);
-	
-	                            case 3:
 	                            case 'end':
 	                                return _context3.stop();
 	                        }
@@ -10272,6 +10309,7 @@
 	                    this.children.splice(index, 0, component);
 	                }
 	                component.parent = this;
+	                return component;
 	            }
 	        }, {
 	            key: 'addComponents',
@@ -10366,11 +10404,27 @@
 	    function Root() {
 	        var _ref4 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	
-	        var config = (0, _objectWithoutProperties3.default)(_ref4, []);
+	        var app = _ref4.app;
+	        var config = (0, _objectWithoutProperties3.default)(_ref4, ['app']);
 	        (0, _classCallCheck3.default)(this, Root);
-	        return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Root).call(this, (0, _extends3.default)({ element: document.body }, config)));
+	
+	        var _this5 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Root).call(this, (0, _extends3.default)({ element: document.body }, config)));
+	
+	        _this5._app = app;
+	        return _this5;
 	    }
 	
+	    (0, _createClass3.default)(Root, [{
+	        key: 'app',
+	        get: function get() {
+	            return this._app;
+	        }
+	    }, {
+	        key: 'root',
+	        get: function get() {
+	            return this;
+	        }
+	    }]);
 	    return Root;
 	}(Container());
 	
@@ -10407,6 +10461,34 @@
 	    }]);
 	    return Window;
 	}(Container());
+	
+	var Button = exports.Button = function (_Component2) {
+	    (0, _inherits3.default)(Button, _Component2);
+	
+	    function Button(_ref6) {
+	        var action = _ref6.action;
+	        var label = _ref6.label;
+	        var config = (0, _objectWithoutProperties3.default)(_ref6, ['action', 'label']);
+	        (0, _classCallCheck3.default)(this, Button);
+	
+	        var _this7 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Button).call(this, (0, _extends3.default)({ tagName: 'button' }, config)));
+	
+	        _this7.action = (0, _adapters.toAction)(_this7, action);
+	        _this7.label = label;
+	        _this7.element.addEventListener('click', function (event) {
+	            _this7.action.perform({ event: event });
+	        });
+	        return _this7;
+	    }
+	
+	    (0, _createClass3.default)(Button, [{
+	        key: 'label',
+	        set: function set(text) {
+	            this.element.innerHTML = text;
+	        }
+	    }]);
+	    return Button;
+	}(Component);
 
 /***/ },
 /* 390 */
@@ -12338,11 +12420,14 @@
 	
 	exports.toString = toString;
 	exports.toRenderer = toRenderer;
+	exports.toAction = toAction;
 	exports.toComponentFactory = toComponentFactory;
 	
 	var _errors = __webpack_require__(388);
 	
 	var _components = __webpack_require__(389);
+	
+	var _actions = __webpack_require__(442);
 	
 	var _sprintf = __webpack_require__(427);
 	
@@ -12373,6 +12458,21 @@
 	        return r;
 	    }
 	    throw new AdapterError('Cannot adapt ' + r + ' to renderer');
+	}
+	
+	function toAction(component, a) {
+	    if (a instanceof _actions.Action) {
+	        return a;
+	    }
+	    if (a instanceof Function) {
+	        return new _actions.Action({ action: a });
+	    }
+	    if (typeof a == 'string') {
+	        return toAction(component, function () {
+	            return component.app.router.call(a);
+	        });
+	    }
+	    throw new AdapterError('Cannot adapt ' + a + ' to action');
 	}
 	
 	function toComponentFactory(f, args) {
@@ -13504,7 +13604,6 @@
 	                var _loop = function _loop() {
 	                    var route = _step.value;
 	
-	                    console.log(url, route.regex, route.pattern);
 	                    var match = route.regex.exec(url);
 	                    if (match) {
 	                        var _ret2 = function () {
@@ -13575,22 +13674,23 @@
 	    function Application() {
 	        var _ref3 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	
-	        var root = _ref3.root;
+	        var win = _ref3.win;
 	        var router = _ref3.router;
 	        (0, _classCallCheck3.default)(this, Application);
 	
 	        var _this4 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Application).call(this));
 	
-	        _this4.root = root || new _components.Root();
+	        _this4.root = new _components.Root({ app: _this4 });
 	        _this4.router = router || new Router();
-	        _this4.window = new _components.Window();
-	        _this4.root.addComponent(_this4.window);
+	        _this4.window = _this4.root.addComponent(win || new _components.Window());
 	
 	        window.addEventListener('popstate', function (e) {
+	            console.log(e, window.location.pathname);
 	            try {
 	                _this4.router.call(window.location.pathname);
 	            } catch (e) {
 	                if (e instanceof NotFoundError) {
+	                    // FIXME
 	                    console.log(e);
 	                }
 	                throw e;
@@ -13711,13 +13811,77 @@
 /* 442 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Action = undefined;
+	
+	var _getPrototypeOf = __webpack_require__(300);
+	
+	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+	
+	var _classCallCheck2 = __webpack_require__(326);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _createClass2 = __webpack_require__(420);
+	
+	var _createClass3 = _interopRequireDefault(_createClass2);
+	
+	var _possibleConstructorReturn2 = __webpack_require__(327);
+	
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+	
+	var _inherits2 = __webpack_require__(374);
+	
+	var _inherits3 = _interopRequireDefault(_inherits2);
+	
+	var _wolfy87Eventemitter = __webpack_require__(424);
+	
+	var _wolfy87Eventemitter2 = _interopRequireDefault(_wolfy87Eventemitter);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Action = exports.Action = function (_EventEmitter) {
+	    (0, _inherits3.default)(Action, _EventEmitter);
+	
+	    function Action() {
+	        var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	
+	        var name = _ref.name;
+	        var action = _ref.action;
+	        (0, _classCallCheck3.default)(this, Action);
+	
+	        var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Action).call(this));
+	
+	        _this.name = name;
+	        _this.action = action;
+	        return _this;
+	    }
+	
+	    (0, _createClass3.default)(Action, [{
+	        key: 'perform',
+	        value: function perform(target) {
+	            this.action(target);
+	            this.emit('Performed', { target: target, action: this });
+	        }
+	    }]);
+	    return Action;
+	}(_wolfy87Eventemitter2.default);
+
+/***/ },
+/* 443 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(443);
+	var content = __webpack_require__(444);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(445)(content, {});
+	var update = __webpack_require__(446)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -13734,10 +13898,10 @@
 	}
 
 /***/ },
-/* 443 */
+/* 444 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(444)();
+	exports = module.exports = __webpack_require__(445)();
 	// imports
 	
 	
@@ -13748,7 +13912,7 @@
 
 
 /***/ },
-/* 444 */
+/* 445 */
 /***/ function(module, exports) {
 
 	/*
@@ -13804,7 +13968,7 @@
 
 
 /***/ },
-/* 445 */
+/* 446 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*

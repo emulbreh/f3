@@ -1,8 +1,9 @@
 import EventEmitter from 'wolfy87-eventemitter';
 
 
-class Action extends EventEmitter {
-    constructor({name, action}) {
+export class Action extends EventEmitter {
+    constructor({name, action}={}) {
+        super();
         this.name = name;
         this.action = action;
     }
@@ -12,17 +13,3 @@ class Action extends EventEmitter {
         this.emit('Performed', {target, action: this});
     }
 }
-
-new Action({
-    name: 'Create Todo',
-    action: () => {
-
-    }
-})
-
-new Action({
-    name: 'Delete Todo',
-    perform: (todo) => {
-         TodoStore.delete(todo);
-    }
-})
