@@ -1,5 +1,6 @@
 import {Component, Container} from './components';
 import {toComponentFactory} from './adapters';
+import {Signal} from './signals';
 
 
 export class List extends Container() {
@@ -7,6 +8,7 @@ export class List extends Container() {
         super(config);
         this.model = model;
         this.itemFactory = toComponentFactory(itemFactory);
+        // FIXME: componentMap doesn't work for duplicate list items
         this.componentMap = new Map();
         for (let item of model) {
             this.addItem(item);
@@ -14,6 +16,25 @@ export class List extends Container() {
         model.on('ItemAdded', (e) => {this.addItem(e.item);});
         model.on('ItemRemoved', (e) => {this.removeItem(e.item);});
         model.on('ItemsReordered', (e) => {this.applyOrdering();});
+        this.itemClicked = new Signal();
+        this.clicked.then((e) => {
+            let element = e.event.target;
+            while (element) {
+                let item = element.dataset.item;
+                if (item) {
+                    this.itemClicked.emit({
+                        item: item,
+                        list: this
+                    });
+                    break;
+                }
+                element = element.parentNode;
+            }
+        });
+    }
+
+    getChildByElement() {
+
     }
 
     applyOrdering() {
@@ -28,15 +49,12 @@ export class List extends Container() {
 
     addItem(item) {
         let component = this.itemFactory({model: item});
+        component.element.dataset.item = item;
         this.addComponent(component);
         this.componentMap[item] = component;
     }
 
     removeItem(item) {
         this.removeComponent(this.componentMap[item]);
-    }
-
-    insertElement(child) {
-        this.model.indexOf(c);
     }
 }

@@ -2,6 +2,12 @@ import * as f3 from 'f3';
 
 import './assets/demo.scss';
 
+let list = new f3.ListModel({
+    items: [1.111, 2.222],
+});
+
+let selectBox;
+
 let container = new f3.Panel();
 let form = new f3.Form({
     children: [
@@ -10,6 +16,7 @@ let form = new f3.Form({
         new f3.TextInput({name: 'a'}),
         new f3.TextInput({name: 'b'}),
         new f3.Checkbox({name: 'c'}),
+        selectBox = new f3.SelectBox({name: 'd', model: list}),
         new f3.Form({
             name: "foo",
             children: [
@@ -19,15 +26,12 @@ let form = new f3.Form({
     ]
 });
 
-var list;
 container.addComponent(form);
 container.addComponent(new f3.List({
     itemFactory: [f3.Display, {
         renderer: '%.1f'
     }],
-    model: list = new f3.ListModel({
-        items: [1.111, 2.222],
-    })
+    model: list
 }));
 
 list.append(3.333);
@@ -36,14 +40,6 @@ list.append(5.555);
 list.removeAt(1);
 list.reverse();
 window.list = list;
-
-//container.removeComponent(c);
-//container.removeComponent(c);
-
-console.log(form.value);
-let xx = {a: 1};
-let yy = {b: 2, a: 2};
-console.log({...xx, ...yy}, xx, yy);
 
 class Foo extends f3.Model {
     static properties = [
@@ -58,12 +54,10 @@ class Bar extends f3.Model {
 }
 
 let f = new Bar({});
-console.log("xx", f, f.foo);
 f.foo = 42;
-f.on('PropertyChanged', (e) => console.log(e));
+f.on('PropertyChanged', (e) => console.log('PropertyChanged', e));
 f.foo = 55;
 f.bar = 1;
-console.log("xx", f.foo);
 container.addComponent(new f3.Button({
     label: 'Bar',
     action: '/bar'

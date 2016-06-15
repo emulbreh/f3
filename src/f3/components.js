@@ -2,6 +2,7 @@ import EventEmitter from 'wolfy87-eventemitter';
 import {ComponentStructureError} from './errors';
 import {identity} from './utils';
 import {toRenderer, toString, toAction} from './adapters';
+import {Signal, HtmlSignal} from './signals';
 
 
 export class Component extends EventEmitter{
@@ -13,6 +14,7 @@ export class Component extends EventEmitter{
             el.style.cssText = cssText;
         }
         this.parent = null;
+        this.clicked = new HtmlSignal({type: 'click', component: this});
     }
 
     get root() {
@@ -30,13 +32,41 @@ export class Component extends EventEmitter{
         return `<${this.constructor.name} />`;
     }
 
-    *findClosestDecendants(predicate) {
+    getChildren() {
+        return [];
     }
 
     *getComponents() {
         yield this;
     }
 
+    *getComponents() {
+        yield this;
+        for (let child of this.getChildren()) {
+            yield* child.getComponents();
+        }
+    }
+
+    *findClosestDecendants(predicate) {
+        for (let child of this.getChildren()) {
+            if (predicate(child)) {
+                yield child;
+            }
+            else {
+                yield* child.findClosestDecendants(predicate);
+            }
+        }
+    }
+
+    show() {
+        this.element.style.display = '';
+        return Promise.resolve();
+    }
+
+    hide() {
+        this.element.style.display = 'none';
+        return Promise.resolve();
+    }
 }
 
 
@@ -58,20 +88,8 @@ export var Container = defineMixin((base=Component) => class Container extends b
         this.addComponents(children);
     }
 
-    *getComponents() {
-        yield* super.getComponents();
-        yield* this.children;
-    }
-
-    *findClosestDecendants(predicate) {
-        for (let child of this.children) {
-            if (predicate(child)) {
-                yield child;
-            }
-            else {
-                yield* child.findClosestDecendants(predicate);
-            }
-        }
+    getChildren() {
+        return this.children;
     }
 
     addComponent(component, index) {
