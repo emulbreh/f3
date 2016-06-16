@@ -6,7 +6,7 @@ let list = new f3.ListModel({
     items: [1.111, 2.222],
 });
 
-let selectBox;
+let selectBox, comboBox;
 
 let container = new f3.Panel();
 let form = new f3.Form({
@@ -17,6 +17,7 @@ let form = new f3.Form({
         new f3.TextInput({name: 'b'}),
         new f3.Checkbox({name: 'c'}),
         selectBox = new f3.SelectBox({name: 'd', model: list}),
+        comboBox = new f3.ComboBox({name: 'e', model: list}),
         new f3.Form({
             name: "foo",
             children: [

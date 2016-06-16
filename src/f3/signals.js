@@ -38,17 +38,17 @@ export class Signal {
 
 
 export class HtmlSignal extends Signal{
-    constructor({component, type, options={capture: false}, ...config}) {
+    constructor({component, type, element, options={capture: false}, ...config}) {
         super(config);
+        element = element || component.element;
         let onBrowserEvent = (event) => {
             this.emit({event, component});
         };
         this.setup = () => {
-            console.log("setup", component, component.element, options);
-            component.element.addEventListener(type, onBrowserEvent, options);
+            element.addEventListener(type, onBrowserEvent, options);
         };
         this.teardown = () => {
-            component.element.removeEventListener(type, onBrowserEvent, options);
+            element.removeEventListener(type, onBrowserEvent, options);
         }
     }
 }

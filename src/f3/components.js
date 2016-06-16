@@ -52,7 +52,7 @@ export class Component extends EventEmitter{
             if (predicate(child)) {
                 yield child;
             }
-            else {
+            else {
                 yield* child.findClosestDecendants(predicate);
             }
         }

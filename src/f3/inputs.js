@@ -1,7 +1,7 @@
 import {Component, Container, Display} from './components';
 import {List} from './lists';
 import {toString, toComponentFactory, toRenderer} from './adapters'
-import {Signal} from './signals';
+import {Signal, HtmlSignal} from './signals';
 
 
 export class Input extends Component {
@@ -41,9 +41,20 @@ export class RawInput extends Input {
         this.inputElement = document.createElement('input');
         this.inputElement.type = inputType;
         this.element.appendChild(this.inputElement);
+        this.blurred = new HtmlSignal({
+            type: 'blur',
+            component: this,
+            element: this.inputElement
+        });
+        this.focused = new HtmlSignal({
+            type: 'focus',
+            component: this,
+            element: this.inputElement
+        });
     }
 
     setValue(val) {
+        super.setValue(val)
         this.inputElement.value = val;
     }
 
@@ -55,8 +66,15 @@ export class RawInput extends Input {
 
 
 export class TextInput extends RawInput {
-    constructor(config={}) {
+    constructor({...config}={}) {
         super(config);
+        this.inputElement.addEventListener('keypress', (e) => {
+            this.setValue(this.inputElement.value);
+        });
+    }
+
+    get value() {
+        return this._value;
     }
 }
 
@@ -75,25 +93,18 @@ export class Checkbox extends RawInput {
     }
 }
 
-
-export class SelectBox extends Container(Input) {
-    constructor({renderer=toString, itemFactory, model, ...config}={}) {
+export class ChoiceInput extends Container(Input) {
+    constructor({itemFactory, model, ...config}={}) {
         super(config);
         this._value = null;
-        this.choiceDisplay = this.addComponent(new Display({
-            renderer: renderer
-        }));
         this.dropdown = this.addComponent(new List({
-            itemFactory: itemFactory || renderer,
+            itemFactory: itemFactory,
             model: model
         }));
         this.dropdown.hide();
         this.dropdown.itemClicked.then((e) => {
             this.value = e.item;
             this.close();
-        });
-        this.choiceDisplay.clicked.then((e) => {
-            this.open();
         });
     }
 
@@ -112,11 +123,40 @@ export class SelectBox extends Container(Input) {
 }
 
 
+export class SelectBox extends ChoiceInput {
+    constructor({itemFactory, renderer=toString, ...config}={}) {
+        super({itemFactory: itemFactory || toRenderer(renderer), ...config});
+        this.choiceDisplay = this.addComponent(new Display({
+            renderer: renderer
+        }));
+        this.choiceDisplay.clicked.then((e) => {
+            this.open();
+        });
+    }
+}
+
+
+export class ComboBox extends ChoiceInput {
+    constructor({itemFactory=toRenderer(toString), ...config}={}) {
+        super({itemFactory: itemFactory, ...config});
+        this.textInput = this.addComponent(new TextInput({
+
+        }));
+        this.textInput.valueChanged.then(() => {
+            this.open();
+            //this.model.filter(this.textInput.value);
+        });
+        this.textInput.blurred.then(() => {
+            this.close();
+        });
+    }
+}
+
+
 export class Form extends Container(Input) {
     get value() {
         let obj = {};
         for (let input of this.findClosestDecendants((c) => c instanceof Input)) {
-            console.log(input, input.name, input.value, input._value);
             obj[input.name] = input.value;
         }
         return obj;
