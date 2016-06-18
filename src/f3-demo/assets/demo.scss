@@ -17,6 +17,12 @@ html, body{
 .Window {
 	@include span-columns(12);
 	height: 100%;
-	border: 5px solid #f70;
+}
 
+.ChoiceInput {
+	.List {
+		& > .cursor {
+			background-color: #fffeee
+		}
+	}
 }

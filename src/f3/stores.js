@@ -1,4 +1,3 @@
-import EventEmitter from 'wolfy87-eventemitter';
 import {F3Error} from './errors';
 
 
@@ -7,7 +6,7 @@ class ObjectDoesNotExist extends F3Error {
 }
 
 
-class Store extends EventEmitter {
+class Store {
     constructor({pkProperty: 'pk'}) {
         this.pkProperty = pkProperty;
         this.instanceCache = new Map();

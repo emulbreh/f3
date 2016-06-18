@@ -1,15 +1,16 @@
-import EventEmitter from 'wolfy87-eventemitter';
+import {Signal} from './signals';
 
 
-export class Action extends EventEmitter {
-    constructor({name, action}={}) {
-        super();
+export class Action {
+    constructor({name, action, shortcut=null}={}) {
         this.name = name;
         this.action = action;
+        this.shortcut = shortcut;
+        this.performed = new Signal();
     }
 
     perform(target) {
         this.action(target);
-        this.emit('Performed', {target, action: this});
+        this.performed.emit({target, action: this});
     }
 }

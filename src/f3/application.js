@@ -1,4 +1,3 @@
-import EventEmitter from 'wolfy87-eventemitter';
 import {Root, Window} from './components';
 import {F3Error} from './errors';
 
@@ -19,7 +18,7 @@ export class NotFoundError extends F3Error {
 }
 
 
-export class Router extends EventEmitter {
+export class Router {
     static groupTypes = {
         'int': '(\d+)',
         'uuid': '([a-fA-F0-9-]+)',
@@ -30,7 +29,6 @@ export class Router extends EventEmitter {
     static defaultGroupType = 'any';
 
     constructor({routes=[]}={}) {
-        super();
         this.routes = routes;
     }
 
@@ -75,9 +73,8 @@ export class Router extends EventEmitter {
 }
 
 
-export class Application extends EventEmitter {
+export class Application {
     constructor({win, router}={}) {
-        super();
         this.root = new Root({app: this});
         this.router = router || new Router();
         this.window = this.root.addComponent(win || new Window());
@@ -112,5 +109,12 @@ export class Application extends EventEmitter {
             page.open(this.window, params);
             window.history.pushState(params, null, url);
         });
+    }
+
+    addAction(action) {
+        this.actions.push(action);
+        if (action.shortcut) {
+            Mousetrap.bind(action.shortcut, action.perform.bind(action));
+        }
     }
 }

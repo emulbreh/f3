@@ -8131,11 +8131,17 @@
 	
 	var f3 = _interopRequireWildcard(_f);
 	
-	__webpack_require__(449);
+	__webpack_require__(453);
+	
+	__webpack_require__(457);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	Mousetrap.bind('alt+f', function (e) {
+	    console.log("Mousetrap", e);
+	});
 	
 	var list = new f3.ListModel({
 	    items: [1.111, 2.222]
@@ -8196,7 +8202,7 @@
 	
 	var f = new Bar({});
 	f.foo = 42;
-	f.on('PropertyChanged', function (e) {
+	f.propertyChanged.then(function (e) {
 	    return console.log('PropertyChanged', e);
 	});
 	f.foo = 55;
@@ -9803,7 +9809,7 @@
 	  }
 	});
 	
-	var _lists = __webpack_require__(436);
+	var _lists = __webpack_require__(440);
 	
 	Object.defineProperty(exports, 'List', {
 	  enumerable: true,
@@ -9812,7 +9818,7 @@
 	  }
 	});
 	
-	var _models = __webpack_require__(442);
+	var _models = __webpack_require__(446);
 	
 	Object.defineProperty(exports, 'Model', {
 	  enumerable: true,
@@ -9854,7 +9860,7 @@
 	  }
 	});
 	
-	var _application = __webpack_require__(443);
+	var _application = __webpack_require__(447);
 	
 	Object.defineProperty(exports, 'Application', {
 	  enumerable: true,
@@ -9893,7 +9899,11 @@
 	  }
 	});
 	
-	__webpack_require__(448);
+	__webpack_require__(457);
+	
+	__webpack_require__(458);
+	
+	__webpack_require__(452);
 
 /***/ },
 /* 383 */
@@ -9960,6 +9970,18 @@
 	
 	var _extends3 = _interopRequireDefault(_extends2);
 	
+	var _getPrototypeOf = __webpack_require__(300);
+	
+	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+	
+	var _possibleConstructorReturn2 = __webpack_require__(327);
+	
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+	
+	var _inherits2 = __webpack_require__(374);
+	
+	var _inherits3 = _interopRequireDefault(_inherits2);
+	
 	var _map = __webpack_require__(390);
 	
 	var _map2 = _interopRequireDefault(_map);
@@ -9976,10 +9998,6 @@
 	
 	var _regenerator2 = _interopRequireDefault(_regenerator);
 	
-	var _getPrototypeOf = __webpack_require__(300);
-	
-	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-	
 	var _objectWithoutProperties2 = __webpack_require__(423);
 	
 	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
@@ -9992,18 +10010,6 @@
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _possibleConstructorReturn2 = __webpack_require__(327);
-	
-	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-	
-	var _inherits2 = __webpack_require__(374);
-	
-	var _inherits3 = _interopRequireDefault(_inherits2);
-	
-	var _wolfy87Eventemitter = __webpack_require__(428);
-	
-	var _wolfy87Eventemitter2 = _interopRequireDefault(_wolfy87Eventemitter);
-	
 	var _errors = __webpack_require__(383);
 	
 	var _utils = __webpack_require__(429);
@@ -10014,9 +10020,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Component = exports.Component = function (_EventEmitter) {
-	    (0, _inherits3.default)(Component, _EventEmitter);
-	
+	var Component = exports.Component = function () {
 	    function Component() {
 	        var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	
@@ -10029,19 +10033,30 @@
 	        var config = (0, _objectWithoutProperties3.default)(_ref, ['tagName', 'cssText', 'element']);
 	        (0, _classCallCheck3.default)(this, Component);
 	
-	        var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Component).call(this, config));
-	
-	        var el = _this.element = element || document.createElement(tagName);
-	        el.className = _this.constructor.name;
+	        var el = this.element = element || document.createElement(tagName);
+	        var c = this.constructor;
+	        do {
+	            el.classList.add(c.name);
+	            c = c.__proto__;
+	        } while (c.prototype instanceof Component);
 	        if (cssText) {
 	            el.style.cssText = cssText;
 	        }
-	        _this.parent = null;
-	        _this.clicked = new _signals.HtmlSignal({ type: 'click', component: _this });
-	        return _this;
+	        this.parent = null;
+	        this.clicked = new _signals.HtmlSignal({ type: 'click', component: this });
 	    }
 	
 	    (0, _createClass3.default)(Component, [{
+	        key: 'addClass',
+	        value: function addClass(className) {
+	            this.element.classList.add(className);
+	        }
+	    }, {
+	        key: 'removeClass',
+	        value: function removeClass(className) {
+	            this.element.classList.remove(className);
+	        }
+	    }, {
 	        key: 'toString',
 	        value: function toString() {
 	            return '<' + this.constructor.name + ' />';
@@ -10253,7 +10268,7 @@
 	        }
 	    }]);
 	    return Component;
-	}(_wolfy87Eventemitter2.default);
+	}();
 	
 	function defineMixin(func) {
 	    var cache = new _map2.default();
@@ -10278,11 +10293,11 @@
 	            var config = (0, _objectWithoutProperties3.default)(_ref2, ['children']);
 	            (0, _classCallCheck3.default)(this, Container);
 	
-	            var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Container).call(this, config));
+	            var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Container).call(this, config));
 	
-	            _this2.children = [];
-	            _this2.addComponents(children);
-	            return _this2;
+	            _this.children = [];
+	            _this.addComponents(children);
+	            return _this;
 	        }
 	
 	        (0, _createClass3.default)(Container, [{
@@ -10371,11 +10386,11 @@
 	        var config = (0, _objectWithoutProperties3.default)(_ref3, ['model', 'renderer']);
 	        (0, _classCallCheck3.default)(this, Display);
 	
-	        var _this4 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Display).call(this, config));
+	        var _this3 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Display).call(this, config));
 	
-	        _this4.renderer = (0, _adapters.toRenderer)(renderer);
-	        _this4.model = model;
-	        return _this4;
+	        _this3.renderer = (0, _adapters.toRenderer)(renderer);
+	        _this3.model = model;
+	        return _this3;
 	    }
 	
 	    (0, _createClass3.default)(Display, [{
@@ -10401,10 +10416,10 @@
 	        var config = (0, _objectWithoutProperties3.default)(_ref4, ['app']);
 	        (0, _classCallCheck3.default)(this, Root);
 	
-	        var _this5 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Root).call(this, (0, _extends3.default)({ element: document.body }, config)));
+	        var _this4 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Root).call(this, (0, _extends3.default)({ element: document.body }, config)));
 	
-	        _this5._app = app;
-	        return _this5;
+	        _this4._app = app;
+	        return _this4;
 	    }
 	
 	    (0, _createClass3.default)(Root, [{
@@ -10430,10 +10445,10 @@
 	        var config = (0, _objectWithoutProperties3.default)(_ref5, []);
 	        (0, _classCallCheck3.default)(this, Window);
 	
-	        var _this6 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Window).call(this, config));
+	        var _this5 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Window).call(this, config));
 	
-	        _this6._content = null;
-	        return _this6;
+	        _this5._content = null;
+	        return _this5;
 	    }
 	
 	    (0, _createClass3.default)(Window, [{
@@ -10464,14 +10479,14 @@
 	        var config = (0, _objectWithoutProperties3.default)(_ref6, ['action', 'label']);
 	        (0, _classCallCheck3.default)(this, Button);
 	
-	        var _this7 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Button).call(this, (0, _extends3.default)({ tagName: 'button' }, config)));
+	        var _this6 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Button).call(this, (0, _extends3.default)({ tagName: 'button' }, config)));
 	
-	        _this7.action = (0, _adapters.toAction)(_this7, action);
-	        _this7.label = label;
-	        _this7.element.addEventListener('click', function (event) {
-	            _this7.action.perform({ event: event });
+	        _this6.action = (0, _adapters.toAction)(_this6, action);
+	        _this6.label = label;
+	        _this6.element.addEventListener('click', function (event) {
+	            _this6.action.perform({ event: event });
 	        });
-	        return _this7;
+	        return _this6;
 	    }
 	
 	    (0, _createClass3.default)(Button, [{
@@ -12439,485 +12454,7 @@
 	$export($export.S + $export.F * !__webpack_require__(321), 'Object', {defineProperty: __webpack_require__(317).f});
 
 /***/ },
-/* 428 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	 * EventEmitter v5.0.0 - git.io/ee
-	 * Unlicense - http://unlicense.org/
-	 * Oliver Caldwell - http://oli.me.uk/
-	 * @preserve
-	 */
-	
-	;(function () {
-	    'use strict';
-	
-	    /**
-	     * Class for managing events.
-	     * Can be extended to provide event functionality in other classes.
-	     *
-	     * @class EventEmitter Manages event registering and emitting.
-	     */
-	    function EventEmitter() {}
-	
-	    // Shortcuts to improve speed and size
-	    var proto = EventEmitter.prototype;
-	    var exports = this;
-	    var originalGlobalValue = exports.EventEmitter;
-	
-	    /**
-	     * Finds the index of the listener for the event in its storage array.
-	     *
-	     * @param {Function[]} listeners Array of listeners to search through.
-	     * @param {Function} listener Method to look for.
-	     * @return {Number} Index of the specified listener, -1 if not found
-	     * @api private
-	     */
-	    function indexOfListener(listeners, listener) {
-	        var i = listeners.length;
-	        while (i--) {
-	            if (listeners[i].listener === listener) {
-	                return i;
-	            }
-	        }
-	
-	        return -1;
-	    }
-	
-	    /**
-	     * Alias a method while keeping the context correct, to allow for overwriting of target method.
-	     *
-	     * @param {String} name The name of the target method.
-	     * @return {Function} The aliased method
-	     * @api private
-	     */
-	    function alias(name) {
-	        return function aliasClosure() {
-	            return this[name].apply(this, arguments);
-	        };
-	    }
-	
-	    /**
-	     * Returns the listener array for the specified event.
-	     * Will initialise the event object and listener arrays if required.
-	     * Will return an object if you use a regex search. The object contains keys for each matched event. So /ba[rz]/ might return an object containing bar and baz. But only if you have either defined them with defineEvent or added some listeners to them.
-	     * Each property in the object response is an array of listener functions.
-	     *
-	     * @param {String|RegExp} evt Name of the event to return the listeners from.
-	     * @return {Function[]|Object} All listener functions for the event.
-	     */
-	    proto.getListeners = function getListeners(evt) {
-	        var events = this._getEvents();
-	        var response;
-	        var key;
-	
-	        // Return a concatenated array of all matching events if
-	        // the selector is a regular expression.
-	        if (evt instanceof RegExp) {
-	            response = {};
-	            for (key in events) {
-	                if (events.hasOwnProperty(key) && evt.test(key)) {
-	                    response[key] = events[key];
-	                }
-	            }
-	        }
-	        else {
-	            response = events[evt] || (events[evt] = []);
-	        }
-	
-	        return response;
-	    };
-	
-	    /**
-	     * Takes a list of listener objects and flattens it into a list of listener functions.
-	     *
-	     * @param {Object[]} listeners Raw listener objects.
-	     * @return {Function[]} Just the listener functions.
-	     */
-	    proto.flattenListeners = function flattenListeners(listeners) {
-	        var flatListeners = [];
-	        var i;
-	
-	        for (i = 0; i < listeners.length; i += 1) {
-	            flatListeners.push(listeners[i].listener);
-	        }
-	
-	        return flatListeners;
-	    };
-	
-	    /**
-	     * Fetches the requested listeners via getListeners but will always return the results inside an object. This is mainly for internal use but others may find it useful.
-	     *
-	     * @param {String|RegExp} evt Name of the event to return the listeners from.
-	     * @return {Object} All listener functions for an event in an object.
-	     */
-	    proto.getListenersAsObject = function getListenersAsObject(evt) {
-	        var listeners = this.getListeners(evt);
-	        var response;
-	
-	        if (listeners instanceof Array) {
-	            response = {};
-	            response[evt] = listeners;
-	        }
-	
-	        return response || listeners;
-	    };
-	
-	    /**
-	     * Adds a listener function to the specified event.
-	     * The listener will not be added if it is a duplicate.
-	     * If the listener returns true then it will be removed after it is called.
-	     * If you pass a regular expression as the event name then the listener will be added to all events that match it.
-	     *
-	     * @param {String|RegExp} evt Name of the event to attach the listener to.
-	     * @param {Function} listener Method to be called when the event is emitted. If the function returns true then it will be removed after calling.
-	     * @return {Object} Current instance of EventEmitter for chaining.
-	     */
-	    proto.addListener = function addListener(evt, listener) {
-	        var listeners = this.getListenersAsObject(evt);
-	        var listenerIsWrapped = typeof listener === 'object';
-	        var key;
-	
-	        for (key in listeners) {
-	            if (listeners.hasOwnProperty(key) && indexOfListener(listeners[key], listener) === -1) {
-	                listeners[key].push(listenerIsWrapped ? listener : {
-	                    listener: listener,
-	                    once: false
-	                });
-	            }
-	        }
-	
-	        return this;
-	    };
-	
-	    /**
-	     * Alias of addListener
-	     */
-	    proto.on = alias('addListener');
-	
-	    /**
-	     * Semi-alias of addListener. It will add a listener that will be
-	     * automatically removed after its first execution.
-	     *
-	     * @param {String|RegExp} evt Name of the event to attach the listener to.
-	     * @param {Function} listener Method to be called when the event is emitted. If the function returns true then it will be removed after calling.
-	     * @return {Object} Current instance of EventEmitter for chaining.
-	     */
-	    proto.addOnceListener = function addOnceListener(evt, listener) {
-	        return this.addListener(evt, {
-	            listener: listener,
-	            once: true
-	        });
-	    };
-	
-	    /**
-	     * Alias of addOnceListener.
-	     */
-	    proto.once = alias('addOnceListener');
-	
-	    /**
-	     * Defines an event name. This is required if you want to use a regex to add a listener to multiple events at once. If you don't do this then how do you expect it to know what event to add to? Should it just add to every possible match for a regex? No. That is scary and bad.
-	     * You need to tell it what event names should be matched by a regex.
-	     *
-	     * @param {String} evt Name of the event to create.
-	     * @return {Object} Current instance of EventEmitter for chaining.
-	     */
-	    proto.defineEvent = function defineEvent(evt) {
-	        this.getListeners(evt);
-	        return this;
-	    };
-	
-	    /**
-	     * Uses defineEvent to define multiple events.
-	     *
-	     * @param {String[]} evts An array of event names to define.
-	     * @return {Object} Current instance of EventEmitter for chaining.
-	     */
-	    proto.defineEvents = function defineEvents(evts) {
-	        for (var i = 0; i < evts.length; i += 1) {
-	            this.defineEvent(evts[i]);
-	        }
-	        return this;
-	    };
-	
-	    /**
-	     * Removes a listener function from the specified event.
-	     * When passed a regular expression as the event name, it will remove the listener from all events that match it.
-	     *
-	     * @param {String|RegExp} evt Name of the event to remove the listener from.
-	     * @param {Function} listener Method to remove from the event.
-	     * @return {Object} Current instance of EventEmitter for chaining.
-	     */
-	    proto.removeListener = function removeListener(evt, listener) {
-	        var listeners = this.getListenersAsObject(evt);
-	        var index;
-	        var key;
-	
-	        for (key in listeners) {
-	            if (listeners.hasOwnProperty(key)) {
-	                index = indexOfListener(listeners[key], listener);
-	
-	                if (index !== -1) {
-	                    listeners[key].splice(index, 1);
-	                }
-	            }
-	        }
-	
-	        return this;
-	    };
-	
-	    /**
-	     * Alias of removeListener
-	     */
-	    proto.off = alias('removeListener');
-	
-	    /**
-	     * Adds listeners in bulk using the manipulateListeners method.
-	     * If you pass an object as the second argument you can add to multiple events at once. The object should contain key value pairs of events and listeners or listener arrays. You can also pass it an event name and an array of listeners to be added.
-	     * You can also pass it a regular expression to add the array of listeners to all events that match it.
-	     * Yeah, this function does quite a bit. That's probably a bad thing.
-	     *
-	     * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to add to multiple events at once.
-	     * @param {Function[]} [listeners] An optional array of listener functions to add.
-	     * @return {Object} Current instance of EventEmitter for chaining.
-	     */
-	    proto.addListeners = function addListeners(evt, listeners) {
-	        // Pass through to manipulateListeners
-	        return this.manipulateListeners(false, evt, listeners);
-	    };
-	
-	    /**
-	     * Removes listeners in bulk using the manipulateListeners method.
-	     * If you pass an object as the second argument you can remove from multiple events at once. The object should contain key value pairs of events and listeners or listener arrays.
-	     * You can also pass it an event name and an array of listeners to be removed.
-	     * You can also pass it a regular expression to remove the listeners from all events that match it.
-	     *
-	     * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to remove from multiple events at once.
-	     * @param {Function[]} [listeners] An optional array of listener functions to remove.
-	     * @return {Object} Current instance of EventEmitter for chaining.
-	     */
-	    proto.removeListeners = function removeListeners(evt, listeners) {
-	        // Pass through to manipulateListeners
-	        return this.manipulateListeners(true, evt, listeners);
-	    };
-	
-	    /**
-	     * Edits listeners in bulk. The addListeners and removeListeners methods both use this to do their job. You should really use those instead, this is a little lower level.
-	     * The first argument will determine if the listeners are removed (true) or added (false).
-	     * If you pass an object as the second argument you can add/remove from multiple events at once. The object should contain key value pairs of events and listeners or listener arrays.
-	     * You can also pass it an event name and an array of listeners to be added/removed.
-	     * You can also pass it a regular expression to manipulate the listeners of all events that match it.
-	     *
-	     * @param {Boolean} remove True if you want to remove listeners, false if you want to add.
-	     * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to add/remove from multiple events at once.
-	     * @param {Function[]} [listeners] An optional array of listener functions to add/remove.
-	     * @return {Object} Current instance of EventEmitter for chaining.
-	     */
-	    proto.manipulateListeners = function manipulateListeners(remove, evt, listeners) {
-	        var i;
-	        var value;
-	        var single = remove ? this.removeListener : this.addListener;
-	        var multiple = remove ? this.removeListeners : this.addListeners;
-	
-	        // If evt is an object then pass each of its properties to this method
-	        if (typeof evt === 'object' && !(evt instanceof RegExp)) {
-	            for (i in evt) {
-	                if (evt.hasOwnProperty(i) && (value = evt[i])) {
-	                    // Pass the single listener straight through to the singular method
-	                    if (typeof value === 'function') {
-	                        single.call(this, i, value);
-	                    }
-	                    else {
-	                        // Otherwise pass back to the multiple function
-	                        multiple.call(this, i, value);
-	                    }
-	                }
-	            }
-	        }
-	        else {
-	            // So evt must be a string
-	            // And listeners must be an array of listeners
-	            // Loop over it and pass each one to the multiple method
-	            i = listeners.length;
-	            while (i--) {
-	                single.call(this, evt, listeners[i]);
-	            }
-	        }
-	
-	        return this;
-	    };
-	
-	    /**
-	     * Removes all listeners from a specified event.
-	     * If you do not specify an event then all listeners will be removed.
-	     * That means every event will be emptied.
-	     * You can also pass a regex to remove all events that match it.
-	     *
-	     * @param {String|RegExp} [evt] Optional name of the event to remove all listeners for. Will remove from every event if not passed.
-	     * @return {Object} Current instance of EventEmitter for chaining.
-	     */
-	    proto.removeEvent = function removeEvent(evt) {
-	        var type = typeof evt;
-	        var events = this._getEvents();
-	        var key;
-	
-	        // Remove different things depending on the state of evt
-	        if (type === 'string') {
-	            // Remove all listeners for the specified event
-	            delete events[evt];
-	        }
-	        else if (evt instanceof RegExp) {
-	            // Remove all events matching the regex.
-	            for (key in events) {
-	                if (events.hasOwnProperty(key) && evt.test(key)) {
-	                    delete events[key];
-	                }
-	            }
-	        }
-	        else {
-	            // Remove all listeners in all events
-	            delete this._events;
-	        }
-	
-	        return this;
-	    };
-	
-	    /**
-	     * Alias of removeEvent.
-	     *
-	     * Added to mirror the node API.
-	     */
-	    proto.removeAllListeners = alias('removeEvent');
-	
-	    /**
-	     * Emits an event of your choice.
-	     * When emitted, every listener attached to that event will be executed.
-	     * If you pass the optional argument array then those arguments will be passed to every listener upon execution.
-	     * Because it uses `apply`, your array of arguments will be passed as if you wrote them out separately.
-	     * So they will not arrive within the array on the other side, they will be separate.
-	     * You can also pass a regular expression to emit to all events that match it.
-	     *
-	     * @param {String|RegExp} evt Name of the event to emit and execute listeners for.
-	     * @param {Array} [args] Optional array of arguments to be passed to each listener.
-	     * @return {Object} Current instance of EventEmitter for chaining.
-	     */
-	    proto.emitEvent = function emitEvent(evt, args) {
-	        var listenersMap = this.getListenersAsObject(evt);
-	        var listeners;
-	        var listener;
-	        var i;
-	        var key;
-	        var response;
-	
-	        for (key in listenersMap) {
-	            if (listenersMap.hasOwnProperty(key)) {
-	                listeners = listenersMap[key].slice(0);
-	
-	                for (i = 0; i < listeners.length; i++) {
-	                    // If the listener returns true then it shall be removed from the event
-	                    // The function is executed either with a basic call or an apply if there is an args array
-	                    listener = listeners[i];
-	
-	                    if (listener.once === true) {
-	                        this.removeListener(evt, listener.listener);
-	                    }
-	
-	                    response = listener.listener.apply(this, args || []);
-	
-	                    if (response === this._getOnceReturnValue()) {
-	                        this.removeListener(evt, listener.listener);
-	                    }
-	                }
-	            }
-	        }
-	
-	        return this;
-	    };
-	
-	    /**
-	     * Alias of emitEvent
-	     */
-	    proto.trigger = alias('emitEvent');
-	
-	    /**
-	     * Subtly different from emitEvent in that it will pass its arguments on to the listeners, as opposed to taking a single array of arguments to pass on.
-	     * As with emitEvent, you can pass a regex in place of the event name to emit to all events that match it.
-	     *
-	     * @param {String|RegExp} evt Name of the event to emit and execute listeners for.
-	     * @param {...*} Optional additional arguments to be passed to each listener.
-	     * @return {Object} Current instance of EventEmitter for chaining.
-	     */
-	    proto.emit = function emit(evt) {
-	        var args = Array.prototype.slice.call(arguments, 1);
-	        return this.emitEvent(evt, args);
-	    };
-	
-	    /**
-	     * Sets the current value to check against when executing listeners. If a
-	     * listeners return value matches the one set here then it will be removed
-	     * after execution. This value defaults to true.
-	     *
-	     * @param {*} value The new value to check for when executing listeners.
-	     * @return {Object} Current instance of EventEmitter for chaining.
-	     */
-	    proto.setOnceReturnValue = function setOnceReturnValue(value) {
-	        this._onceReturnValue = value;
-	        return this;
-	    };
-	
-	    /**
-	     * Fetches the current value to check against when executing listeners. If
-	     * the listeners return value matches this one then it should be removed
-	     * automatically. It will return true by default.
-	     *
-	     * @return {*|Boolean} The current value to check for or the default, true.
-	     * @api private
-	     */
-	    proto._getOnceReturnValue = function _getOnceReturnValue() {
-	        if (this.hasOwnProperty('_onceReturnValue')) {
-	            return this._onceReturnValue;
-	        }
-	        else {
-	            return true;
-	        }
-	    };
-	
-	    /**
-	     * Fetches the events object and creates one if required.
-	     *
-	     * @return {Object} The events storage object.
-	     * @api private
-	     */
-	    proto._getEvents = function _getEvents() {
-	        return this._events || (this._events = {});
-	    };
-	
-	    /**
-	     * Reverts the global {@link EventEmitter} to its previous value and returns a reference to this version.
-	     *
-	     * @return {Function} Non conflicting EventEmitter class.
-	     */
-	    EventEmitter.noConflict = function noConflict() {
-	        exports.EventEmitter = originalGlobalValue;
-	        return EventEmitter;
-	    };
-	
-	    // Expose the class either via AMD, CommonJS or the global object
-	    if (true) {
-	        !(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
-	            return EventEmitter;
-	        }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	    }
-	    else if (typeof module === 'object' && module.exports){
-	        module.exports = EventEmitter;
-	    }
-	    else {
-	        exports.EventEmitter = EventEmitter;
-	    }
-	}.call(this));
-
-
-/***/ },
+/* 428 */,
 /* 429 */
 /***/ function(module, exports) {
 
@@ -13070,10 +12607,6 @@
 	});
 	exports.Action = undefined;
 	
-	var _getPrototypeOf = __webpack_require__(300);
-	
-	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-	
 	var _classCallCheck2 = __webpack_require__(326);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
@@ -13082,46 +12615,35 @@
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _possibleConstructorReturn2 = __webpack_require__(327);
-	
-	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-	
-	var _inherits2 = __webpack_require__(374);
-	
-	var _inherits3 = _interopRequireDefault(_inherits2);
-	
-	var _wolfy87Eventemitter = __webpack_require__(428);
-	
-	var _wolfy87Eventemitter2 = _interopRequireDefault(_wolfy87Eventemitter);
+	var _signals = __webpack_require__(434);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Action = exports.Action = function (_EventEmitter) {
-	    (0, _inherits3.default)(Action, _EventEmitter);
-	
+	var Action = exports.Action = function () {
 	    function Action() {
 	        var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	
 	        var name = _ref.name;
 	        var action = _ref.action;
+	        var _ref$shortcut = _ref.shortcut;
+	        var shortcut = _ref$shortcut === undefined ? null : _ref$shortcut;
 	        (0, _classCallCheck3.default)(this, Action);
 	
-	        var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Action).call(this));
-	
-	        _this.name = name;
-	        _this.action = action;
-	        return _this;
+	        this.name = name;
+	        this.action = action;
+	        this.shortcut = shortcut;
+	        this.performed = new _signals.Signal();
 	    }
 	
 	    (0, _createClass3.default)(Action, [{
 	        key: 'perform',
 	        value: function perform(target) {
 	            this.action(target);
-	            this.emit('Performed', { target: target, action: this });
+	            this.performed.emit({ target: target, action: this });
 	        }
 	    }]);
 	    return Action;
-	}(_wolfy87Eventemitter2.default);
+	}();
 
 /***/ },
 /* 432 */
@@ -13557,7 +13079,7 @@
 	
 	var _extends3 = _interopRequireDefault(_extends2);
 	
-	var _get2 = __webpack_require__(453);
+	var _get2 = __webpack_require__(436);
 	
 	var _get3 = _interopRequireDefault(_get2);
 	
@@ -13587,7 +13109,7 @@
 	
 	var _components = __webpack_require__(384);
 	
-	var _lists = __webpack_require__(436);
+	var _lists = __webpack_require__(440);
 	
 	var _adapters = __webpack_require__(430);
 	
@@ -13630,12 +13152,17 @@
 	            });
 	        }
 	    }, {
+	        key: 'getValue',
+	        value: function getValue() {
+	            return this._value;
+	        }
+	    }, {
 	        key: 'value',
 	        set: function set(val) {
 	            this.setValue(val);
 	        },
 	        get: function get() {
-	            return this._value;
+	            return this.getValue();
 	        }
 	    }]);
 	    return Input;
@@ -13677,8 +13204,8 @@
 	            this.inputElement.value = val;
 	        }
 	    }, {
-	        key: 'value',
-	        get: function get() {
+	        key: 'getValue',
+	        value: function getValue() {
 	            return this.inputElement.value;
 	        }
 	    }]);
@@ -13703,8 +13230,8 @@
 	    }
 	
 	    (0, _createClass3.default)(TextInput, [{
-	        key: 'value',
-	        get: function get() {
+	        key: 'getValue',
+	        value: function getValue() {
 	            return this._value;
 	        }
 	    }]);
@@ -13726,8 +13253,8 @@
 	            this.inputElement.checked = !!val;
 	        }
 	    }, {
-	        key: 'value',
-	        get: function get() {
+	        key: 'getValue',
+	        value: function getValue() {
 	            return this.inputElement.checked;
 	        }
 	    }]);
@@ -13753,7 +13280,7 @@
 	            model: model
 	        }));
 	        _this5.dropdown.hide();
-	        _this5.dropdown.itemClicked.then(function (e) {
+	        _this5.dropdown.itemSelected.then(function (e) {
 	            _this5.value = e.item;
 	            _this5.close();
 	        });
@@ -13769,12 +13296,6 @@
 	        key: 'close',
 	        value: function close() {
 	            this.dropdown.hide();
-	        }
-	    }, {
-	        key: 'setValue',
-	        value: function setValue(val) {
-	            (0, _get3.default)((0, _getPrototypeOf2.default)(ChoiceInput.prototype), 'setValue', this).call(this, val);
-	            this.choiceDisplay.model = val;
 	        }
 	    }]);
 	    return ChoiceInput;
@@ -13800,9 +13321,23 @@
 	        _this6.choiceDisplay.clicked.then(function (e) {
 	            _this6.open();
 	        });
+	        _this6.choiceDisplay.element.tabIndex = 0;
+	        Mousetrap(_this6.choiceDisplay.element).bind(_this6.dropdown.cursorKeyboardHandlers);
+	        Mousetrap(_this6.choiceDisplay.element).bind({
+	            'space': function space() {
+	                _this6.open();
+	            }
+	        });
 	        return _this6;
 	    }
 	
+	    (0, _createClass3.default)(SelectBox, [{
+	        key: 'setValue',
+	        value: function setValue(val) {
+	            (0, _get3.default)((0, _getPrototypeOf2.default)(SelectBox.prototype), 'setValue', this).call(this, val);
+	            this.choiceDisplay.model = val;
+	        }
+	    }]);
 	    return SelectBox;
 	}(ChoiceInput);
 	
@@ -13812,24 +13347,37 @@
 	    function ComboBox() {
 	        var _ref6 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	
-	        var _ref6$itemFactory = _ref6.itemFactory;
-	        var itemFactory = _ref6$itemFactory === undefined ? (0, _adapters.toRenderer)(_adapters.toString) : _ref6$itemFactory;
-	        var config = (0, _objectWithoutProperties3.default)(_ref6, ['itemFactory']);
+	        var itemFactory = _ref6.itemFactory;
+	        var _ref6$renderer = _ref6.renderer;
+	        var renderer = _ref6$renderer === undefined ? _adapters.toString : _ref6$renderer;
+	        var config = (0, _objectWithoutProperties3.default)(_ref6, ['itemFactory', 'renderer']);
 	        (0, _classCallCheck3.default)(this, ComboBox);
 	
-	        var _this7 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ComboBox).call(this, (0, _extends3.default)({ itemFactory: itemFactory }, config)));
+	        var _this7 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ComboBox).call(this, (0, _extends3.default)({ itemFactory: itemFactory || (0, _adapters.toRenderer)(renderer) }, config)));
 	
+	        _this7.renderer = (0, _adapters.toRenderer)(renderer);
 	        _this7.textInput = _this7.addComponent(new TextInput({}));
 	        _this7.textInput.valueChanged.then(function () {
 	            _this7.open();
 	            //this.model.filter(this.textInput.value);
 	        });
+	        _this7.textInput.focused.then(function () {
+	            _this7.open();
+	        });
 	        _this7.textInput.blurred.then(function () {
 	            _this7.close();
 	        });
+	        Mousetrap(_this7.textInput.element).bind(_this7.dropdown.cursorKeyboardHandlers);
 	        return _this7;
 	    }
 	
+	    (0, _createClass3.default)(ComboBox, [{
+	        key: 'setValue',
+	        value: function setValue(val) {
+	            (0, _get3.default)((0, _getPrototypeOf2.default)(ComboBox.prototype), 'setValue', this).call(this, val);
+	            this.textInput.value = this.renderer(val);
+	        }
+	    }]);
 	    return ComboBox;
 	}(ChoiceInput);
 	
@@ -13882,6 +13430,79 @@
 /* 436 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+	
+	exports.__esModule = true;
+	
+	var _getPrototypeOf = __webpack_require__(300);
+	
+	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+	
+	var _getOwnPropertyDescriptor = __webpack_require__(437);
+	
+	var _getOwnPropertyDescriptor2 = _interopRequireDefault(_getOwnPropertyDescriptor);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = function get(object, property, receiver) {
+	  if (object === null) object = Function.prototype;
+	  var desc = (0, _getOwnPropertyDescriptor2.default)(object, property);
+	
+	  if (desc === undefined) {
+	    var parent = (0, _getPrototypeOf2.default)(object);
+	
+	    if (parent === null) {
+	      return undefined;
+	    } else {
+	      return get(parent, property, receiver);
+	    }
+	  } else if ("value" in desc) {
+	    return desc.value;
+	  } else {
+	    var getter = desc.get;
+	
+	    if (getter === undefined) {
+	      return undefined;
+	    }
+	
+	    return getter.call(receiver);
+	  }
+	};
+
+/***/ },
+/* 437 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(438), __esModule: true };
+
+/***/ },
+/* 438 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(439);
+	var $Object = __webpack_require__(313).Object;
+	module.exports = function getOwnPropertyDescriptor(it, key){
+	  return $Object.getOwnPropertyDescriptor(it, key);
+	};
+
+/***/ },
+/* 439 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
+	var toIObject                 = __webpack_require__(343)
+	  , $getOwnPropertyDescriptor = __webpack_require__(370).f;
+	
+	__webpack_require__(311)('getOwnPropertyDescriptor', function(){
+	  return function getOwnPropertyDescriptor(it, key){
+	    return $getOwnPropertyDescriptor(toIObject(it), key);
+	  };
+	});
+
+/***/ },
+/* 440 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
@@ -13889,7 +13510,7 @@
 	});
 	exports.List = undefined;
 	
-	var _toConsumableArray2 = __webpack_require__(437);
+	var _toConsumableArray2 = __webpack_require__(441);
 	
 	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 	
@@ -13939,12 +13560,17 @@
 	    function List(_ref) {
 	        var model = _ref.model;
 	        var itemFactory = _ref.itemFactory;
-	        var config = (0, _objectWithoutProperties3.default)(_ref, ['model', 'itemFactory']);
+	        var _ref$selectable = _ref.selectable;
+	        var selectable = _ref$selectable === undefined ? true : _ref$selectable;
+	        var _ref$cursorClass = _ref.cursorClass;
+	        var cursorClass = _ref$cursorClass === undefined ? 'cursor' : _ref$cursorClass;
+	        var config = (0, _objectWithoutProperties3.default)(_ref, ['model', 'itemFactory', 'selectable', 'cursorClass']);
 	        (0, _classCallCheck3.default)(this, List);
 	
 	        var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(List).call(this, config));
 	
 	        _this.model = model;
+	        _this.cursorClass = cursorClass;
 	        _this.itemFactory = (0, _adapters.toComponentFactory)(itemFactory);
 	        // FIXME: componentMap doesn't work for duplicate list items
 	        _this.componentMap = new _map2.default();
@@ -13973,34 +13599,86 @@
 	            }
 	        }
 	
-	        model.on('ItemAdded', function (e) {
+	        model.itemAdded.then(function (e) {
 	            _this.addItem(e.item);
 	        });
-	        model.on('ItemRemoved', function (e) {
+	        model.itemRemoved.then(function (e) {
 	            _this.removeItem(e.item);
 	        });
-	        model.on('ItemsReordered', function (e) {
+	        model.itemsReordered.then(function (e) {
 	            _this.applyOrdering();
 	        });
+	        _this.selectedItem = null;
+	        _this.selectedIndex = -1;
 	        _this.itemClicked = new _signals.Signal();
+	        _this.itemSelected = new _signals.Signal();
+	        _this._cursorIndex = -1;
 	        _this.clicked.then(function (e) {
 	            var element = e.event.target;
 	            while (element) {
 	                var item = element.dataset.item;
 	                if (item) {
-	                    _this.itemClicked.emit({
-	                        item: item,
-	                        list: _this
-	                    });
+	                    _this.onItemClicked(item);
 	                    break;
 	                }
 	                element = element.parentNode;
 	            }
 	        });
+	        _this.cursorKeyboardHandlers = {
+	            'down': function down() {
+	                _this.moveCursorDown();
+	            },
+	            'up': function up() {
+	                _this.moveCursorUp();
+	            },
+	            'enter': function enter() {
+	                _this.selectIndex(_this.cursorIndex);
+	            }
+	        };
 	        return _this;
 	    }
 	
 	    (0, _createClass3.default)(List, [{
+	        key: 'onItemClicked',
+	        value: function onItemClicked(item) {
+	            this.itemClicked.emit({
+	                item: item,
+	                list: this
+	            });
+	            this.selectItem(item);
+	        }
+	    }, {
+	        key: 'selectIndex',
+	        value: function selectIndex(index) {
+	            this.selectItem(this.model.get(index));
+	        }
+	    }, {
+	        key: 'selectItem',
+	        value: function selectItem(item) {
+	            if (item === this.selectedItem) {
+	                return;
+	            }
+	            this.selectedItem = item;
+	            this.itemSelected.emit({
+	                item: item,
+	                list: this
+	            });
+	        }
+	    }, {
+	        key: 'moveCursorDown',
+	        value: function moveCursorDown() {
+	            this.cursorIndex = this.cursorIndex + 1;
+	        }
+	    }, {
+	        key: 'moveCursorUp',
+	        value: function moveCursorUp() {
+	            if (this.cursorIndex != -1) {
+	                this.cursorIndex = this.cursorIndex + this.model.length - 1;
+	            } else {
+	                this.cursorIndex = this.model.length - 1;
+	            }
+	        }
+	    }, {
 	        key: 'getChildByElement',
 	        value: function getChildByElement() {}
 	    }, {
@@ -14031,19 +13709,42 @@
 	        value: function removeItem(item) {
 	            this.removeComponent(this.componentMap[item]);
 	        }
+	    }, {
+	        key: 'cursorIndex',
+	        get: function get() {
+	            return this._cursorIndex;
+	        },
+	        set: function set(index) {
+	            index = index % this.model.length;
+	            if (index == this._cursorIndex) {
+	                return;
+	            }
+	            if (this._cursorIndex != -1) {
+	                var _component = this.componentMap[this.model.get(this._cursorIndex)];
+	                _component.removeClass(this.cursorClass);
+	            }
+	            this._cursorIndex = index;
+	            if (index == -1) {
+	                return;
+	            }
+	            var item = this.model.get(index);
+	            var component = this.componentMap[item];
+	            console.log(index, item, component);
+	            component.addClass(this.cursorClass);
+	        }
 	    }]);
 	    return List;
 	}((0, _components.Container)());
 
 /***/ },
-/* 437 */
+/* 441 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	exports.__esModule = true;
 	
-	var _from = __webpack_require__(438);
+	var _from = __webpack_require__(442);
 	
 	var _from2 = _interopRequireDefault(_from);
 	
@@ -14062,21 +13763,21 @@
 	};
 
 /***/ },
-/* 438 */
+/* 442 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(439), __esModule: true };
+	module.exports = { "default": __webpack_require__(443), __esModule: true };
 
 /***/ },
-/* 439 */
+/* 443 */
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(331);
-	__webpack_require__(440);
+	__webpack_require__(444);
 	module.exports = __webpack_require__(313).Array.from;
 
 /***/ },
-/* 440 */
+/* 444 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14086,7 +13787,7 @@
 	  , call           = __webpack_require__(397)
 	  , isArrayIter    = __webpack_require__(398)
 	  , toLength       = __webpack_require__(347)
-	  , createProperty = __webpack_require__(441)
+	  , createProperty = __webpack_require__(445)
 	  , getIterFn      = __webpack_require__(399);
 	
 	$export($export.S + $export.F * !__webpack_require__(416)(function(iter){ Array.from(iter); }), 'Array', {
@@ -14119,7 +13820,7 @@
 
 
 /***/ },
-/* 441 */
+/* 445 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14132,7 +13833,7 @@
 	};
 
 /***/ },
-/* 442 */
+/* 446 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14158,18 +13859,6 @@
 	
 	var _getIterator3 = _interopRequireDefault(_getIterator2);
 	
-	var _getPrototypeOf = __webpack_require__(300);
-	
-	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-	
-	var _possibleConstructorReturn2 = __webpack_require__(327);
-	
-	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-	
-	var _inherits2 = __webpack_require__(374);
-	
-	var _inherits3 = _interopRequireDefault(_inherits2);
-	
 	var _defineProperty = __webpack_require__(425);
 	
 	var _defineProperty2 = _interopRequireDefault(_defineProperty);
@@ -14186,9 +13875,7 @@
 	
 	var _symbol2 = _interopRequireDefault(_symbol);
 	
-	var _wolfy87Eventemitter = __webpack_require__(428);
-	
-	var _wolfy87Eventemitter2 = _interopRequireDefault(_wolfy87Eventemitter);
+	var _signals = __webpack_require__(434);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -14214,7 +13901,7 @@
 	            var oldValue = obj[modelData][this.name];
 	            if (oldValue != value) {
 	                obj[modelData][this.name] = value;
-	                obj.emit('PropertyChanged', {
+	                obj.propertyChanged.emit({
 	                    model: obj,
 	                    property: this,
 	                    value: value,
@@ -14239,17 +13926,13 @@
 	    return Property;
 	}();
 	
-	var Model = exports.Model = function (_EventEmitter) {
-	    (0, _inherits3.default)(Model, _EventEmitter);
-	
+	var Model = exports.Model = function () {
 	    function Model(config) {
 	        (0, _classCallCheck3.default)(this, Model);
 	
-	        var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Model).call(this));
-	
-	        _this[modelData] = {};
-	        _this.constructor.initClass();
-	        return _this;
+	        this[modelData] = {};
+	        this.constructor.initClass();
+	        this.propertyChanged = new _signals.Signal();
 	    }
 	
 	    (0, _createClass3.default)(Model, null, [{
@@ -14288,36 +13971,39 @@
 	        }
 	    }]);
 	    return Model;
-	}(_wolfy87Eventemitter2.default);
+	}();
 	
-	var ListModel = exports.ListModel = function (_EventEmitter2) {
-	    (0, _inherits3.default)(ListModel, _EventEmitter2);
-	
+	var ListModel = exports.ListModel = function () {
 	    function ListModel(_ref) {
 	        var items = _ref.items;
 	        var config = (0, _objectWithoutProperties3.default)(_ref, ['items']);
 	        (0, _classCallCheck3.default)(this, ListModel);
 	
-	        var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ListModel).call(this, config));
-	
-	        _this2.items = items;
-	        return _this2;
+	        this.items = items;
+	        this.itemAdded = new _signals.Signal();
+	        this.itemRemoved = new _signals.Signal();
+	        this.itemsReordered = new _signals.Signal();
 	    }
 	
 	    (0, _createClass3.default)(ListModel, [{
 	        key: 'onItemAdded',
 	        value: function onItemAdded(item, index) {
-	            this.emit('ItemAdded', { model: this, item: item, index: index });
+	            this.itemAdded.emit({ model: this, item: item, index: index });
 	        }
 	    }, {
 	        key: 'onItemRemoved',
 	        value: function onItemRemoved(item, index) {
-	            this.emit('ItemRemoved', { model: this, item: item, index: index });
+	            this.itemRemoved.emit({ model: this, item: item, index: index });
 	        }
 	    }, {
 	        key: 'onItemsReordered',
 	        value: function onItemsReordered() {
-	            this.emit('ItemsReordered', { model: this });
+	            this.itemsReordered.emit({ model: this });
+	        }
+	    }, {
+	        key: 'get',
+	        value: function get(index) {
+	            return this.items[index];
 	        }
 	    }, {
 	        key: _iterator3.default,
@@ -14391,10 +14077,10 @@
 	        }
 	    }]);
 	    return ListModel;
-	}(_wolfy87Eventemitter2.default);
+	}();
 
 /***/ },
-/* 443 */
+/* 447 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14416,7 +14102,7 @@
 	
 	var _extends3 = _interopRequireDefault(_extends2);
 	
-	var _slicedToArray2 = __webpack_require__(444);
+	var _slicedToArray2 = __webpack_require__(448);
 	
 	var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
 	
@@ -14443,10 +14129,6 @@
 	var _createClass2 = __webpack_require__(424);
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
-	
-	var _wolfy87Eventemitter = __webpack_require__(428);
-	
-	var _wolfy87Eventemitter2 = _interopRequireDefault(_wolfy87Eventemitter);
 	
 	var _components = __webpack_require__(384);
 	
@@ -14483,9 +14165,7 @@
 	    return NotFoundError;
 	}(_errors.F3Error);
 	
-	var Router = exports.Router = function (_EventEmitter) {
-	    (0, _inherits3.default)(Router, _EventEmitter);
-	
+	var Router = exports.Router = function () {
 	    function Router() {
 	        var _ref2 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	
@@ -14493,16 +14173,13 @@
 	        var routes = _ref2$routes === undefined ? [] : _ref2$routes;
 	        (0, _classCallCheck3.default)(this, Router);
 	
-	        var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Router).call(this));
-	
-	        _this2.routes = routes;
-	        return _this2;
+	        this.routes = routes;
 	    }
 	
 	    (0, _createClass3.default)(Router, [{
 	        key: 'compilePattern',
 	        value: function compilePattern(pattern) {
-	            var _this3 = this;
+	            var _this2 = this;
 	
 	            var params = [];
 	            var regex = pattern.replace(/\{\w+(?::\w+)?\}/, function (match) {
@@ -14513,7 +14190,7 @@
 	                var name = _match$substring$spli2[0];
 	                var type = _match$substring$spli2[1];
 	
-	                type = type || _this3.constructor.defaultGroupType;
+	                type = type || _this2.constructor.defaultGroupType;
 	                var param = { name: name, type: type, regex: Router.groupTypes[type] || type };
 	                params.push(param);
 	                return param.regex;
@@ -14593,7 +14270,7 @@
 	        }
 	    }]);
 	    return Router;
-	}(_wolfy87Eventemitter2.default);
+	}();
 	
 	Router.groupTypes = {
 	    'int': '(\d+)',
@@ -14603,26 +14280,24 @@
 	};
 	Router.defaultGroupType = 'any';
 	
-	var Application = exports.Application = function (_EventEmitter2) {
-	    (0, _inherits3.default)(Application, _EventEmitter2);
-	
+	var Application = exports.Application = function () {
 	    function Application() {
+	        var _this3 = this;
+	
 	        var _ref3 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	
 	        var win = _ref3.win;
 	        var router = _ref3.router;
 	        (0, _classCallCheck3.default)(this, Application);
 	
-	        var _this4 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Application).call(this));
-	
-	        _this4.root = new _components.Root({ app: _this4 });
-	        _this4.router = router || new Router();
-	        _this4.window = _this4.root.addComponent(win || new _components.Window());
+	        this.root = new _components.Root({ app: this });
+	        this.router = router || new Router();
+	        this.window = this.root.addComponent(win || new _components.Window());
 	
 	        window.addEventListener('popstate', function (e) {
 	            console.log(e, window.location.pathname);
 	            try {
-	                _this4.router.call(window.location.pathname);
+	                _this3.router.call(window.location.pathname);
 	            } catch (e) {
 	                if (e instanceof NotFoundError) {
 	                    // FIXME
@@ -14635,38 +14310,45 @@
 	        window.addEventListener('click', function (e) {
 	            if (e.target.tagName == 'A') {
 	                e.preventDefault();
-	                _this4.router.call(e.target.pathname);
+	                _this3.router.call(e.target.pathname);
 	            }
 	        });
 	        window.addEventListener('load', function (e) {
-	            _this4.router.call(window.location.pathname);
+	            _this3.router.call(window.location.pathname);
 	        });
-	        return _this4;
 	    }
 	
 	    (0, _createClass3.default)(Application, [{
 	        key: 'addPage',
 	        value: function addPage(route, page) {
-	            var _this5 = this;
+	            var _this4 = this;
 	
 	            this.router.addRoute(route, function (url, params) {
-	                page.open(_this5.window, params);
+	                page.open(_this4.window, params);
 	                window.history.pushState(params, null, url);
 	            });
 	        }
+	    }, {
+	        key: 'addAction',
+	        value: function addAction(action) {
+	            this.actions.push(action);
+	            if (action.shortcut) {
+	                Mousetrap.bind(action.shortcut, action.perform.bind(action));
+	            }
+	        }
 	    }]);
 	    return Application;
-	}(_wolfy87Eventemitter2.default);
+	}();
 
 /***/ },
-/* 444 */
+/* 448 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	exports.__esModule = true;
 	
-	var _isIterable2 = __webpack_require__(445);
+	var _isIterable2 = __webpack_require__(449);
 	
 	var _isIterable3 = _interopRequireDefault(_isIterable2);
 	
@@ -14715,21 +14397,21 @@
 	}();
 
 /***/ },
-/* 445 */
+/* 449 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(446), __esModule: true };
+	module.exports = { "default": __webpack_require__(450), __esModule: true };
 
 /***/ },
-/* 446 */
+/* 450 */
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(353);
 	__webpack_require__(331);
-	module.exports = __webpack_require__(447);
+	module.exports = __webpack_require__(451);
 
 /***/ },
-/* 447 */
+/* 451 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var classof   = __webpack_require__(400)
@@ -14743,7 +14425,7 @@
 	};
 
 /***/ },
-/* 448 */
+/* 452 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14755,16 +14437,16 @@
 	_config.CONFIG.defaultDisplayComponent = _components.Display;
 
 /***/ },
-/* 449 */
+/* 453 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(450);
+	var content = __webpack_require__(454);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(452)(content, {});
+	var update = __webpack_require__(456)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -14781,21 +14463,21 @@
 	}
 
 /***/ },
-/* 450 */
+/* 454 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(451)();
+	exports = module.exports = __webpack_require__(455)();
 	// imports
 	
 	
 	// module
-	exports.push([module.id, "html {\n  box-sizing: border-box; }\n\n*, *::after, *::before {\n  box-sizing: inherit; }\n\nhtml, body {\n  margin: 0px;\n  padding: 0px;\n  height: 100%;\n  background-color: #2D1429; }\n\n.Root {\n  height: 100%;\n  max-width: 1200px;\n  margin-left: auto;\n  margin-right: auto;\n  background-color: #fff; }\n  .Root::after {\n    clear: both;\n    content: \"\";\n    display: table; }\n\n.Window {\n  float: left;\n  display: block;\n  margin-right: 2.35765%;\n  width: 100%;\n  height: 100%;\n  border: 5px solid #f70; }\n  .Window:last-child {\n    margin-right: 0; }\n", ""]);
+	exports.push([module.id, "html {\n  box-sizing: border-box; }\n\n*, *::after, *::before {\n  box-sizing: inherit; }\n\nhtml, body {\n  margin: 0px;\n  padding: 0px;\n  height: 100%;\n  background-color: #2D1429; }\n\n.Root {\n  height: 100%;\n  max-width: 1200px;\n  margin-left: auto;\n  margin-right: auto;\n  background-color: #fff; }\n  .Root::after {\n    clear: both;\n    content: \"\";\n    display: table; }\n\n.Window {\n  float: left;\n  display: block;\n  margin-right: 2.35765%;\n  width: 100%;\n  height: 100%; }\n  .Window:last-child {\n    margin-right: 0; }\n\n.ChoiceInput .List > .cursor {\n  background-color: #fffeee; }\n", ""]);
 	
 	// exports
 
 
 /***/ },
-/* 451 */
+/* 455 */
 /***/ function(module, exports) {
 
 	/*
@@ -14851,7 +14533,7 @@
 
 
 /***/ },
-/* 452 */
+/* 456 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -15103,77 +14785,1093 @@
 
 
 /***/ },
-/* 453 */
+/* 457 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	var __WEBPACK_AMD_DEFINE_RESULT__;/*global define:false */
+	/**
+	 * Copyright 2016 Craig Campbell
+	 *
+	 * Licensed under the Apache License, Version 2.0 (the "License");
+	 * you may not use this file except in compliance with the License.
+	 * You may obtain a copy of the License at
+	 *
+	 * http://www.apache.org/licenses/LICENSE-2.0
+	 *
+	 * Unless required by applicable law or agreed to in writing, software
+	 * distributed under the License is distributed on an "AS IS" BASIS,
+	 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	 * See the License for the specific language governing permissions and
+	 * limitations under the License.
+	 *
+	 * Mousetrap is a simple keyboard shortcut library for Javascript with
+	 * no external dependencies
+	 *
+	 * @version 1.6.0
+	 * @url craig.is/killing/mice
+	 */
+	(function(window, document, undefined) {
 	
-	exports.__esModule = true;
-	
-	var _getPrototypeOf = __webpack_require__(300);
-	
-	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-	
-	var _getOwnPropertyDescriptor = __webpack_require__(454);
-	
-	var _getOwnPropertyDescriptor2 = _interopRequireDefault(_getOwnPropertyDescriptor);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	exports.default = function get(object, property, receiver) {
-	  if (object === null) object = Function.prototype;
-	  var desc = (0, _getOwnPropertyDescriptor2.default)(object, property);
-	
-	  if (desc === undefined) {
-	    var parent = (0, _getPrototypeOf2.default)(object);
-	
-	    if (parent === null) {
-	      return undefined;
-	    } else {
-	      return get(parent, property, receiver);
-	    }
-	  } else if ("value" in desc) {
-	    return desc.value;
-	  } else {
-	    var getter = desc.get;
-	
-	    if (getter === undefined) {
-	      return undefined;
+	    // Check if mousetrap is used inside browser, if not, return
+	    if (!window) {
+	        return;
 	    }
 	
-	    return getter.call(receiver);
-	  }
-	};
-
-/***/ },
-/* 454 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = { "default": __webpack_require__(455), __esModule: true };
-
-/***/ },
-/* 455 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(456);
-	var $Object = __webpack_require__(313).Object;
-	module.exports = function getOwnPropertyDescriptor(it, key){
-	  return $Object.getOwnPropertyDescriptor(it, key);
-	};
-
-/***/ },
-/* 456 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
-	var toIObject                 = __webpack_require__(343)
-	  , $getOwnPropertyDescriptor = __webpack_require__(370).f;
+	    /**
+	     * mapping of special keycodes to their corresponding keys
+	     *
+	     * everything in this dictionary cannot use keypress events
+	     * so it has to be here to map to the correct keycodes for
+	     * keyup/keydown events
+	     *
+	     * @type {Object}
+	     */
+	    var _MAP = {
+	        8: 'backspace',
+	        9: 'tab',
+	        13: 'enter',
+	        16: 'shift',
+	        17: 'ctrl',
+	        18: 'alt',
+	        20: 'capslock',
+	        27: 'esc',
+	        32: 'space',
+	        33: 'pageup',
+	        34: 'pagedown',
+	        35: 'end',
+	        36: 'home',
+	        37: 'left',
+	        38: 'up',
+	        39: 'right',
+	        40: 'down',
+	        45: 'ins',
+	        46: 'del',
+	        91: 'meta',
+	        93: 'meta',
+	        224: 'meta'
+	    };
 	
-	__webpack_require__(311)('getOwnPropertyDescriptor', function(){
-	  return function getOwnPropertyDescriptor(it, key){
-	    return $getOwnPropertyDescriptor(toIObject(it), key);
-	  };
-	});
+	    /**
+	     * mapping for special characters so they can support
+	     *
+	     * this dictionary is only used incase you want to bind a
+	     * keyup or keydown event to one of these keys
+	     *
+	     * @type {Object}
+	     */
+	    var _KEYCODE_MAP = {
+	        106: '*',
+	        107: '+',
+	        109: '-',
+	        110: '.',
+	        111 : '/',
+	        186: ';',
+	        187: '=',
+	        188: ',',
+	        189: '-',
+	        190: '.',
+	        191: '/',
+	        192: '`',
+	        219: '[',
+	        220: '\\',
+	        221: ']',
+	        222: '\''
+	    };
+	
+	    /**
+	     * this is a mapping of keys that require shift on a US keypad
+	     * back to the non shift equivelents
+	     *
+	     * this is so you can use keyup events with these keys
+	     *
+	     * note that this will only work reliably on US keyboards
+	     *
+	     * @type {Object}
+	     */
+	    var _SHIFT_MAP = {
+	        '~': '`',
+	        '!': '1',
+	        '@': '2',
+	        '#': '3',
+	        '$': '4',
+	        '%': '5',
+	        '^': '6',
+	        '&': '7',
+	        '*': '8',
+	        '(': '9',
+	        ')': '0',
+	        '_': '-',
+	        '+': '=',
+	        ':': ';',
+	        '\"': '\'',
+	        '<': ',',
+	        '>': '.',
+	        '?': '/',
+	        '|': '\\'
+	    };
+	
+	    /**
+	     * this is a list of special strings you can use to map
+	     * to modifier keys when you specify your keyboard shortcuts
+	     *
+	     * @type {Object}
+	     */
+	    var _SPECIAL_ALIASES = {
+	        'option': 'alt',
+	        'command': 'meta',
+	        'return': 'enter',
+	        'escape': 'esc',
+	        'plus': '+',
+	        'mod': /Mac|iPod|iPhone|iPad/.test(navigator.platform) ? 'meta' : 'ctrl'
+	    };
+	
+	    /**
+	     * variable to store the flipped version of _MAP from above
+	     * needed to check if we should use keypress or not when no action
+	     * is specified
+	     *
+	     * @type {Object|undefined}
+	     */
+	    var _REVERSE_MAP;
+	
+	    /**
+	     * loop through the f keys, f1 to f19 and add them to the map
+	     * programatically
+	     */
+	    for (var i = 1; i < 20; ++i) {
+	        _MAP[111 + i] = 'f' + i;
+	    }
+	
+	    /**
+	     * loop through to map numbers on the numeric keypad
+	     */
+	    for (i = 0; i <= 9; ++i) {
+	        _MAP[i + 96] = i;
+	    }
+	
+	    /**
+	     * cross browser add event method
+	     *
+	     * @param {Element|HTMLDocument} object
+	     * @param {string} type
+	     * @param {Function} callback
+	     * @returns void
+	     */
+	    function _addEvent(object, type, callback) {
+	        if (object.addEventListener) {
+	            object.addEventListener(type, callback, false);
+	            return;
+	        }
+	
+	        object.attachEvent('on' + type, callback);
+	    }
+	
+	    /**
+	     * takes the event and returns the key character
+	     *
+	     * @param {Event} e
+	     * @return {string}
+	     */
+	    function _characterFromEvent(e) {
+	
+	        // for keypress events we should return the character as is
+	        if (e.type == 'keypress') {
+	            var character = String.fromCharCode(e.which);
+	
+	            // if the shift key is not pressed then it is safe to assume
+	            // that we want the character to be lowercase.  this means if
+	            // you accidentally have caps lock on then your key bindings
+	            // will continue to work
+	            //
+	            // the only side effect that might not be desired is if you
+	            // bind something like 'A' cause you want to trigger an
+	            // event when capital A is pressed caps lock will no longer
+	            // trigger the event.  shift+a will though.
+	            if (!e.shiftKey) {
+	                character = character.toLowerCase();
+	            }
+	
+	            return character;
+	        }
+	
+	        // for non keypress events the special maps are needed
+	        if (_MAP[e.which]) {
+	            return _MAP[e.which];
+	        }
+	
+	        if (_KEYCODE_MAP[e.which]) {
+	            return _KEYCODE_MAP[e.which];
+	        }
+	
+	        // if it is not in the special map
+	
+	        // with keydown and keyup events the character seems to always
+	        // come in as an uppercase character whether you are pressing shift
+	        // or not.  we should make sure it is always lowercase for comparisons
+	        return String.fromCharCode(e.which).toLowerCase();
+	    }
+	
+	    /**
+	     * checks if two arrays are equal
+	     *
+	     * @param {Array} modifiers1
+	     * @param {Array} modifiers2
+	     * @returns {boolean}
+	     */
+	    function _modifiersMatch(modifiers1, modifiers2) {
+	        return modifiers1.sort().join(',') === modifiers2.sort().join(',');
+	    }
+	
+	    /**
+	     * takes a key event and figures out what the modifiers are
+	     *
+	     * @param {Event} e
+	     * @returns {Array}
+	     */
+	    function _eventModifiers(e) {
+	        var modifiers = [];
+	
+	        if (e.shiftKey) {
+	            modifiers.push('shift');
+	        }
+	
+	        if (e.altKey) {
+	            modifiers.push('alt');
+	        }
+	
+	        if (e.ctrlKey) {
+	            modifiers.push('ctrl');
+	        }
+	
+	        if (e.metaKey) {
+	            modifiers.push('meta');
+	        }
+	
+	        return modifiers;
+	    }
+	
+	    /**
+	     * prevents default for this event
+	     *
+	     * @param {Event} e
+	     * @returns void
+	     */
+	    function _preventDefault(e) {
+	        if (e.preventDefault) {
+	            e.preventDefault();
+	            return;
+	        }
+	
+	        e.returnValue = false;
+	    }
+	
+	    /**
+	     * stops propogation for this event
+	     *
+	     * @param {Event} e
+	     * @returns void
+	     */
+	    function _stopPropagation(e) {
+	        if (e.stopPropagation) {
+	            e.stopPropagation();
+	            return;
+	        }
+	
+	        e.cancelBubble = true;
+	    }
+	
+	    /**
+	     * determines if the keycode specified is a modifier key or not
+	     *
+	     * @param {string} key
+	     * @returns {boolean}
+	     */
+	    function _isModifier(key) {
+	        return key == 'shift' || key == 'ctrl' || key == 'alt' || key == 'meta';
+	    }
+	
+	    /**
+	     * reverses the map lookup so that we can look for specific keys
+	     * to see what can and can't use keypress
+	     *
+	     * @return {Object}
+	     */
+	    function _getReverseMap() {
+	        if (!_REVERSE_MAP) {
+	            _REVERSE_MAP = {};
+	            for (var key in _MAP) {
+	
+	                // pull out the numeric keypad from here cause keypress should
+	                // be able to detect the keys from the character
+	                if (key > 95 && key < 112) {
+	                    continue;
+	                }
+	
+	                if (_MAP.hasOwnProperty(key)) {
+	                    _REVERSE_MAP[_MAP[key]] = key;
+	                }
+	            }
+	        }
+	        return _REVERSE_MAP;
+	    }
+	
+	    /**
+	     * picks the best action based on the key combination
+	     *
+	     * @param {string} key - character for key
+	     * @param {Array} modifiers
+	     * @param {string=} action passed in
+	     */
+	    function _pickBestAction(key, modifiers, action) {
+	
+	        // if no action was picked in we should try to pick the one
+	        // that we think would work best for this key
+	        if (!action) {
+	            action = _getReverseMap()[key] ? 'keydown' : 'keypress';
+	        }
+	
+	        // modifier keys don't work as expected with keypress,
+	        // switch to keydown
+	        if (action == 'keypress' && modifiers.length) {
+	            action = 'keydown';
+	        }
+	
+	        return action;
+	    }
+	
+	    /**
+	     * Converts from a string key combination to an array
+	     *
+	     * @param  {string} combination like "command+shift+l"
+	     * @return {Array}
+	     */
+	    function _keysFromString(combination) {
+	        if (combination === '+') {
+	            return ['+'];
+	        }
+	
+	        combination = combination.replace(/\+{2}/g, '+plus');
+	        return combination.split('+');
+	    }
+	
+	    /**
+	     * Gets info for a specific key combination
+	     *
+	     * @param  {string} combination key combination ("command+s" or "a" or "*")
+	     * @param  {string=} action
+	     * @returns {Object}
+	     */
+	    function _getKeyInfo(combination, action) {
+	        var keys;
+	        var key;
+	        var i;
+	        var modifiers = [];
+	
+	        // take the keys from this pattern and figure out what the actual
+	        // pattern is all about
+	        keys = _keysFromString(combination);
+	
+	        for (i = 0; i < keys.length; ++i) {
+	            key = keys[i];
+	
+	            // normalize key names
+	            if (_SPECIAL_ALIASES[key]) {
+	                key = _SPECIAL_ALIASES[key];
+	            }
+	
+	            // if this is not a keypress event then we should
+	            // be smart about using shift keys
+	            // this will only work for US keyboards however
+	            if (action && action != 'keypress' && _SHIFT_MAP[key]) {
+	                key = _SHIFT_MAP[key];
+	                modifiers.push('shift');
+	            }
+	
+	            // if this key is a modifier then add it to the list of modifiers
+	            if (_isModifier(key)) {
+	                modifiers.push(key);
+	            }
+	        }
+	
+	        // depending on what the key combination is
+	        // we will try to pick the best event for it
+	        action = _pickBestAction(key, modifiers, action);
+	
+	        return {
+	            key: key,
+	            modifiers: modifiers,
+	            action: action
+	        };
+	    }
+	
+	    function _belongsTo(element, ancestor) {
+	        if (element === null || element === document) {
+	            return false;
+	        }
+	
+	        if (element === ancestor) {
+	            return true;
+	        }
+	
+	        return _belongsTo(element.parentNode, ancestor);
+	    }
+	
+	    function Mousetrap(targetElement) {
+	        var self = this;
+	
+	        targetElement = targetElement || document;
+	
+	        if (!(self instanceof Mousetrap)) {
+	            return new Mousetrap(targetElement);
+	        }
+	
+	        /**
+	         * element to attach key events to
+	         *
+	         * @type {Element}
+	         */
+	        self.target = targetElement;
+	
+	        /**
+	         * a list of all the callbacks setup via Mousetrap.bind()
+	         *
+	         * @type {Object}
+	         */
+	        self._callbacks = {};
+	
+	        /**
+	         * direct map of string combinations to callbacks used for trigger()
+	         *
+	         * @type {Object}
+	         */
+	        self._directMap = {};
+	
+	        /**
+	         * keeps track of what level each sequence is at since multiple
+	         * sequences can start out with the same sequence
+	         *
+	         * @type {Object}
+	         */
+	        var _sequenceLevels = {};
+	
+	        /**
+	         * variable to store the setTimeout call
+	         *
+	         * @type {null|number}
+	         */
+	        var _resetTimer;
+	
+	        /**
+	         * temporary state where we will ignore the next keyup
+	         *
+	         * @type {boolean|string}
+	         */
+	        var _ignoreNextKeyup = false;
+	
+	        /**
+	         * temporary state where we will ignore the next keypress
+	         *
+	         * @type {boolean}
+	         */
+	        var _ignoreNextKeypress = false;
+	
+	        /**
+	         * are we currently inside of a sequence?
+	         * type of action ("keyup" or "keydown" or "keypress") or false
+	         *
+	         * @type {boolean|string}
+	         */
+	        var _nextExpectedAction = false;
+	
+	        /**
+	         * resets all sequence counters except for the ones passed in
+	         *
+	         * @param {Object} doNotReset
+	         * @returns void
+	         */
+	        function _resetSequences(doNotReset) {
+	            doNotReset = doNotReset || {};
+	
+	            var activeSequences = false,
+	                key;
+	
+	            for (key in _sequenceLevels) {
+	                if (doNotReset[key]) {
+	                    activeSequences = true;
+	                    continue;
+	                }
+	                _sequenceLevels[key] = 0;
+	            }
+	
+	            if (!activeSequences) {
+	                _nextExpectedAction = false;
+	            }
+	        }
+	
+	        /**
+	         * finds all callbacks that match based on the keycode, modifiers,
+	         * and action
+	         *
+	         * @param {string} character
+	         * @param {Array} modifiers
+	         * @param {Event|Object} e
+	         * @param {string=} sequenceName - name of the sequence we are looking for
+	         * @param {string=} combination
+	         * @param {number=} level
+	         * @returns {Array}
+	         */
+	        function _getMatches(character, modifiers, e, sequenceName, combination, level) {
+	            var i;
+	            var callback;
+	            var matches = [];
+	            var action = e.type;
+	
+	            // if there are no events related to this keycode
+	            if (!self._callbacks[character]) {
+	                return [];
+	            }
+	
+	            // if a modifier key is coming up on its own we should allow it
+	            if (action == 'keyup' && _isModifier(character)) {
+	                modifiers = [character];
+	            }
+	
+	            // loop through all callbacks for the key that was pressed
+	            // and see if any of them match
+	            for (i = 0; i < self._callbacks[character].length; ++i) {
+	                callback = self._callbacks[character][i];
+	
+	                // if a sequence name is not specified, but this is a sequence at
+	                // the wrong level then move onto the next match
+	                if (!sequenceName && callback.seq && _sequenceLevels[callback.seq] != callback.level) {
+	                    continue;
+	                }
+	
+	                // if the action we are looking for doesn't match the action we got
+	                // then we should keep going
+	                if (action != callback.action) {
+	                    continue;
+	                }
+	
+	                // if this is a keypress event and the meta key and control key
+	                // are not pressed that means that we need to only look at the
+	                // character, otherwise check the modifiers as well
+	                //
+	                // chrome will not fire a keypress if meta or control is down
+	                // safari will fire a keypress if meta or meta+shift is down
+	                // firefox will fire a keypress if meta or control is down
+	                if ((action == 'keypress' && !e.metaKey && !e.ctrlKey) || _modifiersMatch(modifiers, callback.modifiers)) {
+	
+	                    // when you bind a combination or sequence a second time it
+	                    // should overwrite the first one.  if a sequenceName or
+	                    // combination is specified in this call it does just that
+	                    //
+	                    // @todo make deleting its own method?
+	                    var deleteCombo = !sequenceName && callback.combo == combination;
+	                    var deleteSequence = sequenceName && callback.seq == sequenceName && callback.level == level;
+	                    if (deleteCombo || deleteSequence) {
+	                        self._callbacks[character].splice(i, 1);
+	                    }
+	
+	                    matches.push(callback);
+	                }
+	            }
+	
+	            return matches;
+	        }
+	
+	        /**
+	         * actually calls the callback function
+	         *
+	         * if your callback function returns false this will use the jquery
+	         * convention - prevent default and stop propogation on the event
+	         *
+	         * @param {Function} callback
+	         * @param {Event} e
+	         * @returns void
+	         */
+	        function _fireCallback(callback, e, combo, sequence) {
+	
+	            // if this event should not happen stop here
+	            if (self.stopCallback(e, e.target || e.srcElement, combo, sequence)) {
+	                return;
+	            }
+	
+	            if (callback(e, combo) === false) {
+	                _preventDefault(e);
+	                _stopPropagation(e);
+	            }
+	        }
+	
+	        /**
+	         * handles a character key event
+	         *
+	         * @param {string} character
+	         * @param {Array} modifiers
+	         * @param {Event} e
+	         * @returns void
+	         */
+	        self._handleKey = function(character, modifiers, e) {
+	            var callbacks = _getMatches(character, modifiers, e);
+	            var i;
+	            var doNotReset = {};
+	            var maxLevel = 0;
+	            var processedSequenceCallback = false;
+	
+	            // Calculate the maxLevel for sequences so we can only execute the longest callback sequence
+	            for (i = 0; i < callbacks.length; ++i) {
+	                if (callbacks[i].seq) {
+	                    maxLevel = Math.max(maxLevel, callbacks[i].level);
+	                }
+	            }
+	
+	            // loop through matching callbacks for this key event
+	            for (i = 0; i < callbacks.length; ++i) {
+	
+	                // fire for all sequence callbacks
+	                // this is because if for example you have multiple sequences
+	                // bound such as "g i" and "g t" they both need to fire the
+	                // callback for matching g cause otherwise you can only ever
+	                // match the first one
+	                if (callbacks[i].seq) {
+	
+	                    // only fire callbacks for the maxLevel to prevent
+	                    // subsequences from also firing
+	                    //
+	                    // for example 'a option b' should not cause 'option b' to fire
+	                    // even though 'option b' is part of the other sequence
+	                    //
+	                    // any sequences that do not match here will be discarded
+	                    // below by the _resetSequences call
+	                    if (callbacks[i].level != maxLevel) {
+	                        continue;
+	                    }
+	
+	                    processedSequenceCallback = true;
+	
+	                    // keep a list of which sequences were matches for later
+	                    doNotReset[callbacks[i].seq] = 1;
+	                    _fireCallback(callbacks[i].callback, e, callbacks[i].combo, callbacks[i].seq);
+	                    continue;
+	                }
+	
+	                // if there were no sequence matches but we are still here
+	                // that means this is a regular match so we should fire that
+	                if (!processedSequenceCallback) {
+	                    _fireCallback(callbacks[i].callback, e, callbacks[i].combo);
+	                }
+	            }
+	
+	            // if the key you pressed matches the type of sequence without
+	            // being a modifier (ie "keyup" or "keypress") then we should
+	            // reset all sequences that were not matched by this event
+	            //
+	            // this is so, for example, if you have the sequence "h a t" and you
+	            // type "h e a r t" it does not match.  in this case the "e" will
+	            // cause the sequence to reset
+	            //
+	            // modifier keys are ignored because you can have a sequence
+	            // that contains modifiers such as "enter ctrl+space" and in most
+	            // cases the modifier key will be pressed before the next key
+	            //
+	            // also if you have a sequence such as "ctrl+b a" then pressing the
+	            // "b" key will trigger a "keypress" and a "keydown"
+	            //
+	            // the "keydown" is expected when there is a modifier, but the
+	            // "keypress" ends up matching the _nextExpectedAction since it occurs
+	            // after and that causes the sequence to reset
+	            //
+	            // we ignore keypresses in a sequence that directly follow a keydown
+	            // for the same character
+	            var ignoreThisKeypress = e.type == 'keypress' && _ignoreNextKeypress;
+	            if (e.type == _nextExpectedAction && !_isModifier(character) && !ignoreThisKeypress) {
+	                _resetSequences(doNotReset);
+	            }
+	
+	            _ignoreNextKeypress = processedSequenceCallback && e.type == 'keydown';
+	        };
+	
+	        /**
+	         * handles a keydown event
+	         *
+	         * @param {Event} e
+	         * @returns void
+	         */
+	        function _handleKeyEvent(e) {
+	
+	            // normalize e.which for key events
+	            // @see http://stackoverflow.com/questions/4285627/javascript-keycode-vs-charcode-utter-confusion
+	            if (typeof e.which !== 'number') {
+	                e.which = e.keyCode;
+	            }
+	
+	            var character = _characterFromEvent(e);
+	
+	            // no character found then stop
+	            if (!character) {
+	                return;
+	            }
+	
+	            // need to use === for the character check because the character can be 0
+	            if (e.type == 'keyup' && _ignoreNextKeyup === character) {
+	                _ignoreNextKeyup = false;
+	                return;
+	            }
+	
+	            self.handleKey(character, _eventModifiers(e), e);
+	        }
+	
+	        /**
+	         * called to set a 1 second timeout on the specified sequence
+	         *
+	         * this is so after each key press in the sequence you have 1 second
+	         * to press the next key before you have to start over
+	         *
+	         * @returns void
+	         */
+	        function _resetSequenceTimer() {
+	            clearTimeout(_resetTimer);
+	            _resetTimer = setTimeout(_resetSequences, 1000);
+	        }
+	
+	        /**
+	         * binds a key sequence to an event
+	         *
+	         * @param {string} combo - combo specified in bind call
+	         * @param {Array} keys
+	         * @param {Function} callback
+	         * @param {string=} action
+	         * @returns void
+	         */
+	        function _bindSequence(combo, keys, callback, action) {
+	
+	            // start off by adding a sequence level record for this combination
+	            // and setting the level to 0
+	            _sequenceLevels[combo] = 0;
+	
+	            /**
+	             * callback to increase the sequence level for this sequence and reset
+	             * all other sequences that were active
+	             *
+	             * @param {string} nextAction
+	             * @returns {Function}
+	             */
+	            function _increaseSequence(nextAction) {
+	                return function() {
+	                    _nextExpectedAction = nextAction;
+	                    ++_sequenceLevels[combo];
+	                    _resetSequenceTimer();
+	                };
+	            }
+	
+	            /**
+	             * wraps the specified callback inside of another function in order
+	             * to reset all sequence counters as soon as this sequence is done
+	             *
+	             * @param {Event} e
+	             * @returns void
+	             */
+	            function _callbackAndReset(e) {
+	                _fireCallback(callback, e, combo);
+	
+	                // we should ignore the next key up if the action is key down
+	                // or keypress.  this is so if you finish a sequence and
+	                // release the key the final key will not trigger a keyup
+	                if (action !== 'keyup') {
+	                    _ignoreNextKeyup = _characterFromEvent(e);
+	                }
+	
+	                // weird race condition if a sequence ends with the key
+	                // another sequence begins with
+	                setTimeout(_resetSequences, 10);
+	            }
+	
+	            // loop through keys one at a time and bind the appropriate callback
+	            // function.  for any key leading up to the final one it should
+	            // increase the sequence. after the final, it should reset all sequences
+	            //
+	            // if an action is specified in the original bind call then that will
+	            // be used throughout.  otherwise we will pass the action that the
+	            // next key in the sequence should match.  this allows a sequence
+	            // to mix and match keypress and keydown events depending on which
+	            // ones are better suited to the key provided
+	            for (var i = 0; i < keys.length; ++i) {
+	                var isFinal = i + 1 === keys.length;
+	                var wrappedCallback = isFinal ? _callbackAndReset : _increaseSequence(action || _getKeyInfo(keys[i + 1]).action);
+	                _bindSingle(keys[i], wrappedCallback, action, combo, i);
+	            }
+	        }
+	
+	        /**
+	         * binds a single keyboard combination
+	         *
+	         * @param {string} combination
+	         * @param {Function} callback
+	         * @param {string=} action
+	         * @param {string=} sequenceName - name of sequence if part of sequence
+	         * @param {number=} level - what part of the sequence the command is
+	         * @returns void
+	         */
+	        function _bindSingle(combination, callback, action, sequenceName, level) {
+	
+	            // store a direct mapped reference for use with Mousetrap.trigger
+	            self._directMap[combination + ':' + action] = callback;
+	
+	            // make sure multiple spaces in a row become a single space
+	            combination = combination.replace(/\s+/g, ' ');
+	
+	            var sequence = combination.split(' ');
+	            var info;
+	
+	            // if this pattern is a sequence of keys then run through this method
+	            // to reprocess each pattern one key at a time
+	            if (sequence.length > 1) {
+	                _bindSequence(combination, sequence, callback, action);
+	                return;
+	            }
+	
+	            info = _getKeyInfo(combination, action);
+	
+	            // make sure to initialize array if this is the first time
+	            // a callback is added for this key
+	            self._callbacks[info.key] = self._callbacks[info.key] || [];
+	
+	            // remove an existing match if there is one
+	            _getMatches(info.key, info.modifiers, {type: info.action}, sequenceName, combination, level);
+	
+	            // add this call back to the array
+	            // if it is a sequence put it at the beginning
+	            // if not put it at the end
+	            //
+	            // this is important because the way these are processed expects
+	            // the sequence ones to come first
+	            self._callbacks[info.key][sequenceName ? 'unshift' : 'push']({
+	                callback: callback,
+	                modifiers: info.modifiers,
+	                action: info.action,
+	                seq: sequenceName,
+	                level: level,
+	                combo: combination
+	            });
+	        }
+	
+	        /**
+	         * binds multiple combinations to the same callback
+	         *
+	         * @param {Array} combinations
+	         * @param {Function} callback
+	         * @param {string|undefined} action
+	         * @returns void
+	         */
+	        self._bindMultiple = function(combinations, callback, action) {
+	            for (var i = 0; i < combinations.length; ++i) {
+	                _bindSingle(combinations[i], callback, action);
+	            }
+	        };
+	
+	        // start!
+	        _addEvent(targetElement, 'keypress', _handleKeyEvent);
+	        _addEvent(targetElement, 'keydown', _handleKeyEvent);
+	        _addEvent(targetElement, 'keyup', _handleKeyEvent);
+	    }
+	
+	    /**
+	     * binds an event to mousetrap
+	     *
+	     * can be a single key, a combination of keys separated with +,
+	     * an array of keys, or a sequence of keys separated by spaces
+	     *
+	     * be sure to list the modifier keys first to make sure that the
+	     * correct key ends up getting bound (the last key in the pattern)
+	     *
+	     * @param {string|Array} keys
+	     * @param {Function} callback
+	     * @param {string=} action - 'keypress', 'keydown', or 'keyup'
+	     * @returns void
+	     */
+	    Mousetrap.prototype.bind = function(keys, callback, action) {
+	        var self = this;
+	        keys = keys instanceof Array ? keys : [keys];
+	        self._bindMultiple.call(self, keys, callback, action);
+	        return self;
+	    };
+	
+	    /**
+	     * unbinds an event to mousetrap
+	     *
+	     * the unbinding sets the callback function of the specified key combo
+	     * to an empty function and deletes the corresponding key in the
+	     * _directMap dict.
+	     *
+	     * TODO: actually remove this from the _callbacks dictionary instead
+	     * of binding an empty function
+	     *
+	     * the keycombo+action has to be exactly the same as
+	     * it was defined in the bind method
+	     *
+	     * @param {string|Array} keys
+	     * @param {string} action
+	     * @returns void
+	     */
+	    Mousetrap.prototype.unbind = function(keys, action) {
+	        var self = this;
+	        return self.bind.call(self, keys, function() {}, action);
+	    };
+	
+	    /**
+	     * triggers an event that has already been bound
+	     *
+	     * @param {string} keys
+	     * @param {string=} action
+	     * @returns void
+	     */
+	    Mousetrap.prototype.trigger = function(keys, action) {
+	        var self = this;
+	        if (self._directMap[keys + ':' + action]) {
+	            self._directMap[keys + ':' + action]({}, keys);
+	        }
+	        return self;
+	    };
+	
+	    /**
+	     * resets the library back to its initial state.  this is useful
+	     * if you want to clear out the current keyboard shortcuts and bind
+	     * new ones - for example if you switch to another page
+	     *
+	     * @returns void
+	     */
+	    Mousetrap.prototype.reset = function() {
+	        var self = this;
+	        self._callbacks = {};
+	        self._directMap = {};
+	        return self;
+	    };
+	
+	    /**
+	     * should we stop this event before firing off callbacks
+	     *
+	     * @param {Event} e
+	     * @param {Element} element
+	     * @return {boolean}
+	     */
+	    Mousetrap.prototype.stopCallback = function(e, element) {
+	        var self = this;
+	
+	        // if the element has the class "mousetrap" then no need to stop
+	        if ((' ' + element.className + ' ').indexOf(' mousetrap ') > -1) {
+	            return false;
+	        }
+	
+	        if (_belongsTo(element, self.target)) {
+	            return false;
+	        }
+	
+	        // stop for input, select, and textarea
+	        return element.tagName == 'INPUT' || element.tagName == 'SELECT' || element.tagName == 'TEXTAREA' || element.isContentEditable;
+	    };
+	
+	    /**
+	     * exposes _handleKey publicly so it can be overwritten by extensions
+	     */
+	    Mousetrap.prototype.handleKey = function() {
+	        var self = this;
+	        return self._handleKey.apply(self, arguments);
+	    };
+	
+	    /**
+	     * allow custom key mappings
+	     */
+	    Mousetrap.addKeycodes = function(object) {
+	        for (var key in object) {
+	            if (object.hasOwnProperty(key)) {
+	                _MAP[key] = object[key];
+	            }
+	        }
+	        _REVERSE_MAP = null;
+	    };
+	
+	    /**
+	     * Init the global mousetrap functions
+	     *
+	     * This method is needed to allow the global mousetrap functions to work
+	     * now that mousetrap is a constructor function.
+	     */
+	    Mousetrap.init = function() {
+	        var documentMousetrap = Mousetrap(document);
+	        for (var method in documentMousetrap) {
+	            if (method.charAt(0) !== '_') {
+	                Mousetrap[method] = (function(method) {
+	                    return function() {
+	                        return documentMousetrap[method].apply(documentMousetrap, arguments);
+	                    };
+	                } (method));
+	            }
+	        }
+	    };
+	
+	    Mousetrap.init();
+	
+	    // expose mousetrap to the global object
+	    window.Mousetrap = Mousetrap;
+	
+	    // expose as a common js module
+	    if (typeof module !== 'undefined' && module.exports) {
+	        module.exports = Mousetrap;
+	    }
+	
+	    // expose mousetrap as an AMD module
+	    if (true) {
+	        !(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
+	            return Mousetrap;
+	        }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	    }
+	}) (typeof window !== 'undefined' ? window : null, typeof  window !== 'undefined' ? document : null);
+
+
+/***/ },
+/* 458 */
+/***/ function(module, exports) {
+
+	/**
+	 * Overwrites default Mousetrap.bind method to optionally accept
+	 * an object to bind multiple key events in a single call
+	 *
+	 * You can pass it in like:
+	 *
+	 * Mousetrap.bind({
+	 *     'a': function() { console.log('a'); },
+	 *     'b': function() { console.log('b'); }
+	 * });
+	 *
+	 * And can optionally pass in 'keypress', 'keydown', or 'keyup'
+	 * as a second argument
+	 *
+	 */
+	/* global Mousetrap:true */
+	(function(Mousetrap) {
+	    var _oldBind = Mousetrap.prototype.bind;
+	    var args;
+	
+	    Mousetrap.prototype.bind = function() {
+	        var self = this;
+	        args = arguments;
+	
+	        // normal call
+	        if (typeof args[0] == 'string' || args[0] instanceof Array) {
+	            return _oldBind.call(self, args[0], args[1], args[2]);
+	        }
+	
+	        // object passed in
+	        for (var key in args[0]) {
+	            if (args[0].hasOwnProperty(key)) {
+	                _oldBind.call(self, key, args[0][key], args[1]);
+	            }
+	        }
+	    };
+	
+	    Mousetrap.init();
+	}) (Mousetrap);
+
 
 /***/ }
 /******/ ]);

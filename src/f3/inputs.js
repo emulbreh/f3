@@ -25,12 +25,16 @@ export class Input extends Component {
         });
     }
 
+    getValue() {
+        return this._value;
+    }
+
     set value(val) {
         this.setValue(val);
     }
 
     get value() {
-        return this._value;
+        return this.getValue();
     }
 }
 
@@ -58,7 +62,7 @@ export class RawInput extends Input {
         this.inputElement.value = val;
     }
 
-    get value() {
+    getValue() {
         return this.inputElement.value;
     }
 
@@ -73,7 +77,7 @@ export class TextInput extends RawInput {
         });
     }
 
-    get value() {
+    getValue() {
         return this._value;
     }
 }
@@ -88,10 +92,11 @@ export class Checkbox extends RawInput {
         this.inputElement.checked = !!val;
     }
 
-    get value() {
+    getValue() {
         return this.inputElement.checked;
     }
 }
+
 
 export class ChoiceInput extends Container(Input) {
     constructor({itemFactory, model, ...config}={}) {
@@ -102,7 +107,7 @@ export class ChoiceInput extends Container(Input) {
             model: model
         }));
         this.dropdown.hide();
-        this.dropdown.itemClicked.then((e) => {
+        this.dropdown.itemSelected.then((e) => {
             this.value = e.item;
             this.close();
         });
@@ -114,11 +119,6 @@ export class ChoiceInput extends Container(Input) {
 
     close() {
         this.dropdown.hide();
-    }
-
-    setValue(val) {
-        super.setValue(val);
-        this.choiceDisplay.model = val;
     }
 }
 
@@ -132,13 +132,24 @@ export class SelectBox extends ChoiceInput {
         this.choiceDisplay.clicked.then((e) => {
             this.open();
         });
+        this.choiceDisplay.element.tabIndex = 0;
+        Mousetrap(this.choiceDisplay.element).bind(this.dropdown.cursorKeyboardHandlers);
+        Mousetrap(this.choiceDisplay.element).bind({
+            'space': () => {this.open();}
+        });
+    }
+
+    setValue(val) {
+        super.setValue(val);
+        this.choiceDisplay.model = val;
     }
 }
 
 
 export class ComboBox extends ChoiceInput {
-    constructor({itemFactory=toRenderer(toString), ...config}={}) {
-        super({itemFactory: itemFactory, ...config});
+    constructor({itemFactory, renderer=toString, ...config}={}) {
+        super({itemFactory: itemFactory || toRenderer(renderer), ...config});
+        this.renderer = toRenderer(renderer);
         this.textInput = this.addComponent(new TextInput({
 
         }));
@@ -146,9 +157,18 @@ export class ComboBox extends ChoiceInput {
             this.open();
             //this.model.filter(this.textInput.value);
         });
+        this.textInput.focused.then(() => {
+            this.open();
+        });
         this.textInput.blurred.then(() => {
             this.close();
         });
+        Mousetrap(this.textInput.element).bind(this.dropdown.cursorKeyboardHandlers);
+    }
+
+    setValue(val) {
+        super.setValue(val);
+        this.textInput.value = this.renderer(val);
     }
 }
 

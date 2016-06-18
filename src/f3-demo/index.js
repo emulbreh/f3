@@ -1,6 +1,9 @@
 import * as f3 from 'f3';
 
 import './assets/demo.scss';
+import 'mousetrap';
+
+Mousetrap.bind('alt+f', (e) => {console.log("Mousetrap", e);})
 
 let list = new f3.ListModel({
     items: [1.111, 2.222],
@@ -56,7 +59,7 @@ class Bar extends f3.Model {
 
 let f = new Bar({});
 f.foo = 42;
-f.on('PropertyChanged', (e) => console.log('PropertyChanged', e));
+f.propertyChanged.then((e) => console.log('PropertyChanged', e));
 f.foo = 55;
 f.bar = 1;
 container.addComponent(new f3.Button({

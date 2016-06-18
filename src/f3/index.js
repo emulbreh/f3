@@ -1,3 +1,6 @@
+import 'mousetrap';
+import 'mousetrap/plugins/bind-dictionary/mousetrap-bind-dictionary';
+
 export {ComponentStructureError, F3Error} from './errors';
 export {Component, Container, Root, Panel, Display, Button} from './components'
 export {TextInput, Checkbox, RawInput, Form, SelectBox, ComboBox} from './inputs';

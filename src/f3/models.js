@@ -1,4 +1,4 @@
-import EventEmitter from 'wolfy87-eventemitter';
+import {Signal} from './signals';
 
 export var properties = Symbol('f3.properties');
 export var initialized = Symbol('f3.initialized');
@@ -18,7 +18,7 @@ export class Property {
         let oldValue = obj[modelData][this.name];
         if (oldValue != value) {
             obj[modelData][this.name] = value;
-            obj.emit('PropertyChanged', {
+            obj.propertyChanged.emit({
                 model: obj,
                 property: this,
                 value: value,
@@ -41,11 +41,11 @@ export class Property {
 }
 
 
-export class Model extends EventEmitter {
+export class Model {
     constructor(config) {
-        super();
         this[modelData] = {};
         this.constructor.initClass();
+        this.propertyChanged = new Signal();
     }
 
     static initClass() {
@@ -61,22 +61,28 @@ export class Model extends EventEmitter {
 }
 
 
-export class ListModel extends EventEmitter{
+export class ListModel{
     constructor({items, ...config}) {
-        super(config);
         this.items = items;
+        this.itemAdded = new Signal();
+        this.itemRemoved = new Signal();
+        this.itemsReordered = new Signal();
     }
 
     onItemAdded(item, index) {
-        this.emit('ItemAdded', {model: this, item, index});
+        this.itemAdded.emit({model: this, item, index});
     }
 
     onItemRemoved(item, index) {
-        this.emit('ItemRemoved', {model: this, item, index});
+        this.itemRemoved.emit({model: this, item, index});
     }
 
     onItemsReordered() {
-        this.emit('ItemsReordered', {model: this});
+        this.itemsReordered.emit({model: this});
+    }
+
+    get(index) {
+        return this.items[index];
     }
 
     get length() {

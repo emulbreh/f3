@@ -1,20 +1,30 @@
-import EventEmitter from 'wolfy87-eventemitter';
 import {ComponentStructureError} from './errors';
 import {identity} from './utils';
 import {toRenderer, toString, toAction} from './adapters';
 import {Signal, HtmlSignal} from './signals';
 
 
-export class Component extends EventEmitter{
+export class Component {
     constructor({tagName='div', cssText=null, element=null, ...config}={}) {
-        super(config);
         let el = this.element = element || document.createElement(tagName);
-        el.className = this.constructor.name;
+        let c = this.constructor;
+        do {
+            el.classList.add(c.name);
+            c = c.__proto__;
+        } while (c.prototype instanceof Component);
         if (cssText) {
             el.style.cssText = cssText;
         }
         this.parent = null;
         this.clicked = new HtmlSignal({type: 'click', component: this});
+    }
+
+    addClass(className) {
+        this.element.classList.add(className);
+    }
+
+    removeClass(className) {
+        this.element.classList.remove(className);
     }
 
     get root() {
