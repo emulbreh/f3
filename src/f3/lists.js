@@ -8,20 +8,18 @@ export class List extends Container() {
         super(config);
         this.model = model;
         this.cursorClass = cursorClass;
-        this.itemFactory = toComponentFactory(itemFactory);
+        this._cursorIndex = -1;
+
         // FIXME: componentMap doesn't work for duplicate list items
+        this.itemFactory = toComponentFactory(itemFactory);
         this.componentMap = new Map();
-        for (let item of model) {
-            this.addItem(item);
-        }
         model.itemAdded.then((e) => {this.addItem(e.item);});
         model.itemRemoved.then((e) => {this.removeItem(e.item);});
         model.itemsReordered.then((e) => {this.applyOrdering();});
-        this.selectedItem = null;
-        this.selectedIndex = -1;
+
         this.itemClicked = new Signal();
         this.itemSelected = new Signal();
-        this._cursorIndex = -1;
+
         this.clicked.then((e) => {
             let element = e.event.target;
             while (element) {
@@ -33,7 +31,7 @@ export class List extends Container() {
                 element = element.parentNode;
             }
         });
-        this.cursorKeyboardHandlers = {
+        this.cursorKeymap = {
             'down': () => {
                 this.moveCursorDown();
             },
@@ -44,6 +42,9 @@ export class List extends Container() {
                 this.selectIndex(this.cursorIndex);
             }
         };
+        for (let item of model) {
+            this.addItem(item);
+        }
     }
 
     onItemClicked(item) {
@@ -59,10 +60,6 @@ export class List extends Container() {
     }
 
     selectItem(item) {
-        if (item === this.selectedItem) {
-            return;
-        }
-        this.selectedItem = item;
         this.itemSelected.emit({
             item: item,
             list: this
@@ -88,7 +85,6 @@ export class List extends Container() {
         }
         let item = this.model.get(index);
         let component = this.componentMap[item];
-        console.log(index, item, component);
         component.addClass(this.cursorClass);
 
     }

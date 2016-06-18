@@ -5,7 +5,7 @@ import {Signal, HtmlSignal} from './signals';
 
 
 export class Component {
-    constructor({tagName='div', cssText=null, element=null, ...config}={}) {
+    constructor({tagName='div', cssText=null, element=null, focusable=false, keymap=null, ...config}={}) {
         let el = this.element = element || document.createElement(tagName);
         let c = this.constructor;
         do {
@@ -15,8 +15,32 @@ export class Component {
         if (cssText) {
             el.style.cssText = cssText;
         }
-        this.parent = null;
+        this.focusable = focusable;
+        this._focusElement = null;
+        this.focusElement = this.element;
         this.clicked = new HtmlSignal({type: 'click', component: this});
+        this.parent = null;
+        if (keymap) {
+            this.installKeymap(keymap);
+        }
+    }
+
+    set focusElement(element) {
+        this._focusElement = element;
+        if (['INPUT', 'TEXTAREA'].includes(element.tagName)) {
+            element.tabIndex = this.focusable ? 0 : -1;
+        }
+        else if (this.focusable) {
+            element.tabIndex = 0;
+        }
+    }
+
+    get focusElement() {
+        return this._focusElement;
+    }
+
+    installKeymap(keymap) {
+        Mousetrap(this.focusElement).bind(keymap);
     }
 
     addClass(className) {

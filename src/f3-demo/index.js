@@ -11,7 +11,14 @@ let list = new f3.ListModel({
 
 let selectBox, comboBox;
 
-let container = new f3.Panel();
+let container = new f3.Panel({children: [
+    new f3.Display({
+        model: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
+    }),
+    new f3.Display({
+        model: '<i class="fa fa-circle-o-notch fa-spin" />'
+    })
+]});
 let form = new f3.Form({
     children: [
         new f3.Component(),

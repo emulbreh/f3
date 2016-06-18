@@ -1,16 +1,65 @@
 @import 'bourbon';
 @import 'neat';
 
+$f3-font-family: "Aller Light";
+$f3-font-size: 14px;
+
+$f3-input-border-color: #eee;
+$f3-input-font-size: $f3-font-size;
+$f3-input-font-family: $f3-font-family;
+$f3-input-line-height: 2ex;
+$f3-input-padding: 4px;
+$f3-input-focus-border-color: #A0CEF0;
+
+$f3-background-color: #fff;
+$f3-highlight-background-color: tint(#00f, 80%);
+
 html, body{
 	margin: 0px;
 	padding: 0px;
-	height: 100%;
+	min-height: 100%;
 	background-color: #2D1429;
+	font-family: $f3-font-family;
+	line-height: 1.3em;
+}
+
+
+@mixin f3-input-style(){
+	font-family: $f3-input-font-family;
+	font-size: $f3-input-font-size;
+	padding: $f3-input-padding;
+	border: 1px solid $f3-input-border-color;
+	border-bottom: 1px solid #bbb;
+	//border-radius: 3px;
+
+	&:focus{
+		outline: none;
+		border-color: $f3-input-focus-border-color;
+	}
+}
+
+.Input > #{$all-text-inputs} {
+	@include f3-input-style();
+	width: 100%;
+}
+
+.Form {
+	padding: 1em;
+
+	& > .Input {
+		margin-bottom: 0.5em;
+	}
+}
+
+.Input {
+	width: 10em;
+	display: inline-block;
 }
 
 .Root{
 	height: 100%;
 	@include outer-container();
+	padding: 1em;
 	background-color: #fff;
 }
 
@@ -20,9 +69,79 @@ html, body{
 }
 
 .ChoiceInput {
+	position: relative;
+
 	.List {
+		position: absolute;
+		top: 100%;
+		width: 100%;
+		left: 0%;
+		z-index: 1000;
+		background-color: $f3-background-color;
+		border: 1px solid $f3-input-border-color;
+		padding: $f3-input-padding;
+
 		& > .cursor {
-			background-color: #fffeee
+			background-color: $f3-highlight-background-color;
 		}
+
+		& > :hover {
+			background-color: tint(#f00, 80%);
+		}
+	}
+}
+
+.Checkbox {
+
+	& > input{
+		@include appearance(none);
+		@include f3-input-style();
+		display: inline-block;
+		width: 1.3em;
+		height: 1.3em;
+		padding: 0em;
+		margin: 0em;
+		overflow: hidden;
+
+		&:after {
+			font-family: FontAwesome;
+			display: inline-block;
+			width: 1.1em;
+			height: 1.1em;
+			padding: 0.05em;
+			color: #000;
+			content: ""; //"\f0c8";
+		}
+		&:checked{
+			&:after {
+				content: "\f00c"; //"\f14a"; //
+			}
+		}
+	}
+}
+
+.SelectBox {
+	position: relative;
+
+	& > .Display {
+		@include f3-input-style();
+		display: block;
+	}
+}
+
+.ChoiceInput {
+	&:after {
+		@include f3-input-style();
+		border: none;
+		content: "\f107"; //"\f0d7"; //"\f13a"; //"\f078"; //;
+		font-family: FontAwesome;
+		display: inline-block;
+		padding: 0em;
+		margin: 0em;
+		position: absolute;
+		top: $f3-input-padding;
+		right: 3.5 * $f3-input-padding;
+		font-size: 80%;
+		color: #bbb;
 	}
 }

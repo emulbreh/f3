@@ -40,11 +40,16 @@ export class Input extends Component {
 
 
 export class RawInput extends Input {
-    constructor({inputType='text', ...config}={}) {
-        super(config);
+    constructor({inputType='text', focusable=true, ...config}={}) {
+        super({...config, focusable: false});
+
         this.inputElement = document.createElement('input');
         this.inputElement.type = inputType;
         this.element.appendChild(this.inputElement);
+
+        this.focusable = focusable;
+        this.focusElement = this.inputElement;
+
         this.blurred = new HtmlSignal({
             type: 'blur',
             component: this,
@@ -119,6 +124,7 @@ export class ChoiceInput extends Container(Input) {
 
     close() {
         this.dropdown.hide();
+        this.dropdown.cursorIndex = -1;
     }
 }
 
@@ -127,15 +133,16 @@ export class SelectBox extends ChoiceInput {
     constructor({itemFactory, renderer=toString, ...config}={}) {
         super({itemFactory: itemFactory || toRenderer(renderer), ...config});
         this.choiceDisplay = this.addComponent(new Display({
-            renderer: renderer
+            renderer: renderer,
+            focusable: true,
+            keymap: this.dropdown.cursorKeymap
         }));
         this.choiceDisplay.clicked.then((e) => {
             this.open();
         });
-        this.choiceDisplay.element.tabIndex = 0;
-        Mousetrap(this.choiceDisplay.element).bind(this.dropdown.cursorKeyboardHandlers);
-        Mousetrap(this.choiceDisplay.element).bind({
-            'space': () => {this.open();}
+        this.choiceDisplay.installKeymap({
+            'space': () => {this.open();},
+            'escape': () => {this.close();}
         });
     }
 
@@ -151,22 +158,24 @@ export class ComboBox extends ChoiceInput {
         super({itemFactory: itemFactory || toRenderer(renderer), ...config});
         this.renderer = toRenderer(renderer);
         this.textInput = this.addComponent(new TextInput({
-
+            keymap: this.dropdown.cursorKeymap
         }));
         this.textInput.valueChanged.then(() => {
-            this.open();
+            //this.open();
             //this.model.filter(this.textInput.value);
         });
+        this._closeTimeout = null;
         this.textInput.focused.then(() => {
+            clearTimeout(this._closeTimeout);
             this.open();
         });
         this.textInput.blurred.then(() => {
-            this.close();
+            this._closeTimeout = setTimeout(this.close.bind(this), 100);
         });
-        Mousetrap(this.textInput.element).bind(this.dropdown.cursorKeyboardHandlers);
     }
 
     setValue(val) {
+        console.log(val, this.renderer(val));
         super.setValue(val);
         this.textInput.value = this.renderer(val);
     }
