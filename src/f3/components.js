@@ -223,19 +223,3 @@ export class Window extends Container() {
     }
 
 }
-
-
-export class Button extends Component {
-    constructor({action, label, ...config}) {
-        super({tagName: 'button', ...config});
-        this.action = adapt(Action, action, this);
-        this.label = label;
-        this.element.addEventListener('click', (event) => {
-            this.action.perform({event});
-        });
-    }
-
-    set label(text) {
-        this.element.innerHTML = text;
-    }
-}

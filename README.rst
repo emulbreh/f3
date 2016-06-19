@@ -15,11 +15,21 @@ Concepts
 component
     A user interface unit; corresponds to an HTMLElement
 renderer
-    A function that maps an object to a string
+    An object that can map an object to a string
 component factory
-    A function that maps an object to a component.
+    An object that can map an object to a component
 action
     A user interface `command`_
+
+Todo
+----
+
+* Collapsible
+* IconSet
+* TabPanel
+* Fieldset
+* Dialog
+* Overlay
 
 
 .. _command: https://en.wikipedia.org/wiki/Command_pattern

@@ -3,6 +3,7 @@ import {List} from './lists';
 import {adapt, toString} from './adapters'
 import {Signal, HtmlSignal} from './signals';
 import {Renderer} from './renderers';
+import {Label} from './labels';
 
 
 export class Input extends Component {
@@ -196,7 +197,10 @@ export class Form extends Container(Input) {
 export class Field extends Container(Component) {
     constructor({label='', input, ...config}={}) {
         super(config);
+        this.addClass(input.constructor.name + 'Field');
         this.input = input;
-        this.label = Label.adapt(label);
+        this.label = adapt(Label, label);
+        this.addComponent(this.label.create());
+        this.addComponent(this.input);
     }
 }

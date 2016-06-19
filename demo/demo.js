@@ -8131,9 +8131,9 @@
 	
 	var f3 = _interopRequireWildcard(_f);
 	
-	__webpack_require__(454);
+	__webpack_require__(457);
 	
-	__webpack_require__(451);
+	__webpack_require__(454);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -8151,12 +8151,27 @@
 	    comboBox = void 0;
 	
 	var container = new f3.Panel({ children: [new f3.Display({
-	        model: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
+	        className: 'menu',
+	        model: 'Demo'
+	    }), new f3.Display({
+	        model: 'Lorem ipsum dolor sit amet, <a href="/foo">consetetur</a> sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
 	    }), new f3.Display({
 	        model: '<i class="fa fa-circle-o-notch fa-spin" />'
 	    })] });
 	var form = new f3.Form({
-	    children: [new f3.Display({ model: "Field A", className: 'label' }), new f3.TextInput({ name: 'a' }), new f3.Display({ model: "Field B", className: 'label' }), new f3.TextInput({ name: 'b' }), new f3.Checkbox({ name: 'c' }), selectBox = new f3.SelectBox({ name: 'd', model: list }), comboBox = new f3.ComboBox({ name: 'e', model: list }), new f3.Form({
+	    children: [new f3.Field({
+	        label: 'Field A',
+	        input: new f3.TextInput({ name: 'a' })
+	    }), new f3.Field({
+	        label: 'Field B',
+	        input: new f3.TextInput({ name: 'b' })
+	    }), new f3.Field({
+	        label: 'Enable C checkbox option',
+	        input: new f3.Checkbox({ name: 'c' })
+	    }), new f3.Field({
+	        label: 'Choice',
+	        input: selectBox = new f3.SelectBox({ name: 'd', model: list })
+	    }), comboBox = new f3.ComboBox({ name: 'e', model: list }), new f3.Form({
 	        name: "foo",
 	        children: [new f3.TextInput({ name: 'nested' })]
 	    })]
@@ -8220,7 +8235,7 @@
 	    action: '/foo'
 	}));
 	container.addComponent(new f3.Button({
-	    label: 'Show data',
+	    label: new f3.Label({ text: 'Show Data', icon: 'file-code-o' }),
 	    action: new f3.Action({
 	        action: function action() {
 	            console.log(form.value);
@@ -9718,7 +9733,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.config = exports.Action = exports.Page = exports.Router = exports.Application = exports.ComponentFactory = exports.toString = exports.__adapt__ = exports.adapt = exports.properties = exports.ListModel = exports.Property = exports.Model = exports.List = exports.ComboBox = exports.SelectBox = exports.Form = exports.RawInput = exports.Checkbox = exports.TextInput = exports.Button = exports.Display = exports.Panel = exports.Root = exports.Container = exports.Component = exports.F3Error = exports.ComponentStructureError = undefined;
+	exports.config = exports.Label = exports.Action = exports.Page = exports.Router = exports.Application = exports.ComponentFactory = exports.toString = exports.__adapt__ = exports.adapt = exports.properties = exports.ListModel = exports.Property = exports.Model = exports.List = exports.Field = exports.ComboBox = exports.SelectBox = exports.Form = exports.RawInput = exports.Checkbox = exports.TextInput = exports.Button = exports.Display = exports.Panel = exports.Root = exports.Container = exports.Component = exports.F3Error = exports.ComponentStructureError = undefined;
 	
 	var _errors = __webpack_require__(383);
 	
@@ -9767,10 +9782,13 @@
 	    return _components.Display;
 	  }
 	});
+	
+	var _buttons = __webpack_require__(461);
+	
 	Object.defineProperty(exports, 'Button', {
 	  enumerable: true,
 	  get: function get() {
-	    return _components.Button;
+	    return _buttons.Button;
 	  }
 	});
 	
@@ -9812,6 +9830,12 @@
 	    return _inputs.ComboBox;
 	  }
 	});
+	Object.defineProperty(exports, 'Field', {
+	  enumerable: true,
+	  get: function get() {
+	    return _inputs.Field;
+	  }
+	});
 	
 	var _lists = __webpack_require__(439);
 	
@@ -9822,7 +9846,7 @@
 	  }
 	});
 	
-	var _models = __webpack_require__(445);
+	var _models = __webpack_require__(448);
 	
 	Object.defineProperty(exports, 'Model', {
 	  enumerable: true,
@@ -9870,7 +9894,7 @@
 	  }
 	});
 	
-	var _componentFactories = __webpack_require__(459);
+	var _componentFactories = __webpack_require__(445);
 	
 	Object.defineProperty(exports, 'ComponentFactory', {
 	  enumerable: true,
@@ -9879,7 +9903,7 @@
 	  }
 	});
 	
-	var _application = __webpack_require__(446);
+	var _application = __webpack_require__(449);
 	
 	Object.defineProperty(exports, 'Application', {
 	  enumerable: true,
@@ -9900,7 +9924,7 @@
 	  }
 	});
 	
-	var _actions = __webpack_require__(430);
+	var _actions = __webpack_require__(433);
 	
 	Object.defineProperty(exports, 'Action', {
 	  enumerable: true,
@@ -9909,7 +9933,16 @@
 	  }
 	});
 	
-	var _config = __webpack_require__(432);
+	var _labels = __webpack_require__(447);
+	
+	Object.defineProperty(exports, 'Label', {
+	  enumerable: true,
+	  get: function get() {
+	    return _labels.Label;
+	  }
+	});
+	
+	var _config = __webpack_require__(446);
 	
 	Object.defineProperty(exports, 'config', {
 	  enumerable: true,
@@ -9918,11 +9951,11 @@
 	  }
 	});
 	
-	__webpack_require__(451);
+	__webpack_require__(454);
 	
-	__webpack_require__(452);
+	__webpack_require__(455);
 	
-	__webpack_require__(453);
+	__webpack_require__(456);
 
 /***/ },
 /* 383 */
@@ -9983,7 +10016,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.Button = exports.Window = exports.Root = exports.Display = exports.Panel = exports.Container = exports.Component = undefined;
+	exports.Window = exports.Root = exports.Display = exports.Panel = exports.Container = exports.Component = undefined;
 	
 	var _extends2 = __webpack_require__(385);
 	
@@ -10035,11 +10068,11 @@
 	
 	var _adapters = __webpack_require__(429);
 	
-	var _signals = __webpack_require__(431);
+	var _signals = __webpack_require__(430);
 	
-	var _renderers = __webpack_require__(458);
+	var _renderers = __webpack_require__(431);
 	
-	var _actions = __webpack_require__(430);
+	var _actions = __webpack_require__(433);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -10525,34 +10558,6 @@
 	    }]);
 	    return Window;
 	}(Container());
-	
-	var Button = exports.Button = function (_Component2) {
-	    (0, _inherits3.default)(Button, _Component2);
-	
-	    function Button(_ref6) {
-	        var action = _ref6.action;
-	        var label = _ref6.label;
-	        var config = (0, _objectWithoutProperties3.default)(_ref6, ['action', 'label']);
-	        (0, _classCallCheck3.default)(this, Button);
-	
-	        var _this6 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Button).call(this, (0, _extends3.default)({ tagName: 'button' }, config)));
-	
-	        _this6.action = (0, _adapters.adapt)(_actions.Action, action, _this6);
-	        _this6.label = label;
-	        _this6.element.addEventListener('click', function (event) {
-	            _this6.action.perform({ event: event });
-	        });
-	        return _this6;
-	    }
-	
-	    (0, _createClass3.default)(Button, [{
-	        key: 'label',
-	        set: function set(text) {
-	            this.element.innerHTML = text;
-	        }
-	    }]);
-	    return Button;
-	}(Component);
 
 /***/ },
 /* 385 */
@@ -12605,71 +12610,6 @@
 /* 430 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.Action = undefined;
-	
-	var _classCallCheck2 = __webpack_require__(326);
-	
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-	
-	var _createClass2 = __webpack_require__(424);
-	
-	var _createClass3 = _interopRequireDefault(_createClass2);
-	
-	var _signals = __webpack_require__(431);
-	
-	var _adapters = __webpack_require__(429);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var Action = exports.Action = function () {
-	    function Action() {
-	        var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	
-	        var name = _ref.name;
-	        var action = _ref.action;
-	        var _ref$shortcut = _ref.shortcut;
-	        var shortcut = _ref$shortcut === undefined ? null : _ref$shortcut;
-	        (0, _classCallCheck3.default)(this, Action);
-	
-	        this.name = name;
-	        this.action = action;
-	        this.shortcut = shortcut;
-	        this.performed = new _signals.Signal();
-	    }
-	
-	    (0, _createClass3.default)(Action, [{
-	        key: 'perform',
-	        value: function perform(target) {
-	            this.action(target);
-	            this.performed.emit({ target: target, action: this });
-	        }
-	    }], [{
-	        key: _adapters.__adapt__,
-	        value: function value(obj, component) {
-	            if (obj instanceof Function) {
-	                return new Action({ action: obj });
-	            }
-	            if (typeof obj == 'string') {
-	                return new Action({
-	                    action: function action() {
-	                        component.app.router.call(obj);
-	                    }
-	                });
-	            }
-	        }
-	    }]);
-	    return Action;
-	}();
-
-/***/ },
-/* 431 */
-/***/ function(module, exports, __webpack_require__) {
-
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
@@ -12814,20 +12754,58 @@
 	}(Signal);
 
 /***/ },
-/* 432 */
-/***/ function(module, exports) {
+/* 431 */
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	var CONFIG = exports.CONFIG = {
-	    defaultDisplayComponent: null
-	};
+	exports.Renderer = undefined;
+	
+	var _classCallCheck2 = __webpack_require__(326);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _createClass2 = __webpack_require__(424);
+	
+	var _createClass3 = _interopRequireDefault(_createClass2);
+	
+	var _adapters = __webpack_require__(429);
+	
+	var _sprintf = __webpack_require__(432);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Renderer = exports.Renderer = function () {
+	    function Renderer(func) {
+	        (0, _classCallCheck3.default)(this, Renderer);
+	
+	        this.func = func;
+	    }
+	
+	    (0, _createClass3.default)(Renderer, [{
+	        key: 'render',
+	        value: function render() {
+	            return this.func.apply(this, arguments);
+	        }
+	    }], [{
+	        key: _adapters.__adapt__,
+	        value: function value(obj) {
+	            if (typeof obj == 'string') {
+	                return new Renderer(_sprintf.sprintf.bind(null, obj));
+	            }
+	            if (obj instanceof Function) {
+	                return new Renderer(obj);
+	            }
+	        }
+	    }]);
+	    return Renderer;
+	}();
 
 /***/ },
-/* 433 */
+/* 432 */
 /***/ function(module, exports) {
 
 	/**
@@ -13082,6 +13060,71 @@
 
 
 /***/ },
+/* 433 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Action = undefined;
+	
+	var _classCallCheck2 = __webpack_require__(326);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _createClass2 = __webpack_require__(424);
+	
+	var _createClass3 = _interopRequireDefault(_createClass2);
+	
+	var _signals = __webpack_require__(430);
+	
+	var _adapters = __webpack_require__(429);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Action = exports.Action = function () {
+	    function Action() {
+	        var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	
+	        var name = _ref.name;
+	        var action = _ref.action;
+	        var _ref$shortcut = _ref.shortcut;
+	        var shortcut = _ref$shortcut === undefined ? null : _ref$shortcut;
+	        (0, _classCallCheck3.default)(this, Action);
+	
+	        this.name = name;
+	        this.action = action;
+	        this.shortcut = shortcut;
+	        this.performed = new _signals.Signal();
+	    }
+	
+	    (0, _createClass3.default)(Action, [{
+	        key: 'perform',
+	        value: function perform(target) {
+	            this.action(target);
+	            this.performed.emit({ target: target, action: this });
+	        }
+	    }], [{
+	        key: _adapters.__adapt__,
+	        value: function value(obj, component) {
+	            if (obj instanceof Function) {
+	                return new Action({ action: obj });
+	            }
+	            if (typeof obj == 'string') {
+	                return new Action({
+	                    action: function action() {
+	                        component.app.router.call(obj);
+	                    }
+	                });
+	            }
+	        }
+	    }]);
+	    return Action;
+	}();
+
+/***/ },
 /* 434 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -13134,9 +13177,11 @@
 	
 	var _adapters = __webpack_require__(429);
 	
-	var _signals = __webpack_require__(431);
+	var _signals = __webpack_require__(430);
 	
-	var _renderers = __webpack_require__(458);
+	var _renderers = __webpack_require__(431);
+	
+	var _labels = __webpack_require__(447);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -13476,8 +13521,11 @@
 	
 	        var _this9 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Field).call(this, config));
 	
+	        _this9.addClass(input.constructor.name + 'Field');
 	        _this9.input = input;
-	        _this9.label = Label.adapt(label);
+	        _this9.label = (0, _adapters.adapt)(_labels.Label, label);
+	        _this9.addComponent(_this9.label.create());
+	        _this9.addComponent(_this9.input);
 	        return _this9;
 	    }
 	
@@ -13606,11 +13654,11 @@
 	
 	var _components = __webpack_require__(384);
 	
-	var _componentFactories = __webpack_require__(459);
+	var _componentFactories = __webpack_require__(445);
 	
 	var _adapters = __webpack_require__(429);
 	
-	var _signals = __webpack_require__(431);
+	var _signals = __webpack_require__(430);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -13897,6 +13945,202 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.ComponentFactory = undefined;
+	
+	var _typeof2 = __webpack_require__(328);
+	
+	var _typeof3 = _interopRequireDefault(_typeof2);
+	
+	var _extends2 = __webpack_require__(385);
+	
+	var _extends3 = _interopRequireDefault(_extends2);
+	
+	var _classCallCheck2 = __webpack_require__(326);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _createClass2 = __webpack_require__(424);
+	
+	var _createClass3 = _interopRequireDefault(_createClass2);
+	
+	var _adapters = __webpack_require__(429);
+	
+	var _components = __webpack_require__(384);
+	
+	var _renderers = __webpack_require__(431);
+	
+	var _config = __webpack_require__(446);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var ComponentFactory = exports.ComponentFactory = function () {
+	    function ComponentFactory(func) {
+	        var config = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	        (0, _classCallCheck3.default)(this, ComponentFactory);
+	
+	        this.func = func;
+	        this.config = config;
+	    }
+	
+	    (0, _createClass3.default)(ComponentFactory, [{
+	        key: 'create',
+	        value: function create(config) {
+	            return this.func((0, _extends3.default)({}, this.config, config));
+	        }
+	    }], [{
+	        key: _adapters.__adapt__,
+	        value: function value(obj, args) {
+	            var _this = this;
+	
+	            if (Array.isArray(obj)) {
+	                return this[_adapters.__adapt__].apply(this, obj);
+	            }
+	            if (obj.prototype instanceof _components.Component) {
+	                return new this(function (config) {
+	                    return new obj(config);
+	                }, args);
+	            }
+	            if (obj instanceof Function) {
+	                return new this(obj, args);
+	            }
+	            try {
+	                var _ret = function () {
+	                    var renderer = (0, _adapters.adapt)(_renderers.Renderer, obj);
+	                    return {
+	                        v: new _this(function (config) {
+	                            return new _config.CONFIG.defaultDisplayComponent((0, _extends3.default)({
+	                                renderer: renderer }, config));
+	                        }, args)
+	                    };
+	                }();
+	
+	                if ((typeof _ret === 'undefined' ? 'undefined' : (0, _typeof3.default)(_ret)) === "object") return _ret.v;
+	            } catch (e) {
+	                if (!(e instanceof _adapters.AdapterError)) {
+	                    throw e;
+	                }
+	            }
+	        }
+	    }]);
+	    return ComponentFactory;
+	}();
+
+/***/ },
+/* 446 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var CONFIG = exports.CONFIG = {
+	    defaultDisplayComponent: null
+	};
+
+/***/ },
+/* 447 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Label = undefined;
+	
+	var _extends2 = __webpack_require__(385);
+	
+	var _extends3 = _interopRequireDefault(_extends2);
+	
+	var _getPrototypeOf = __webpack_require__(300);
+	
+	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+	
+	var _objectWithoutProperties2 = __webpack_require__(423);
+	
+	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+	
+	var _classCallCheck2 = __webpack_require__(326);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _createClass2 = __webpack_require__(424);
+	
+	var _createClass3 = _interopRequireDefault(_createClass2);
+	
+	var _possibleConstructorReturn2 = __webpack_require__(327);
+	
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+	
+	var _inherits2 = __webpack_require__(374);
+	
+	var _inherits3 = _interopRequireDefault(_inherits2);
+	
+	var _components = __webpack_require__(384);
+	
+	var _adapters = __webpack_require__(429);
+	
+	var _componentFactories = __webpack_require__(445);
+	
+	var _config = __webpack_require__(446);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Label = exports.Label = function (_ComponentFactory) {
+	    (0, _inherits3.default)(Label, _ComponentFactory);
+	
+	    function Label(_ref) {
+	        var _ref$text = _ref.text;
+	        var text = _ref$text === undefined ? '' : _ref$text;
+	        var _ref$icon = _ref.icon;
+	        var icon = _ref$icon === undefined ? '' : _ref$icon;
+	        var config = (0, _objectWithoutProperties3.default)(_ref, ['text', 'icon']);
+	        (0, _classCallCheck3.default)(this, Label);
+	
+	        var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Label).call(this, null));
+	
+	        _this.text = text;
+	        _this.icon = icon;
+	        _this.config = config;
+	        _this.factory = (0, _adapters.adapt)(_componentFactories.ComponentFactory, _this);
+	        return _this;
+	    }
+	
+	    (0, _createClass3.default)(Label, [{
+	        key: 'create',
+	        value: function create(config) {
+	            return new _config.CONFIG.defaultDisplayComponent((0, _extends3.default)({
+	                model: this.html,
+	                className: 'label'
+	            }, this.config, config));
+	        }
+	    }, {
+	        key: 'html',
+	        get: function get() {
+	            var icon = this.icon ? '<i class="fa fa-' + this.icon + '"></i>' : '';
+	            return icon + this.text;
+	        }
+	    }], [{
+	        key: _adapters.__adapt__,
+	        value: function value(obj) {
+	            if (typeof obj == 'string') {
+	                return new this({ text: obj });
+	            }
+	        }
+	    }]);
+	    return Label;
+	}(_componentFactories.ComponentFactory);
+
+/***/ },
+/* 448 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	exports.ListModel = exports.Model = exports.Property = exports.initialized = exports.properties = undefined;
 	
 	var _regenerator = __webpack_require__(420);
@@ -13931,7 +14175,7 @@
 	
 	var _symbol2 = _interopRequireDefault(_symbol);
 	
-	var _signals = __webpack_require__(431);
+	var _signals = __webpack_require__(430);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -14135,7 +14379,7 @@
 	}();
 
 /***/ },
-/* 446 */
+/* 449 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14157,7 +14401,7 @@
 	
 	var _extends3 = _interopRequireDefault(_extends2);
 	
-	var _slicedToArray2 = __webpack_require__(447);
+	var _slicedToArray2 = __webpack_require__(450);
 	
 	var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
 	
@@ -14396,14 +14640,14 @@
 	}();
 
 /***/ },
-/* 447 */
+/* 450 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	exports.__esModule = true;
 	
-	var _isIterable2 = __webpack_require__(448);
+	var _isIterable2 = __webpack_require__(451);
 	
 	var _isIterable3 = _interopRequireDefault(_isIterable2);
 	
@@ -14452,21 +14696,21 @@
 	}();
 
 /***/ },
-/* 448 */
+/* 451 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(449), __esModule: true };
+	module.exports = { "default": __webpack_require__(452), __esModule: true };
 
 /***/ },
-/* 449 */
+/* 452 */
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(353);
 	__webpack_require__(331);
-	module.exports = __webpack_require__(450);
+	module.exports = __webpack_require__(453);
 
 /***/ },
-/* 450 */
+/* 453 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var classof   = __webpack_require__(400)
@@ -14480,7 +14724,7 @@
 	};
 
 /***/ },
-/* 451 */
+/* 454 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*global define:false */
@@ -15524,7 +15768,7 @@
 
 
 /***/ },
-/* 452 */
+/* 455 */
 /***/ function(module, exports) {
 
 	/**
@@ -15569,35 +15813,35 @@
 
 
 /***/ },
-/* 453 */
+/* 456 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var _components = __webpack_require__(384);
 	
-	var _config = __webpack_require__(432);
+	var _config = __webpack_require__(446);
 	
 	_config.CONFIG.defaultDisplayComponent = _components.Display;
 
 /***/ },
-/* 454 */
+/* 457 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(455);
+	var content = __webpack_require__(458);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(457)(content, {});
+	var update = __webpack_require__(460)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js?{\"includePaths\":[\"/Users/emulbreh/Projekte/f3/node_modules/bourbon/app/assets/stylesheets\",\"/Users/emulbreh/Projekte/f3/node_modules/bourbon-neat/app/assets/stylesheets\",\"/Users/emulbreh/Projekte/f3/node_modules/open-iconic/font/css\"]}!./demo.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js?{\"includePaths\":[\"/Users/emulbreh/Projekte/f3/node_modules/bourbon/app/assets/stylesheets\",\"/Users/emulbreh/Projekte/f3/node_modules/bourbon-neat/app/assets/stylesheets\",\"/Users/emulbreh/Projekte/f3/node_modules/open-iconic/font/css\"]}!./demo.scss");
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js?{\"includePaths\":[\"/Users/emulbreh/Projekte/f3/node_modules/bourbon/app/assets/stylesheets\",\"/Users/emulbreh/Projekte/f3/node_modules/bourbon-neat/app/assets/stylesheets\"]}!./demo.scss", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js?{\"includePaths\":[\"/Users/emulbreh/Projekte/f3/node_modules/bourbon/app/assets/stylesheets\",\"/Users/emulbreh/Projekte/f3/node_modules/bourbon-neat/app/assets/stylesheets\"]}!./demo.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -15607,21 +15851,21 @@
 	}
 
 /***/ },
-/* 455 */
+/* 458 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(456)();
+	exports = module.exports = __webpack_require__(459)();
 	// imports
 	
 	
 	// module
-	exports.push([module.id, "html {\n  box-sizing: border-box; }\n\n*, *::after, *::before {\n  box-sizing: inherit; }\n\nhtml, body {\n  margin: 0px;\n  padding: 0px;\n  min-height: 100%;\n  background-color: #2D1429;\n  font-family: \"Aller Light\";\n  line-height: 1.3em; }\n\n.Input > input[type=\"color\"], input[type=\"date\"], input[type=\"datetime\"], input[type=\"datetime-local\"], input[type=\"email\"], input[type=\"month\"], input[type=\"number\"], input[type=\"password\"], input[type=\"search\"], input[type=\"tel\"], input[type=\"text\"], input[type=\"time\"], input[type=\"url\"], input[type=\"week\"], input:not([type]), textarea {\n  font-family: \"Aller Light\";\n  font-size: 14px;\n  padding: 4px;\n  border: 1px solid #eee;\n  border-bottom: 1px solid #bbb;\n  width: 100%; }\n  .Input > input[type=\"color\"]:focus, input[type=\"date\"]:focus, input[type=\"datetime\"]:focus, input[type=\"datetime-local\"]:focus, input[type=\"email\"]:focus, input[type=\"month\"]:focus, input[type=\"number\"]:focus, input[type=\"password\"]:focus, input[type=\"search\"]:focus, input[type=\"tel\"]:focus, input[type=\"text\"]:focus, input[type=\"time\"]:focus, input[type=\"url\"]:focus, input[type=\"week\"]:focus, input:not([type]):focus, textarea:focus {\n    outline: none;\n    border-color: #A0CEF0; }\n\n.Form {\n  padding: 1em; }\n  .Form > .Input {\n    margin-bottom: 0.5em; }\n\n.Input {\n  width: 10em;\n  display: inline-block; }\n\n.Root {\n  height: 100%;\n  max-width: 1200px;\n  margin-left: auto;\n  margin-right: auto;\n  padding: 1em;\n  background-color: #fff; }\n  .Root::after {\n    clear: both;\n    content: \"\";\n    display: table; }\n\n.Window {\n  float: left;\n  display: block;\n  margin-right: 2.35765%;\n  width: 100%;\n  height: 100%; }\n  .Window:last-child {\n    margin-right: 0; }\n\n.ChoiceInput {\n  position: relative; }\n  .ChoiceInput .List {\n    position: absolute;\n    top: 100%;\n    width: 100%;\n    left: 0%;\n    z-index: 1000;\n    background-color: #fff;\n    border: 1px solid #eee;\n    padding: 4px; }\n    .ChoiceInput .List > .cursor {\n      background-color: #ccccff; }\n    .ChoiceInput .List > :hover {\n      background-color: #ffcccc; }\n\n.Checkbox > input {\n  -webkit-appearance: none;\n  -moz-appearance: none;\n  -ms-appearance: none;\n  -o-appearance: none;\n  appearance: none;\n  font-family: \"Aller Light\";\n  font-size: 14px;\n  padding: 4px;\n  border: 1px solid #eee;\n  border-bottom: 1px solid #bbb;\n  display: inline-block;\n  width: 1.3em;\n  height: 1.3em;\n  padding: 0em;\n  margin: 0em;\n  overflow: hidden; }\n  .Checkbox > input:focus {\n    outline: none;\n    border-color: #A0CEF0; }\n  .Checkbox > input:after {\n    font-family: FontAwesome;\n    display: inline-block;\n    width: 1.1em;\n    height: 1.1em;\n    padding: 0.05em;\n    color: #000;\n    content: \"\"; }\n  .Checkbox > input:checked:after {\n    content: \"\\F00C\"; }\n\n.SelectBox {\n  position: relative; }\n  .SelectBox > .Display {\n    font-family: \"Aller Light\";\n    font-size: 14px;\n    padding: 4px;\n    border: 1px solid #eee;\n    border-bottom: 1px solid #bbb;\n    display: block; }\n    .SelectBox > .Display:focus {\n      outline: none;\n      border-color: #A0CEF0; }\n\n.ChoiceInput:after {\n  font-family: \"Aller Light\";\n  font-size: 14px;\n  padding: 4px;\n  border: 1px solid #eee;\n  border-bottom: 1px solid #bbb;\n  border: none;\n  content: \"\\F107\";\n  font-family: FontAwesome;\n  display: inline-block;\n  padding: 0em;\n  margin: 0em;\n  position: absolute;\n  top: 4px;\n  right: 14px;\n  font-size: 80%;\n  color: #bbb; }\n  .ChoiceInput:after:focus {\n    outline: none;\n    border-color: #A0CEF0; }\n\n.Display.label {\n  font-size: 70%; }\n", ""]);
+	exports.push([module.id, "html {\n  box-sizing: border-box; }\n\n*, *::after, *::before {\n  box-sizing: inherit; }\n\nhtml, body {\n  margin: 0px;\n  padding: 0px;\n  min-height: 100%;\n  background-color: #2D1429;\n  font-family: \"Aller Light\";\n  line-height: 1.3em; }\n\n.menu {\n  background-color: #201910;\n  color: #fff;\n  padding: 1em;\n  margin: -1em -1em 1em -1em; }\n\n.Input > input[type=\"color\"], input[type=\"date\"], input[type=\"datetime\"], input[type=\"datetime-local\"], input[type=\"email\"], input[type=\"month\"], input[type=\"number\"], input[type=\"password\"], input[type=\"search\"], input[type=\"tel\"], input[type=\"text\"], input[type=\"time\"], input[type=\"url\"], input[type=\"week\"], input:not([type]), textarea {\n  font-family: \"Aller Light\";\n  font-size: 14px;\n  padding: 4px;\n  border: 1px solid #eee;\n  border-bottom: 1px solid #bbb;\n  width: 100%; }\n  .Input > input[type=\"color\"]:focus, input[type=\"date\"]:focus, input[type=\"datetime\"]:focus, input[type=\"datetime-local\"]:focus, input[type=\"email\"]:focus, input[type=\"month\"]:focus, input[type=\"number\"]:focus, input[type=\"password\"]:focus, input[type=\"search\"]:focus, input[type=\"tel\"]:focus, input[type=\"text\"]:focus, input[type=\"time\"]:focus, input[type=\"url\"]:focus, input[type=\"week\"]:focus, input:not([type]):focus, textarea:focus {\n    outline: none;\n    border-color: #A0CEF0; }\n\n.Form {\n  padding: 1em; }\n\n.Input {\n  width: 10em;\n  display: inline-block; }\n\n.Root {\n  height: 100%;\n  max-width: 1200px;\n  margin-left: auto;\n  margin-right: auto;\n  padding: 1em;\n  background-color: #fff; }\n  .Root::after {\n    clear: both;\n    content: \"\";\n    display: table; }\n\n.Window {\n  float: left;\n  display: block;\n  margin-right: 2.35765%;\n  width: 100%;\n  height: 100%; }\n  .Window:last-child {\n    margin-right: 0; }\n\n.Form {\n  width: auto; }\n\n.ChoiceInput {\n  position: relative; }\n  .ChoiceInput .List {\n    position: absolute;\n    top: 100%;\n    width: 100%;\n    left: 0%;\n    z-index: 1000;\n    background-color: #fff;\n    border: 1px solid #eee;\n    padding: 4px; }\n    .ChoiceInput .List > .cursor {\n      background-color: #ccccff; }\n    .ChoiceInput .List > :hover {\n      background-color: #ffcccc; }\n\n.Field {\n  margin-bottom: 0.5em; }\n\n.CheckboxField > .Checkbox {\n  float: left;\n  display: inline-block; }\n\n.CheckboxField > .label {\n  display: inline-block;\n  padding-left: 0.5em; }\n\n.Checkbox {\n  width: auto; }\n  .Checkbox > input {\n    -webkit-appearance: none;\n    -moz-appearance: none;\n    -ms-appearance: none;\n    -o-appearance: none;\n    appearance: none;\n    font-family: \"Aller Light\";\n    font-size: 14px;\n    padding: 4px;\n    border: 1px solid #eee;\n    border-bottom: 1px solid #bbb;\n    display: inline-block;\n    width: 1.3em;\n    height: 1.3em;\n    padding: 0em;\n    margin: 0em;\n    overflow: hidden; }\n    .Checkbox > input:focus {\n      outline: none;\n      border-color: #A0CEF0; }\n    .Checkbox > input:after {\n      font-family: FontAwesome;\n      display: inline-block;\n      width: 1.1em;\n      height: 1.1em;\n      padding: 0.05em;\n      color: #000;\n      content: \"\"; }\n    .Checkbox > input:checked:after {\n      content: \"\\F00C\"; }\n\n.SelectBox {\n  position: relative; }\n  .SelectBox > .Display {\n    font-family: \"Aller Light\";\n    font-size: 14px;\n    padding: 4px;\n    border: 1px solid #eee;\n    border-bottom: 1px solid #bbb;\n    display: block; }\n    .SelectBox > .Display:focus {\n      outline: none;\n      border-color: #A0CEF0; }\n\n.ChoiceInput:after {\n  font-family: \"Aller Light\";\n  font-size: 14px;\n  padding: 4px;\n  border: 1px solid #eee;\n  border-bottom: 1px solid #bbb;\n  border: none;\n  content: \"\\F107\";\n  font-family: FontAwesome;\n  display: inline-block;\n  padding: 0em;\n  margin: 0em;\n  position: absolute;\n  top: 4px;\n  right: 14px;\n  font-size: 80%;\n  color: #bbb; }\n  .ChoiceInput:after:focus {\n    outline: none;\n    border-color: #A0CEF0; }\n\n.Display.label {\n  font-size: 70%; }\n\n.Button {\n  -webkit-appearance: none;\n  -moz-appearance: none;\n  -ms-appearance: none;\n  -o-appearance: none;\n  appearance: none;\n  font-family: \"Aller Light\";\n  font-size: 14px;\n  padding: 4px;\n  border: 1px solid #eee;\n  border-bottom: 1px solid #bbb;\n  background-color: #f0edeb;\n  border: 1px solid #f0edeb;\n  padding: 8px;\n  margin: 0em 0.5em 0.5em 0em;\n  cursor: pointer; }\n  .Button:focus {\n    outline: none;\n    border-color: #A0CEF0; }\n  .Button:hover {\n    background-color: #f8f6f5; }\n  .Button .fa {\n    font-size: 110%;\n    margin-right: 0.5em; }\n", ""]);
 	
 	// exports
 
 
 /***/ },
-/* 456 */
+/* 459 */
 /***/ function(module, exports) {
 
 	/*
@@ -15677,7 +15921,7 @@
 
 
 /***/ },
-/* 457 */
+/* 460 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -15929,7 +16173,7 @@
 
 
 /***/ },
-/* 458 */
+/* 461 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15937,67 +16181,20 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.Renderer = undefined;
-	
-	var _classCallCheck2 = __webpack_require__(326);
-	
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-	
-	var _createClass2 = __webpack_require__(424);
-	
-	var _createClass3 = _interopRequireDefault(_createClass2);
-	
-	var _adapters = __webpack_require__(429);
-	
-	var _sprintf = __webpack_require__(433);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var Renderer = exports.Renderer = function () {
-	    function Renderer(func) {
-	        (0, _classCallCheck3.default)(this, Renderer);
-	
-	        this.func = func;
-	    }
-	
-	    (0, _createClass3.default)(Renderer, [{
-	        key: 'render',
-	        value: function render() {
-	            return this.func.apply(this, arguments);
-	        }
-	    }], [{
-	        key: _adapters.__adapt__,
-	        value: function value(obj) {
-	            if (typeof obj == 'string') {
-	                return new Renderer(_sprintf.sprintf.bind(null, obj));
-	            }
-	            if (obj instanceof Function) {
-	                return new Renderer(obj);
-	            }
-	        }
-	    }]);
-	    return Renderer;
-	}();
-
-/***/ },
-/* 459 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.ComponentFactory = undefined;
-	
-	var _typeof2 = __webpack_require__(328);
-	
-	var _typeof3 = _interopRequireDefault(_typeof2);
+	exports.Button = undefined;
 	
 	var _extends2 = __webpack_require__(385);
 	
 	var _extends3 = _interopRequireDefault(_extends2);
 	
+	var _getPrototypeOf = __webpack_require__(300);
+	
+	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+	
+	var _objectWithoutProperties2 = __webpack_require__(423);
+	
+	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+	
 	var _classCallCheck2 = __webpack_require__(326);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
@@ -16006,67 +16203,56 @@
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _adapters = __webpack_require__(429);
+	var _possibleConstructorReturn2 = __webpack_require__(327);
+	
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+	
+	var _inherits2 = __webpack_require__(374);
+	
+	var _inherits3 = _interopRequireDefault(_inherits2);
 	
 	var _components = __webpack_require__(384);
 	
-	var _renderers = __webpack_require__(458);
+	var _adapters = __webpack_require__(429);
 	
-	var _config = __webpack_require__(432);
+	var _actions = __webpack_require__(433);
+	
+	var _labels = __webpack_require__(447);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var ComponentFactory = exports.ComponentFactory = function () {
-	    function ComponentFactory(func) {
-	        var config = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-	        (0, _classCallCheck3.default)(this, ComponentFactory);
+	var Button = exports.Button = function (_Component) {
+	    (0, _inherits3.default)(Button, _Component);
 	
-	        this.func = func;
-	        this.config = config;
+	    function Button(_ref) {
+	        var action = _ref.action;
+	        var label = _ref.label;
+	        var config = (0, _objectWithoutProperties3.default)(_ref, ['action', 'label']);
+	        (0, _classCallCheck3.default)(this, Button);
+	
+	        var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Button).call(this, (0, _extends3.default)({ tagName: 'button' }, config)));
+	
+	        _this.action = (0, _adapters.adapt)(_actions.Action, action, _this);
+	        _this._label = null;
+	        _this.label = label;
+	        _this.element.addEventListener('click', function (event) {
+	            _this.action.perform({ event: event });
+	        });
+	        return _this;
 	    }
 	
-	    (0, _createClass3.default)(ComponentFactory, [{
-	        key: 'create',
-	        value: function create(config) {
-	            return this.func((0, _extends3.default)({}, this.config, config));
-	        }
-	    }], [{
-	        key: _adapters.__adapt__,
-	        value: function value(obj, args) {
-	            var _this = this;
-	
-	            if (Array.isArray(obj)) {
-	                return this[_adapters.__adapt__].apply(this, obj);
-	            }
-	            if (obj.prototype instanceof _components.Component) {
-	                return new this(function (config) {
-	                    return new obj(config);
-	                }, args);
-	            }
-	            if (obj instanceof Function) {
-	                return new this(obj, args);
-	            }
-	            try {
-	                var _ret = function () {
-	                    var renderer = (0, _adapters.adapt)(_renderers.Renderer, obj);
-	                    return {
-	                        v: new _this(function (config) {
-	                            return new _config.CONFIG.defaultDisplayComponent((0, _extends3.default)({
-	                                renderer: renderer }, config));
-	                        }, args)
-	                    };
-	                }();
-	
-	                if ((typeof _ret === 'undefined' ? 'undefined' : (0, _typeof3.default)(_ret)) === "object") return _ret.v;
-	            } catch (e) {
-	                if (!(e instanceof _adapters.AdapterError)) {
-	                    throw e;
-	                }
-	            }
+	    (0, _createClass3.default)(Button, [{
+	        key: 'label',
+	        get: function get() {
+	            return this._label;
+	        },
+	        set: function set(label) {
+	            this._label = (0, _adapters.adapt)(_labels.Label, label);
+	            this.element.innerHTML = this.label.html;
 	        }
 	    }]);
-	    return ComponentFactory;
-	}();
+	    return Button;
+	}(_components.Component);
 
 /***/ }
 /******/ ]);

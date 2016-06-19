@@ -1,8 +1,13 @@
 @import 'bourbon';
 @import 'neat';
 
+$f3-primary-color: #201910;
+
 $f3-font-family: "Aller Light";
 $f3-font-size: 14px;
+$f3-small-vspace: 0.5em;
+
+$f3-button-color: tint(lighten($f3-primary-color, 20%), 90%);
 
 $f3-input-border-color: #eee;
 $f3-input-font-size: $f3-font-size;
@@ -21,6 +26,13 @@ html, body{
 	background-color: #2D1429;
 	font-family: $f3-font-family;
 	line-height: 1.3em;
+}
+
+.menu {
+	background-color: $f3-primary-color;
+	color: #fff;
+	padding: 1em;
+	margin: -1em -1em 1em -1em;
 }
 
 
@@ -45,10 +57,6 @@ html, body{
 
 .Form {
 	padding: 1em;
-
-	& > .Input {
-		margin-bottom: 0.5em;
-	}
 }
 
 .Input {
@@ -66,6 +74,10 @@ html, body{
 .Window {
 	@include span-columns(12);
 	height: 100%;
+}
+
+.Form {
+	width: auto;
 }
 
 .ChoiceInput {
@@ -91,7 +103,25 @@ html, body{
 	}
 }
 
+.Field {
+	margin-bottom: $f3-small-vspace;
+}
+
+.CheckboxField {
+	& > .Checkbox {
+		float: left;
+		display: inline-block;
+	}
+
+	& > .label{
+		display: inline-block;
+		padding-left: 0.5em;
+	}
+}
+
+
 .Checkbox {
+	width: auto;
 
 	& > input{
 		@include appearance(none);
@@ -148,4 +178,23 @@ html, body{
 
 .Display.label{
 	font-size: 70%;
+}
+
+.Button {
+	@include appearance(none);
+	@include f3-input-style();
+	background-color: $f3-button-color;
+	border: 1px solid $f3-button-color;
+	padding: 2 * $f3-input-padding;
+	margin: 0em 0.5em 0.5em 0em;
+	cursor: pointer;
+
+	&:hover {
+		background-color: tint($f3-button-color, 50%);
+	}
+
+	.fa {
+		font-size: 110%;
+		margin-right: 0.5em;
+	}
 }
