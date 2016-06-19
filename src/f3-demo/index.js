@@ -21,9 +21,9 @@ let container = new f3.Panel({children: [
 ]});
 let form = new f3.Form({
     children: [
-        new f3.Component(),
-        new f3.Component(),
+        new f3.Display({model: "Field A", className: 'label'}),
         new f3.TextInput({name: 'a'}),
+        new f3.Display({model: "Field B", className: 'label'}),
         new f3.TextInput({name: 'b'}),
         new f3.Checkbox({name: 'c'}),
         selectBox = new f3.SelectBox({name: 'd', model: list}),

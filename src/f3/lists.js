@@ -1,5 +1,6 @@
 import {Component, Container} from './components';
-import {toComponentFactory} from './adapters';
+import {ComponentFactory} from './componentFactories';
+import {adapt} from './adapters';
 import {Signal} from './signals';
 
 
@@ -11,7 +12,7 @@ export class List extends Container() {
         this._cursorIndex = -1;
 
         // FIXME: componentMap doesn't work for duplicate list items
-        this.itemFactory = toComponentFactory(itemFactory);
+        this.itemFactory = adapt(ComponentFactory, itemFactory);
         this.componentMap = new Map();
         model.itemAdded.then((e) => {this.addItem(e.item);});
         model.itemRemoved.then((e) => {this.removeItem(e.item);});
@@ -117,7 +118,7 @@ export class List extends Container() {
     }
 
     addItem(item) {
-        let component = this.itemFactory({model: item});
+        let component = this.itemFactory.create({model: item});
         component.element.dataset.item = item;
         this.addComponent(component);
         this.componentMap[item] = component;

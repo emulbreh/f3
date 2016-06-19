@@ -1,7 +1,8 @@
 import {Component, Container, Display} from './components';
 import {List} from './lists';
-import {toString, toComponentFactory, toRenderer} from './adapters'
+import {adapt, toString} from './adapters'
 import {Signal, HtmlSignal} from './signals';
+import {Renderer} from './renderers';
 
 
 export class Input extends Component {
@@ -131,7 +132,7 @@ export class ChoiceInput extends Container(Input) {
 
 export class SelectBox extends ChoiceInput {
     constructor({itemFactory, renderer=toString, ...config}={}) {
-        super({itemFactory: itemFactory || toRenderer(renderer), ...config});
+        super({itemFactory: itemFactory || adapt(Renderer, renderer), ...config});
         this.choiceDisplay = this.addComponent(new Display({
             renderer: renderer,
             focusable: true,
@@ -155,8 +156,8 @@ export class SelectBox extends ChoiceInput {
 
 export class ComboBox extends ChoiceInput {
     constructor({itemFactory, renderer=toString, ...config}={}) {
-        super({itemFactory: itemFactory || toRenderer(renderer), ...config});
-        this.renderer = toRenderer(renderer);
+        super({itemFactory: itemFactory || adapt(Renderer, renderer), ...config});
+        this.renderer = adapt(Renderer, renderer);
         this.textInput = this.addComponent(new TextInput({
             keymap: this.dropdown.cursorKeymap
         }));
@@ -175,9 +176,8 @@ export class ComboBox extends ChoiceInput {
     }
 
     setValue(val) {
-        console.log(val, this.renderer(val));
         super.setValue(val);
-        this.textInput.value = this.renderer(val);
+        this.textInput.value = this.renderer.render(val);
     }
 }
 
@@ -189,5 +189,14 @@ export class Form extends Container(Input) {
             obj[input.name] = input.value;
         }
         return obj;
+    }
+}
+
+
+export class Field extends Container(Component) {
+    constructor({label='', input, ...config}={}) {
+        super(config);
+        this.input = input;
+        this.label = Label.adapt(label);
     }
 }

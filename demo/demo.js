@@ -8156,7 +8156,7 @@
 	        model: '<i class="fa fa-circle-o-notch fa-spin" />'
 	    })] });
 	var form = new f3.Form({
-	    children: [new f3.Component(), new f3.Component(), new f3.TextInput({ name: 'a' }), new f3.TextInput({ name: 'b' }), new f3.Checkbox({ name: 'c' }), selectBox = new f3.SelectBox({ name: 'd', model: list }), comboBox = new f3.ComboBox({ name: 'e', model: list }), new f3.Form({
+	    children: [new f3.Display({ model: "Field A", className: 'label' }), new f3.TextInput({ name: 'a' }), new f3.Display({ model: "Field B", className: 'label' }), new f3.TextInput({ name: 'b' }), new f3.Checkbox({ name: 'c' }), selectBox = new f3.SelectBox({ name: 'd', model: list }), comboBox = new f3.ComboBox({ name: 'e', model: list }), new f3.Form({
 	        name: "foo",
 	        children: [new f3.TextInput({ name: 'nested' })]
 	    })]
@@ -9718,7 +9718,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.config = exports.Action = exports.Page = exports.Router = exports.Application = exports.toRenderer = exports.toComponentFactory = exports.properties = exports.ListModel = exports.Property = exports.Model = exports.List = exports.ComboBox = exports.SelectBox = exports.Form = exports.RawInput = exports.Checkbox = exports.TextInput = exports.Button = exports.Display = exports.Panel = exports.Root = exports.Container = exports.Component = exports.F3Error = exports.ComponentStructureError = undefined;
+	exports.config = exports.Action = exports.Page = exports.Router = exports.Application = exports.ComponentFactory = exports.toString = exports.__adapt__ = exports.adapt = exports.properties = exports.ListModel = exports.Property = exports.Model = exports.List = exports.ComboBox = exports.SelectBox = exports.Form = exports.RawInput = exports.Checkbox = exports.TextInput = exports.Button = exports.Display = exports.Panel = exports.Root = exports.Container = exports.Component = exports.F3Error = exports.ComponentStructureError = undefined;
 	
 	var _errors = __webpack_require__(383);
 	
@@ -9851,16 +9851,31 @@
 	
 	var _adapters = __webpack_require__(429);
 	
-	Object.defineProperty(exports, 'toComponentFactory', {
+	Object.defineProperty(exports, 'adapt', {
 	  enumerable: true,
 	  get: function get() {
-	    return _adapters.toComponentFactory;
+	    return _adapters.adapt;
 	  }
 	});
-	Object.defineProperty(exports, 'toRenderer', {
+	Object.defineProperty(exports, '__adapt__', {
 	  enumerable: true,
 	  get: function get() {
-	    return _adapters.toRenderer;
+	    return _adapters.__adapt__;
+	  }
+	});
+	Object.defineProperty(exports, 'toString', {
+	  enumerable: true,
+	  get: function get() {
+	    return _adapters.toString;
+	  }
+	});
+	
+	var _componentFactories = __webpack_require__(459);
+	
+	Object.defineProperty(exports, 'ComponentFactory', {
+	  enumerable: true,
+	  get: function get() {
+	    return _componentFactories.ComponentFactory;
 	  }
 	});
 	
@@ -10022,6 +10037,10 @@
 	
 	var _signals = __webpack_require__(431);
 	
+	var _renderers = __webpack_require__(458);
+	
+	var _actions = __webpack_require__(430);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var Component = exports.Component = function () {
@@ -10032,13 +10051,15 @@
 	        var tagName = _ref$tagName === undefined ? 'div' : _ref$tagName;
 	        var _ref$cssText = _ref.cssText;
 	        var cssText = _ref$cssText === undefined ? null : _ref$cssText;
+	        var _ref$className = _ref.className;
+	        var className = _ref$className === undefined ? null : _ref$className;
 	        var _ref$element = _ref.element;
 	        var element = _ref$element === undefined ? null : _ref$element;
 	        var _ref$focusable = _ref.focusable;
 	        var focusable = _ref$focusable === undefined ? false : _ref$focusable;
 	        var _ref$keymap = _ref.keymap;
 	        var keymap = _ref$keymap === undefined ? null : _ref$keymap;
-	        var config = (0, _objectWithoutProperties3.default)(_ref, ['tagName', 'cssText', 'element', 'focusable', 'keymap']);
+	        var config = (0, _objectWithoutProperties3.default)(_ref, ['tagName', 'cssText', 'className', 'element', 'focusable', 'keymap']);
 	        (0, _classCallCheck3.default)(this, Component);
 	
 	        var el = this.element = element || document.createElement(tagName);
@@ -10047,6 +10068,9 @@
 	            el.classList.add(c.name);
 	            c = c.__proto__;
 	        } while (c.prototype instanceof Component);
+	        if (className) {
+	            el.classList.add(className);
+	        }
 	        if (cssText) {
 	            el.style.cssText = cssText;
 	        }
@@ -10420,7 +10444,7 @@
 	
 	        var _this3 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Display).call(this, config));
 	
-	        _this3.renderer = (0, _adapters.toRenderer)(renderer);
+	        _this3.renderer = (0, _adapters.adapt)(_renderers.Renderer, renderer);
 	        _this3.model = model;
 	        return _this3;
 	    }
@@ -10429,7 +10453,7 @@
 	        key: 'model',
 	        set: function set(model) {
 	            this._model = model;
-	            this.element.innerHTML = this.renderer(model);
+	            this.element.innerHTML = this.renderer.render(model);
 	        },
 	        get: function get() {
 	            return this._model;
@@ -10513,7 +10537,7 @@
 	
 	        var _this6 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Button).call(this, (0, _extends3.default)({ tagName: 'button' }, config)));
 	
-	        _this6.action = (0, _adapters.toAction)(_this6, action);
+	        _this6.action = (0, _adapters.adapt)(_actions.Action, action, _this6);
 	        _this6.label = label;
 	        _this6.element.addEventListener('click', function (event) {
 	            _this6.action.perform({ event: event });
@@ -12507,15 +12531,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.AdapterError = undefined;
-	
-	var _typeof2 = __webpack_require__(328);
-	
-	var _typeof3 = _interopRequireDefault(_typeof2);
-	
-	var _extends2 = __webpack_require__(385);
-	
-	var _extends3 = _interopRequireDefault(_extends2);
+	exports.AdapterError = exports.__adapt__ = undefined;
 	
 	var _getPrototypeOf = __webpack_require__(300);
 	
@@ -12533,22 +12549,23 @@
 	
 	var _inherits3 = _interopRequireDefault(_inherits2);
 	
+	var _map = __webpack_require__(390);
+	
+	var _map2 = _interopRequireDefault(_map);
+	
+	var _symbol = __webpack_require__(358);
+	
+	var _symbol2 = _interopRequireDefault(_symbol);
+	
+	exports.adapt = adapt;
 	exports.toString = toString;
-	exports.toAction = toAction;
-	exports.toRenderer = toRenderer;
-	exports.toComponentFactory = toComponentFactory;
 	
 	var _errors = __webpack_require__(383);
 	
-	var _components = __webpack_require__(384);
-	
-	var _actions = __webpack_require__(430);
-	
-	var _config = __webpack_require__(432);
-	
-	var _sprintf = __webpack_require__(433);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var __adapt__ = exports.__adapt__ = (0, _symbol2.default)('f3.adapt');
+	var nativeAdapters = new _map2.default();
 	
 	var AdapterError = exports.AdapterError = function (_F3Error) {
 	    (0, _inherits3.default)(AdapterError, _F3Error);
@@ -12561,71 +12578,28 @@
 	    return AdapterError;
 	}(_errors.F3Error);
 	
+	function adapt(cls, obj) {
+	    if (obj instanceof cls) {
+	        return obj;
+	    }
+	    var adapt = nativeAdapters[cls] || cls[__adapt__];
+	
+	    for (var _len = arguments.length, ctx = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+	        ctx[_key - 2] = arguments[_key];
+	    }
+	
+	    var value = adapt.call.apply(adapt, [cls, obj].concat(ctx));
+	    if (typeof value == 'undefined') {
+	        throw new AdapterError('Cannot adapt ' + obj + ' to ' + cls);
+	    }
+	    return value;
+	}
+	
 	function toString(value) {
 	    return '' + value;
 	}
 	
-	function toAction(component, a) {
-	    if (a instanceof _actions.Action) {
-	        return a;
-	    }
-	    if (a instanceof Function) {
-	        return new _actions.Action({ action: a });
-	    }
-	    if (typeof a == 'string') {
-	        return toAction(component, function () {
-	            return component.app.router.call(a);
-	        });
-	    }
-	    throw new AdapterError('Cannot adapt ' + a + ' to action');
-	}
-	
-	function toRenderer(r) {
-	    if (typeof r == 'string') {
-	        r = _sprintf.sprintf.bind(null, r);
-	    } else if (!(r instanceof Function)) {
-	        throw new AdapterError('Cannot adapt ' + r + ' to renderer');
-	    }
-	    r.__f3_renderer = true;
-	    return r;
-	}
-	
-	function toComponentFactory(f, args) {
-	    if (args) {
-	        f = toComponentFactory(f);
-	        return function (config) {
-	            return f((0, _extends3.default)({}, args, config));
-	        };
-	    }
-	    if (Array.isArray(f)) {
-	        return toComponentFactory.apply(null, f);
-	    }
-	    if (f.prototype instanceof _components.Component) {
-	        return function (config) {
-	            return new f(config);
-	        };
-	    }
-	    if (f instanceof Function && !f.__f3_renderer) {
-	        return f;
-	    }
-	    try {
-	        var _ret = function () {
-	            var renderer = toRenderer(f);
-	            return {
-	                v: function v(config) {
-	                    return new _config.CONFIG.defaultDisplayComponent((0, _extends3.default)({ renderer: renderer }, config));
-	                }
-	            };
-	        }();
-	
-	        if ((typeof _ret === 'undefined' ? 'undefined' : (0, _typeof3.default)(_ret)) === "object") return _ret.v;
-	    } catch (e) {
-	        if (!(e instanceof AdapterError)) {
-	            throw e;
-	        }
-	    }
-	    throw new AdapterError('Cannot adapt ' + f + ' to component factory');
-	}
+	nativeAdapters[String] = toString;
 
 /***/ },
 /* 430 */
@@ -12647,6 +12621,8 @@
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
 	var _signals = __webpack_require__(431);
+	
+	var _adapters = __webpack_require__(429);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -12671,6 +12647,20 @@
 	        value: function perform(target) {
 	            this.action(target);
 	            this.performed.emit({ target: target, action: this });
+	        }
+	    }], [{
+	        key: _adapters.__adapt__,
+	        value: function value(obj, component) {
+	            if (obj instanceof Function) {
+	                return new Action({ action: obj });
+	            }
+	            if (typeof obj == 'string') {
+	                return new Action({
+	                    action: function action() {
+	                        component.app.router.call(obj);
+	                    }
+	                });
+	            }
 	        }
 	    }]);
 	    return Action;
@@ -13100,7 +13090,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.Form = exports.ComboBox = exports.SelectBox = exports.ChoiceInput = exports.Checkbox = exports.TextInput = exports.RawInput = exports.Input = undefined;
+	exports.Field = exports.Form = exports.ComboBox = exports.SelectBox = exports.ChoiceInput = exports.Checkbox = exports.TextInput = exports.RawInput = exports.Input = undefined;
 	
 	var _getIterator2 = __webpack_require__(417);
 	
@@ -13145,6 +13135,8 @@
 	var _adapters = __webpack_require__(429);
 	
 	var _signals = __webpack_require__(431);
+	
+	var _renderers = __webpack_require__(458);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -13351,7 +13343,7 @@
 	        var config = (0, _objectWithoutProperties3.default)(_ref5, ['itemFactory', 'renderer']);
 	        (0, _classCallCheck3.default)(this, SelectBox);
 	
-	        var _this6 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(SelectBox).call(this, (0, _extends3.default)({ itemFactory: itemFactory || (0, _adapters.toRenderer)(renderer) }, config)));
+	        var _this6 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(SelectBox).call(this, (0, _extends3.default)({ itemFactory: itemFactory || (0, _adapters.adapt)(_renderers.Renderer, renderer) }, config)));
 	
 	        _this6.choiceDisplay = _this6.addComponent(new _components.Display({
 	            renderer: renderer,
@@ -13394,9 +13386,9 @@
 	        var config = (0, _objectWithoutProperties3.default)(_ref6, ['itemFactory', 'renderer']);
 	        (0, _classCallCheck3.default)(this, ComboBox);
 	
-	        var _this7 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ComboBox).call(this, (0, _extends3.default)({ itemFactory: itemFactory || (0, _adapters.toRenderer)(renderer) }, config)));
+	        var _this7 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ComboBox).call(this, (0, _extends3.default)({ itemFactory: itemFactory || (0, _adapters.adapt)(_renderers.Renderer, renderer) }, config)));
 	
-	        _this7.renderer = (0, _adapters.toRenderer)(renderer);
+	        _this7.renderer = (0, _adapters.adapt)(_renderers.Renderer, renderer);
 	        _this7.textInput = _this7.addComponent(new TextInput({
 	            keymap: _this7.dropdown.cursorKeymap
 	        }));
@@ -13418,9 +13410,8 @@
 	    (0, _createClass3.default)(ComboBox, [{
 	        key: 'setValue',
 	        value: function setValue(val) {
-	            console.log(val, this.renderer(val));
 	            (0, _get3.default)((0, _getPrototypeOf2.default)(ComboBox.prototype), 'setValue', this).call(this, val);
-	            this.textInput.value = this.renderer(val);
+	            this.textInput.value = this.renderer.render(val);
 	        }
 	    }]);
 	    return ComboBox;
@@ -13470,6 +13461,28 @@
 	    }]);
 	    return Form;
 	}((0, _components.Container)(Input));
+	
+	var Field = exports.Field = function (_Container3) {
+	    (0, _inherits3.default)(Field, _Container3);
+	
+	    function Field() {
+	        var _ref7 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	
+	        var _ref7$label = _ref7.label;
+	        var label = _ref7$label === undefined ? '' : _ref7$label;
+	        var input = _ref7.input;
+	        var config = (0, _objectWithoutProperties3.default)(_ref7, ['label', 'input']);
+	        (0, _classCallCheck3.default)(this, Field);
+	
+	        var _this9 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Field).call(this, config));
+	
+	        _this9.input = input;
+	        _this9.label = Label.adapt(label);
+	        return _this9;
+	    }
+	
+	    return Field;
+	}((0, _components.Container)(_components.Component));
 
 /***/ },
 /* 435 */
@@ -13593,6 +13606,8 @@
 	
 	var _components = __webpack_require__(384);
 	
+	var _componentFactories = __webpack_require__(459);
+	
 	var _adapters = __webpack_require__(429);
 	
 	var _signals = __webpack_require__(431);
@@ -13619,7 +13634,7 @@
 	        _this._cursorIndex = -1;
 	
 	        // FIXME: componentMap doesn't work for duplicate list items
-	        _this.itemFactory = (0, _adapters.toComponentFactory)(itemFactory);
+	        _this.itemFactory = (0, _adapters.adapt)(_componentFactories.ComponentFactory, itemFactory);
 	        _this.componentMap = new _map2.default();
 	        model.itemAdded.then(function (e) {
 	            _this.addItem(e.item);
@@ -13741,7 +13756,7 @@
 	    }, {
 	        key: 'addItem',
 	        value: function addItem(item) {
-	            var component = this.itemFactory({ model: item });
+	            var component = this.itemFactory.create({ model: item });
 	            component.element.dataset.item = item;
 	            this.addComponent(component);
 	            this.componentMap[item] = component;
@@ -13982,7 +13997,6 @@
 	            if (this[initialized]) {
 	                return;
 	            }
-	            console.log('init class ' + this);
 	            var _iteratorNormalCompletion = true;
 	            var _didIteratorError = false;
 	            var _iteratorError = undefined;
@@ -15601,7 +15615,7 @@
 	
 	
 	// module
-	exports.push([module.id, "html {\n  box-sizing: border-box; }\n\n*, *::after, *::before {\n  box-sizing: inherit; }\n\nhtml, body {\n  margin: 0px;\n  padding: 0px;\n  min-height: 100%;\n  background-color: #2D1429;\n  font-family: \"Aller Light\";\n  line-height: 1.3em; }\n\n.Input > input[type=\"color\"], input[type=\"date\"], input[type=\"datetime\"], input[type=\"datetime-local\"], input[type=\"email\"], input[type=\"month\"], input[type=\"number\"], input[type=\"password\"], input[type=\"search\"], input[type=\"tel\"], input[type=\"text\"], input[type=\"time\"], input[type=\"url\"], input[type=\"week\"], input:not([type]), textarea {\n  font-family: \"Aller Light\";\n  font-size: 14px;\n  padding: 4px;\n  border: 1px solid #eee;\n  border-bottom: 1px solid #bbb;\n  width: 100%; }\n  .Input > input[type=\"color\"]:focus, input[type=\"date\"]:focus, input[type=\"datetime\"]:focus, input[type=\"datetime-local\"]:focus, input[type=\"email\"]:focus, input[type=\"month\"]:focus, input[type=\"number\"]:focus, input[type=\"password\"]:focus, input[type=\"search\"]:focus, input[type=\"tel\"]:focus, input[type=\"text\"]:focus, input[type=\"time\"]:focus, input[type=\"url\"]:focus, input[type=\"week\"]:focus, input:not([type]):focus, textarea:focus {\n    outline: none;\n    border-color: #A0CEF0; }\n\n.Form {\n  padding: 1em; }\n  .Form > .Input {\n    margin-bottom: 0.5em; }\n\n.Input {\n  width: 10em;\n  display: inline-block; }\n\n.Root {\n  height: 100%;\n  max-width: 1200px;\n  margin-left: auto;\n  margin-right: auto;\n  padding: 1em;\n  background-color: #fff; }\n  .Root::after {\n    clear: both;\n    content: \"\";\n    display: table; }\n\n.Window {\n  float: left;\n  display: block;\n  margin-right: 2.35765%;\n  width: 100%;\n  height: 100%; }\n  .Window:last-child {\n    margin-right: 0; }\n\n.ChoiceInput {\n  position: relative; }\n  .ChoiceInput .List {\n    position: absolute;\n    top: 100%;\n    width: 100%;\n    left: 0%;\n    z-index: 1000;\n    background-color: #fff;\n    border: 1px solid #eee;\n    padding: 4px; }\n    .ChoiceInput .List > .cursor {\n      background-color: #ccccff; }\n    .ChoiceInput .List > :hover {\n      background-color: #ffcccc; }\n\n.Checkbox > input {\n  -webkit-appearance: none;\n  -moz-appearance: none;\n  -ms-appearance: none;\n  -o-appearance: none;\n  appearance: none;\n  font-family: \"Aller Light\";\n  font-size: 14px;\n  padding: 4px;\n  border: 1px solid #eee;\n  border-bottom: 1px solid #bbb;\n  display: inline-block;\n  width: 1.3em;\n  height: 1.3em;\n  padding: 0em;\n  margin: 0em;\n  overflow: hidden; }\n  .Checkbox > input:focus {\n    outline: none;\n    border-color: #A0CEF0; }\n  .Checkbox > input:after {\n    font-family: FontAwesome;\n    display: inline-block;\n    width: 1.1em;\n    height: 1.1em;\n    padding: 0.05em;\n    color: #000;\n    content: \"\"; }\n  .Checkbox > input:checked:after {\n    content: \"\\F00C\"; }\n\n.SelectBox {\n  position: relative; }\n  .SelectBox > .Display {\n    font-family: \"Aller Light\";\n    font-size: 14px;\n    padding: 4px;\n    border: 1px solid #eee;\n    border-bottom: 1px solid #bbb;\n    display: block; }\n    .SelectBox > .Display:focus {\n      outline: none;\n      border-color: #A0CEF0; }\n\n.ChoiceInput:after {\n  font-family: \"Aller Light\";\n  font-size: 14px;\n  padding: 4px;\n  border: 1px solid #eee;\n  border-bottom: 1px solid #bbb;\n  border: none;\n  content: \"\\F107\";\n  font-family: FontAwesome;\n  display: inline-block;\n  padding: 0em;\n  margin: 0em;\n  position: absolute;\n  top: 4px;\n  right: 14px;\n  font-size: 80%;\n  color: #bbb; }\n  .ChoiceInput:after:focus {\n    outline: none;\n    border-color: #A0CEF0; }\n", ""]);
+	exports.push([module.id, "html {\n  box-sizing: border-box; }\n\n*, *::after, *::before {\n  box-sizing: inherit; }\n\nhtml, body {\n  margin: 0px;\n  padding: 0px;\n  min-height: 100%;\n  background-color: #2D1429;\n  font-family: \"Aller Light\";\n  line-height: 1.3em; }\n\n.Input > input[type=\"color\"], input[type=\"date\"], input[type=\"datetime\"], input[type=\"datetime-local\"], input[type=\"email\"], input[type=\"month\"], input[type=\"number\"], input[type=\"password\"], input[type=\"search\"], input[type=\"tel\"], input[type=\"text\"], input[type=\"time\"], input[type=\"url\"], input[type=\"week\"], input:not([type]), textarea {\n  font-family: \"Aller Light\";\n  font-size: 14px;\n  padding: 4px;\n  border: 1px solid #eee;\n  border-bottom: 1px solid #bbb;\n  width: 100%; }\n  .Input > input[type=\"color\"]:focus, input[type=\"date\"]:focus, input[type=\"datetime\"]:focus, input[type=\"datetime-local\"]:focus, input[type=\"email\"]:focus, input[type=\"month\"]:focus, input[type=\"number\"]:focus, input[type=\"password\"]:focus, input[type=\"search\"]:focus, input[type=\"tel\"]:focus, input[type=\"text\"]:focus, input[type=\"time\"]:focus, input[type=\"url\"]:focus, input[type=\"week\"]:focus, input:not([type]):focus, textarea:focus {\n    outline: none;\n    border-color: #A0CEF0; }\n\n.Form {\n  padding: 1em; }\n  .Form > .Input {\n    margin-bottom: 0.5em; }\n\n.Input {\n  width: 10em;\n  display: inline-block; }\n\n.Root {\n  height: 100%;\n  max-width: 1200px;\n  margin-left: auto;\n  margin-right: auto;\n  padding: 1em;\n  background-color: #fff; }\n  .Root::after {\n    clear: both;\n    content: \"\";\n    display: table; }\n\n.Window {\n  float: left;\n  display: block;\n  margin-right: 2.35765%;\n  width: 100%;\n  height: 100%; }\n  .Window:last-child {\n    margin-right: 0; }\n\n.ChoiceInput {\n  position: relative; }\n  .ChoiceInput .List {\n    position: absolute;\n    top: 100%;\n    width: 100%;\n    left: 0%;\n    z-index: 1000;\n    background-color: #fff;\n    border: 1px solid #eee;\n    padding: 4px; }\n    .ChoiceInput .List > .cursor {\n      background-color: #ccccff; }\n    .ChoiceInput .List > :hover {\n      background-color: #ffcccc; }\n\n.Checkbox > input {\n  -webkit-appearance: none;\n  -moz-appearance: none;\n  -ms-appearance: none;\n  -o-appearance: none;\n  appearance: none;\n  font-family: \"Aller Light\";\n  font-size: 14px;\n  padding: 4px;\n  border: 1px solid #eee;\n  border-bottom: 1px solid #bbb;\n  display: inline-block;\n  width: 1.3em;\n  height: 1.3em;\n  padding: 0em;\n  margin: 0em;\n  overflow: hidden; }\n  .Checkbox > input:focus {\n    outline: none;\n    border-color: #A0CEF0; }\n  .Checkbox > input:after {\n    font-family: FontAwesome;\n    display: inline-block;\n    width: 1.1em;\n    height: 1.1em;\n    padding: 0.05em;\n    color: #000;\n    content: \"\"; }\n  .Checkbox > input:checked:after {\n    content: \"\\F00C\"; }\n\n.SelectBox {\n  position: relative; }\n  .SelectBox > .Display {\n    font-family: \"Aller Light\";\n    font-size: 14px;\n    padding: 4px;\n    border: 1px solid #eee;\n    border-bottom: 1px solid #bbb;\n    display: block; }\n    .SelectBox > .Display:focus {\n      outline: none;\n      border-color: #A0CEF0; }\n\n.ChoiceInput:after {\n  font-family: \"Aller Light\";\n  font-size: 14px;\n  padding: 4px;\n  border: 1px solid #eee;\n  border-bottom: 1px solid #bbb;\n  border: none;\n  content: \"\\F107\";\n  font-family: FontAwesome;\n  display: inline-block;\n  padding: 0em;\n  margin: 0em;\n  position: absolute;\n  top: 4px;\n  right: 14px;\n  font-size: 80%;\n  color: #bbb; }\n  .ChoiceInput:after:focus {\n    outline: none;\n    border-color: #A0CEF0; }\n\n.Display.label {\n  font-size: 70%; }\n", ""]);
 	
 	// exports
 
@@ -15913,6 +15927,146 @@
 			URL.revokeObjectURL(oldSrc);
 	}
 
+
+/***/ },
+/* 458 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Renderer = undefined;
+	
+	var _classCallCheck2 = __webpack_require__(326);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _createClass2 = __webpack_require__(424);
+	
+	var _createClass3 = _interopRequireDefault(_createClass2);
+	
+	var _adapters = __webpack_require__(429);
+	
+	var _sprintf = __webpack_require__(433);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Renderer = exports.Renderer = function () {
+	    function Renderer(func) {
+	        (0, _classCallCheck3.default)(this, Renderer);
+	
+	        this.func = func;
+	    }
+	
+	    (0, _createClass3.default)(Renderer, [{
+	        key: 'render',
+	        value: function render() {
+	            return this.func.apply(this, arguments);
+	        }
+	    }], [{
+	        key: _adapters.__adapt__,
+	        value: function value(obj) {
+	            if (typeof obj == 'string') {
+	                return new Renderer(_sprintf.sprintf.bind(null, obj));
+	            }
+	            if (obj instanceof Function) {
+	                return new Renderer(obj);
+	            }
+	        }
+	    }]);
+	    return Renderer;
+	}();
+
+/***/ },
+/* 459 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.ComponentFactory = undefined;
+	
+	var _typeof2 = __webpack_require__(328);
+	
+	var _typeof3 = _interopRequireDefault(_typeof2);
+	
+	var _extends2 = __webpack_require__(385);
+	
+	var _extends3 = _interopRequireDefault(_extends2);
+	
+	var _classCallCheck2 = __webpack_require__(326);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _createClass2 = __webpack_require__(424);
+	
+	var _createClass3 = _interopRequireDefault(_createClass2);
+	
+	var _adapters = __webpack_require__(429);
+	
+	var _components = __webpack_require__(384);
+	
+	var _renderers = __webpack_require__(458);
+	
+	var _config = __webpack_require__(432);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var ComponentFactory = exports.ComponentFactory = function () {
+	    function ComponentFactory(func) {
+	        var config = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	        (0, _classCallCheck3.default)(this, ComponentFactory);
+	
+	        this.func = func;
+	        this.config = config;
+	    }
+	
+	    (0, _createClass3.default)(ComponentFactory, [{
+	        key: 'create',
+	        value: function create(config) {
+	            return this.func((0, _extends3.default)({}, this.config, config));
+	        }
+	    }], [{
+	        key: _adapters.__adapt__,
+	        value: function value(obj, args) {
+	            var _this = this;
+	
+	            if (Array.isArray(obj)) {
+	                return this[_adapters.__adapt__].apply(this, obj);
+	            }
+	            if (obj.prototype instanceof _components.Component) {
+	                return new this(function (config) {
+	                    return new obj(config);
+	                }, args);
+	            }
+	            if (obj instanceof Function) {
+	                return new this(obj, args);
+	            }
+	            try {
+	                var _ret = function () {
+	                    var renderer = (0, _adapters.adapt)(_renderers.Renderer, obj);
+	                    return {
+	                        v: new _this(function (config) {
+	                            return new _config.CONFIG.defaultDisplayComponent((0, _extends3.default)({
+	                                renderer: renderer }, config));
+	                        }, args)
+	                    };
+	                }();
+	
+	                if ((typeof _ret === 'undefined' ? 'undefined' : (0, _typeof3.default)(_ret)) === "object") return _ret.v;
+	            } catch (e) {
+	                if (!(e instanceof _adapters.AdapterError)) {
+	                    throw e;
+	                }
+	            }
+	        }
+	    }]);
+	    return ComponentFactory;
+	}();
 
 /***/ }
 /******/ ]);

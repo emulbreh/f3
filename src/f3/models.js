@@ -1,7 +1,7 @@
 import {Signal} from './signals';
 
-export var properties = Symbol('f3.properties');
-export var initialized = Symbol('f3.initialized');
+export const properties = Symbol('f3.properties');
+export const initialized = Symbol('f3.initialized');
 const modelData = Symbol('f3.modelData');
 
 
@@ -52,7 +52,6 @@ export class Model {
         if (this[initialized]) {
             return;
         }
-        console.log(`init class ${this}`);
         for (let property of this.properties) {
             property.define(this);
         }

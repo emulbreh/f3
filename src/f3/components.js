@@ -1,17 +1,22 @@
 import {ComponentStructureError} from './errors';
 import {identity} from './utils';
-import {toRenderer, toString, toAction} from './adapters';
+import {adapt, toString} from './adapters';
 import {Signal, HtmlSignal} from './signals';
+import {Renderer} from './renderers';
+import {Action} from './actions';
 
 
 export class Component {
-    constructor({tagName='div', cssText=null, element=null, focusable=false, keymap=null, ...config}={}) {
+    constructor({tagName='div', cssText=null, className=null, element=null, focusable=false, keymap=null, ...config}={}) {
         let el = this.element = element || document.createElement(tagName);
         let c = this.constructor;
         do {
             el.classList.add(c.name);
             c = c.__proto__;
         } while (c.prototype instanceof Component);
+        if (className) {
+            el.classList.add(className);
+        }
         if (cssText) {
             el.style.cssText = cssText;
         }
@@ -166,13 +171,13 @@ export class Panel extends Container() {
 export class Display extends Component {
     constructor({model, renderer=toString, ...config}={}) {
         super(config);
-        this.renderer = toRenderer(renderer);
+        this.renderer = adapt(Renderer, renderer);
         this.model = model;
     }
 
     set model(model) {
         this._model = model;
-        this.element.innerHTML = this.renderer(model);
+        this.element.innerHTML = this.renderer.render(model);
     }
 
     get model() {
@@ -223,7 +228,7 @@ export class Window extends Container() {
 export class Button extends Component {
     constructor({action, label, ...config}) {
         super({tagName: 'button', ...config});
-        this.action = toAction(this, action);
+        this.action = adapt(Action, action, this);
         this.label = label;
         this.element.addEventListener('click', (event) => {
             this.action.perform({event});
