@@ -29,7 +29,7 @@ export class Signal {
         this.then(() => {this.remove(callback);});
     }
 
-    emit(event) {
+    emit(event={}) {
         for (let listener of this.listeners) {
             listener(event);
         }

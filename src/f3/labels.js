@@ -20,8 +20,14 @@ export class Label extends ComponentFactory{
     }
 
     get html() {
-        let icon = this.icon ? `<i class="fa fa-${this.icon}"></i>` : '';
-        return icon + this.text;
+        let h = '';
+        if (this.icon) {
+            h +=  `<i class="fa fa-${this.icon}"></i>`;
+        }
+        if (this.text) {
+            h += `<span>${this.text}</span>`;
+        }
+        return h;
     }
 
     create(config) {
@@ -33,3 +39,10 @@ export class Label extends ComponentFactory{
         });
     }
 }
+
+
+export const defaultLabels = {
+    ok: new Label({text: 'Ok', icon: 'check'}),
+    cancel: new Label({text: 'Cancel', icon: 'close'}),
+    close: new Label({icon: 'close'})
+};

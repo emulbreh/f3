@@ -38,15 +38,17 @@ export class Input extends Component {
     get value() {
         return this.getValue();
     }
+
 }
 
 
 export class RawInput extends Input {
-    constructor({inputType='text', focusable=true, ...config}={}) {
+    constructor({inputType='text', focusable=true, placeholder='', ...config}={}) {
         super({...config, focusable: false});
 
         this.inputElement = document.createElement('input');
         this.inputElement.type = inputType;
+        this.inputElement.placeholder = placeholder;
         this.element.appendChild(this.inputElement);
 
         this.focusable = focusable;
@@ -73,6 +75,9 @@ export class RawInput extends Input {
         return this.inputElement.value;
     }
 
+    click(el=null) {
+        super.click(el || this.inputElement);
+    }
 }
 
 
@@ -146,6 +151,7 @@ export class SelectBox extends ChoiceInput {
             'space': () => {this.open();},
             'escape': () => {this.close();}
         });
+        this.focusElement = this.choiceDisplay.element;
     }
 
     setValue(val) {
@@ -198,9 +204,12 @@ export class Field extends Container(Component) {
     constructor({label='', input, ...config}={}) {
         super(config);
         this.addClass(input.constructor.name + 'Field');
-        this.input = input;
         this.label = adapt(Label, label);
-        this.addComponent(this.label.create());
-        this.addComponent(this.input);
+        this.labelComponent = this.addComponent(this.label.create());
+        this.input = this.addComponent(input);
+        this.labelComponent.clicked.then((ctx) => {
+            this.input.click();
+            this.input.focus();
+        });
     }
 }

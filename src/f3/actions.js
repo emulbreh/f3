@@ -8,9 +8,13 @@ export class Action {
         this.action = action;
         this.shortcut = shortcut;
         this.performed = new Signal();
+        this.trigger = this.perform.bind(this);
     }
 
     static [__adapt__](obj, component) {
+        if (!obj) {
+            return new Action({action: () => {}});
+        }
         if (obj instanceof Function) {
             return new Action({action: obj});
         }

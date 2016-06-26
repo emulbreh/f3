@@ -1,4 +1,4 @@
-import {Root, Window} from './components';
+import {Root, Frame, Container} from './components';
 import {F3Error} from './errors';
 
 
@@ -7,8 +7,8 @@ export class Page {
         this.root = root;
     }
 
-    open(win, params) {
-        win.content = this.root;
+    open(frame, params) {
+        frame.content = this.root;
     }
 }
 
@@ -74,10 +74,14 @@ export class Router {
 
 
 export class Application {
-    constructor({win, router}={}) {
-        this.root = new Root({app: this});
+    constructor({frame, router}={}) {
+        this.root = new (Root(Container()))({
+            app: this,
+            element: document.body
+        });
         this.router = router || new Router();
-        this.window = this.root.addComponent(win || new Window());
+        this.frame = this.root.addComponent(frame || new Frame());
+        this.actions = [];
 
         window.addEventListener('popstate', (e) => {
             console.log(e, window.location.pathname);
@@ -106,7 +110,7 @@ export class Application {
 
     addPage(route, page) {
         this.router.addRoute(route, (url, params) => {
-            page.open(this.window, params);
+            page.open(this.frame, params);
             window.history.pushState(params, null, url);
         });
     }

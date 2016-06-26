@@ -24,11 +24,16 @@ action
 Todo
 ----
 
+* Autocomplete
 * Collapsible
-* IconSet
-* TabPanel
-* Fieldset
+* ButtonGroup
 * Dialog
+* Fieldset
+* FormSet
+* IconSet
+* Model IDs
+* MultiComboBox
+* TabPanel
 * Overlay
 
 

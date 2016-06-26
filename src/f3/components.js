@@ -22,8 +22,10 @@ export class Component {
         }
         this.focusable = focusable;
         this._focusElement = null;
-        this.focusElement = this.element;
+        this.focusElement = el;
+
         this.clicked = new HtmlSignal({type: 'click', component: this});
+
         this.parent = null;
         if (keymap) {
             this.installKeymap(keymap);
@@ -106,6 +108,21 @@ export class Component {
         this.element.style.display = 'none';
         return Promise.resolve();
     }
+
+    focus() {
+        this.focusElement.focus();
+    }
+
+    blur() {
+        this.focusElement.blur();
+    }
+
+    click(el=null) {
+        el = el || this.element;
+        el.dispatchEvent(new MouseEvent('click', {
+            target: el
+        }));
+    }
 }
 
 
@@ -177,7 +194,13 @@ export class Display extends Component {
 
     set model(model) {
         this._model = model;
-        this.element.innerHTML = this.renderer.render(model);
+        if (model instanceof HTMLElement) {
+            this.element.innerHTML = '';
+            this.element.appendChild(model);
+        }
+        else {
+            this.element.innerHTML = this.renderer.render(model);
+        }
     }
 
     get model() {
@@ -185,9 +208,9 @@ export class Display extends Component {
     }
 }
 
-export class Root extends Container() {
+export var Root = defineMixin((base=Component) => class Root extends base {
     constructor({app, ...config}={}) {
-        super({element: document.body, ...config});
+        super(config);
         this._app = app;
     }
 
@@ -198,10 +221,10 @@ export class Root extends Container() {
     get root() {
         return this;
     }
-}
+});
 
 
-export class Window extends Container() {
+export class Frame extends Container() {
     constructor({...config}={}) {
         super(config);
         this._content = null;

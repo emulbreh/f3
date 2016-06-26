@@ -1,10 +1,14 @@
 @import 'bourbon';
 @import 'neat';
 
+//@import 'uikit-variables';
+//@import 'uikit-mixins';
+//@import 'uikit';
+
 $f3-primary-color: #201910;
 
-$f3-font-family: "Aller Light";
-$f3-font-size: 14px;
+$f3-font-family: "Helvetica Neue", "Helvetica"; //"AveriaSans-Light"; //"Aller Light";
+$f3-font-size: 16px;
 $f3-small-vspace: 0.5em;
 
 $f3-button-color: tint(lighten($f3-primary-color, 20%), 90%);
@@ -15,6 +19,8 @@ $f3-input-font-family: $f3-font-family;
 $f3-input-line-height: 2ex;
 $f3-input-padding: 4px;
 $f3-input-focus-border-color: #A0CEF0;
+
+$f3-display-padding: $f3-input-padding;
 
 $f3-background-color: #fff;
 $f3-highlight-background-color: tint(#00f, 80%);
@@ -60,11 +66,11 @@ html, body{
 }
 
 .Input {
-	width: 10em;
+	width: 100%;
 	display: inline-block;
 }
 
-.Root{
+body.Root{
 	height: 100%;
 	@include outer-container();
 	padding: 1em;
@@ -104,7 +110,7 @@ html, body{
 }
 
 .Field {
-	margin-bottom: $f3-small-vspace;
+	margin: $f3-small-vspace 0px;
 }
 
 .CheckboxField {
@@ -177,24 +183,101 @@ html, body{
 }
 
 .Display.label{
-	font-size: 70%;
+	font-size: 90%;
 }
 
-.Button {
+.Button{
 	@include appearance(none);
 	@include f3-input-style();
 	background-color: $f3-button-color;
 	border: 1px solid $f3-button-color;
-	padding: 2 * $f3-input-padding;
+	padding: $f3-input-padding 2 * $f3-input-padding;
 	margin: 0em 0.5em 0.5em 0em;
 	cursor: pointer;
+	text-align: left;
 
 	&:hover {
-		background-color: tint($f3-button-color, 50%);
+		background-color: tint($f3-button-color, 40%);
 	}
 
 	.fa {
-		font-size: 110%;
-		margin-right: 0.5em;
+		color: shade($f3-button-color, 75%);
+	}
+}
+
+/*
+.Button {
+	@extend .uk-button;
+}
+*/
+
+.Display.label {
+	& > .fa + span {
+		padding-left: $f3-input-padding;
+	}
+}
+
+.cover {
+	z-index: 100;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	background-color: #000;
+	opacity: 0.2;
+}
+
+.Dialog {
+	z-index: 1000;
+	position: fixed;
+	left: 50vw;
+	top: 20vh;
+	background-color: #fff;
+
+	height: auto;
+	min-height: 200px;
+
+	width: 400px;
+	max-width: 80vw;
+
+	margin-left: -200px;
+	margin-top: -10vh;
+	box-shadow:
+		+0.5em 0.5em 1em #999,
+		-0.5em 0.5em 1em #999
+	;
+	border-radius: 4px;
+	overflow: hidden;
+
+	& > .header {
+		background-color: #eee;
+		@include clearfix;
+
+		& > .Display{
+			float: left;
+			padding: $f3-display-padding;
+		}
+
+		& > .Button {
+			float: right;
+			margin: 0px;
+		}
+	}
+}
+
+.ToggleButton {
+	&.toggled {
+		background-color: tint($f3-button-color, 70%);
+
+		&:hover {
+			background-color: tint($f3-button-color, 100%);
+		}
+	}
+}
+
+.FormField{
+	& > .label{
+		border-bottom: 1px solid #ccc;
 	}
 }

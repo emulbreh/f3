@@ -23,6 +23,8 @@ let container = new f3.Panel({children: [
         model: '<i class="fa fa-circle-o-notch fa-spin" />'
     })
 ]});
+let canvas = document.createElement('canvas');
+
 let form = new f3.Form({
     children: [
         new f3.Field({
@@ -42,11 +44,17 @@ let form = new f3.Form({
             input: selectBox = new f3.SelectBox({name: 'd', model: list})
         }),
         comboBox = new f3.ComboBox({name: 'e', model: list}),
-        new f3.Form({
-            name: "foo",
-            children: [
-                new f3.TextInput({name: 'nested'})
-            ]
+        new f3.Field({
+            label: new f3.Label({text: 'Input Group', icon: 'object-group'}),
+            input: new f3.Form({
+                name: "foo",
+                children: [
+                    new f3.TextInput({
+                        name: 'nested',
+                        placeholder: 'Foo'
+                    }),
+                ]
+            })
         })
     ]
 });
@@ -101,6 +109,28 @@ container.addComponent(new f3.Button({
 }));
 
 let app = new f3.Application();
+
+let okButton;
+container.addComponents([
+    okButton = new f3.Button({label: f3.defaultLabels.ok}),
+    new f3.Button({label: f3.defaultLabels.cancel}),
+    new f3.ToggleButton({label: 'Toggle Me'})
+]);
+
+let testAction = new f3.Action({
+    shortcut: 'alt+e',
+    action: () => {
+        let d = new f3.Dialog({
+            app: app,
+            title: new f3.Label({text: 'Test Dialog', icon: 'gears'})
+        });
+        d.open();
+    }
+});
+app.addAction(testAction);
+
+okButton.clicked.then(testAction.trigger);
+
 app.addPage('/', new f3.Page({root: container}));
 app.addPage('/foo', new f3.Page({
     root: new f3.Display({model: "foo page"})
@@ -108,3 +138,4 @@ app.addPage('/foo', new f3.Page({
 app.addPage('/bar', new f3.Page({
     root: new f3.Display({model: "bar page"})
 }));
+console.log("xxxx");
