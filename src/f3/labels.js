@@ -14,7 +14,7 @@ export class Label extends ComponentFactory{
     }
 
     static [__adapt__](obj) {
-        if (typeof(obj) == 'string') {
+        if (typeof(obj) === 'string') {
             return new this({text: obj});
         }
     }
@@ -22,7 +22,7 @@ export class Label extends ComponentFactory{
     get html() {
         let h = '';
         if (this.icon) {
-            h +=  `<i class="fa fa-${this.icon}"></i>`;
+            h += `<i class="fa fa-${this.icon}"></i>`;
         }
         if (this.text) {
             h += `<span>${this.text}</span>`;

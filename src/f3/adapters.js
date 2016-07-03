@@ -16,7 +16,7 @@ export function adapt(cls, obj, ...ctx) {
     }
     let adapt = nativeAdapters[cls] || cls[__adapt__];
     let value = adapt.call(cls, obj, ...ctx);
-    if (typeof(value) == 'undefined') {
+    if (value === undefined) {
         throw new AdapterError(`Cannot adapt ${obj} to ${cls}`);
     }
     return value;

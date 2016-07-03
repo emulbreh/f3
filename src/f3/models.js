@@ -51,7 +51,7 @@ export class Property {
 
     set(obj, value) {
         let oldValue = obj[modelData][this.name];
-        if (oldValue != value) {
+        if (oldValue !== value) {
             obj[modelData][this.name] = value;
             obj.propertyChanged.emit({
                 model: obj,
@@ -96,7 +96,7 @@ export class String extends Type {
     }
 
     *validate(value) {
-        if (typeof(value) != 'string') {
+        if (typeof(value) !== 'string') {
             yield 'must be of type string'
         }
         if (this.regex && !this.regex.test(value)) {

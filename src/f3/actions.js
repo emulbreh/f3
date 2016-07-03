@@ -18,7 +18,7 @@ export class Action {
         if (obj instanceof Function) {
             return new Action({action: obj});
         }
-        if (typeof(obj) == 'string') {
+        if (typeof(obj) === 'string') {
             return new Action({
                 action: () => {
                     component.app.router.call(obj);

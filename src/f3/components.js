@@ -145,7 +145,7 @@ export const Container = defineMixin((base=Component) => class Container extends
     }
 
     addComponent(component, index) {
-        if (index === undefined || index == this.children.length) {
+        if (index === undefined || index === this.children.length) {
             index = this.children.length;
             this.element.appendChild(component.element);
             this.children.push(component);

@@ -9,17 +9,17 @@ export class Signal {
 
     then(callback) {
         this.listeners.push(callback);
-        if (this.listeners.length == 1 && this.setup) {
+        if (this.listeners.length === 1 && this.setup) {
             this.setup.call(this);
         }
     }
 
     remove(callback) {
         let index = this.listeners.indexOf(callback);
-        if (index != -1) {
+        if (index !== -1) {
             this.listeners.splice(index, 1);
         }
-        if (this.listeners.length == 0 && this.teardown) {
+        if (this.listeners.length === 0 && this.teardown) {
             this.teardown.call(this);
         }
     }

@@ -79,15 +79,15 @@ export class List extends Container() {
 
     set cursorIndex(index) {
         index = index % this.model.length;
-        if (index == this._cursorIndex) {
+        if (index === this._cursorIndex) {
             return;
         }
-        if (this._cursorIndex != -1) {
+        if (this._cursorIndex !== -1) {
             let component = this.componentMap[this.model.get(this._cursorIndex)];
             component.removeClass(this.cursorClass);
         }
         this._cursorIndex = index;
-        if (index == -1) {
+        if (index === -1) {
             return;
         }
         let item = this.model.get(index);
@@ -101,7 +101,7 @@ export class List extends Container() {
     }
 
     moveCursorUp() {
-        if (this.cursorIndex != -1) {
+        if (this.cursorIndex !== -1) {
             this.cursorIndex = this.cursorIndex + this.model.length - 1;
         }
         else {

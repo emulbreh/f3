@@ -12,7 +12,7 @@ export class Renderer {
     }
 
     static [__adapt__](obj) {
-        if (typeof(obj) == 'string') {
+        if (typeof(obj) === 'string') {
             return new Renderer(sprintf.bind(null, obj));
         }
         if (obj instanceof Function) {

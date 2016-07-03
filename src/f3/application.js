@@ -99,7 +99,7 @@ export class Application {
             e.preventDefault();
         });
         window.addEventListener('click', (e) => {
-            if (e.target.tagName == 'A') {
+            if (e.target.tagName === 'A') {
                 e.preventDefault();
                 this.router.call(e.target.pathname);
             }
