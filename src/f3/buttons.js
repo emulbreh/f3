@@ -44,7 +44,7 @@ export class ToggleButton extends Button {
         if (value) {
             this.addClass('toggled');
         }
-        else {
+        else{
             this.removeClass('toggled');
         }
     }

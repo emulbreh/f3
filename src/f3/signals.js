@@ -26,7 +26,9 @@ export class Signal {
 
     once(callback) {
         this.then(callback);
-        this.then(() => {this.remove(callback);});
+        this.then(() => {
+            this.remove(callback);
+        });
     }
 
     emit(event={}) {

@@ -137,7 +137,7 @@ export class Number extends Type {
 
 export class Float extends Number {
     constructor({...config}) {
-        super({inputFactory: FloatInput, ...config});
+        super({...config});
     }
 
     coerce(value) {
@@ -198,7 +198,7 @@ export class ListModel{
         this.itemsReordered.emit({model: this});
     }
 
-    get(index) {
+    get(index) {
         return this.items[index];
     }
 

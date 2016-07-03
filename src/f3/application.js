@@ -1,5 +1,6 @@
 import {Root, Frame, Container} from './components';
 import {F3Error} from './errors';
+import 'mousetrap';
 
 
 export class Page {

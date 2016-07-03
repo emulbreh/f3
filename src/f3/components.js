@@ -150,7 +150,7 @@ export const Container = defineMixin((base=Component) => class Container extends
             this.element.appendChild(component.element);
             this.children.push(component);
         }
-        else {
+        else{
             this.element.insertBefore(this.components[index].element, component.element);
             this.children.splice(index, 0, component);
         }

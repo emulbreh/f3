@@ -167,8 +167,12 @@ export class SelectBox extends ChoiceInput {
             this.open();
         });
         this.choiceDisplay.installKeymap({
-            'space': () => {this.open();},
-            'escape': () => {this.close();}
+            'space': () => {
+                this.open();
+            },
+            'escape': () => {
+                this.close();
+            }
         });
         this.focusElement = this.choiceDisplay.element;
     }

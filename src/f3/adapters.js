@@ -5,7 +5,9 @@ export const __adapt__ = Symbol('f3.adapt');
 const nativeAdapters = new Map();
 
 
-export class AdapterError extends F3Error {}
+export class AdapterError extends F3Error{
+
+}
 
 
 export function adapt(cls, obj, ...ctx) {

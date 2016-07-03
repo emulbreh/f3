@@ -14,9 +14,15 @@ export class List extends Container() {
         // FIXME: componentMap doesn't work for duplicate list items
         this.itemFactory = adapt(ComponentFactory, itemFactory);
         this.componentMap = new Map();
-        model.itemAdded.then((e) => {this.addItem(e.item);});
-        model.itemRemoved.then((e) => {this.removeItem(e.item);});
-        model.itemsReordered.then((e) => {this.applyOrdering();});
+        model.itemAdded.then((e) => {
+            this.addItem(e.item);
+        });
+        model.itemRemoved.then((e) => {
+            this.removeItem(e.item);
+        });
+        model.itemsReordered.then((e) => {
+            this.applyOrdering();
+        });
 
         this.itemClicked = new Signal();
         this.itemSelected = new Signal();
