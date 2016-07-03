@@ -79,10 +79,6 @@ export class Component {
 
     *getComponents() {
         yield this;
-    }
-
-    *getComponents() {
-        yield this;
         for (let child of this.getChildren()) {
             yield* child.getComponents();
         }
@@ -100,12 +96,12 @@ export class Component {
     }
 
     show() {
-        this.element.style.display = '';
+        this.removeClass('hidden');
         return Promise.resolve();
     }
 
     hide() {
-        this.element.style.display = 'none';
+        this.addClass('hidden');
         return Promise.resolve();
     }
 
@@ -137,7 +133,7 @@ function defineMixin(func) {
 }
 
 
-export var Container = defineMixin((base=Component) => class Container extends base {
+export const Container = defineMixin((base=Component) => class Container extends base {
     constructor({children=[], ...config}={}) {
         super(config);
         this.children = [];

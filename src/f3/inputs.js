@@ -1,6 +1,6 @@
 import {Component, Container, Display} from './components';
 import {List} from './lists';
-import {adapt, toString} from './adapters'
+import {adapt, toString} from './adapters';
 import {Signal, HtmlSignal} from './signals';
 import {Renderer} from './renderers';
 import {Label} from './labels';
@@ -43,11 +43,13 @@ export class Input extends Component {
 
 
 export class RawInput extends Input {
-    constructor({inputType='text', focusable=true, placeholder='', ...config}={}) {
+    constructor({inputType='text', inputTagName='input', focusable=true, placeholder='', ...config}={}) {
         super({...config, focusable: false});
 
-        this.inputElement = document.createElement('input');
-        this.inputElement.type = inputType;
+        this.inputElement = document.createElement(inputTagName);
+        if (inputType) {
+            this.inputElement.type = inputType;
+        }
         this.inputElement.placeholder = placeholder;
         this.element.appendChild(this.inputElement);
 
@@ -91,6 +93,23 @@ export class TextInput extends RawInput {
 
     getValue() {
         return this._value;
+    }
+}
+
+export class TextArea extends RawInput {
+    constructor({...config}) {
+        super({
+            inputTagName: 'textarea',
+            inputType: null,
+            ...config
+        });
+    }
+}
+
+
+export class IntegerInput extends TextInput {
+    getValue() {
+        return parseInt(super.getValue(), 10);
     }
 }
 

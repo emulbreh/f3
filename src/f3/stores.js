@@ -7,7 +7,7 @@ class ObjectDoesNotExist extends F3Error {
 
 
 class Store {
-    constructor({pkProperty: 'pk'}) {
+    constructor({pkProperty='pk'}) {
         this.pkProperty = pkProperty;
         this.instanceCache = new Map();
     }

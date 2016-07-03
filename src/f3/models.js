@@ -1,13 +1,48 @@
 import {Signal} from './signals';
+import {constant, uniqueId} from './utils';
+import {adapt} from './adapters';
+import {Label} from './labels';
+import {ComponentFactory} from './componentFactories';
+import {TextInput, Checkbox} from './inputs';
+
 
 export const properties = Symbol('f3.properties');
 export const initialized = Symbol('f3.initialized');
+export const __id__ = Symbol('f3.__id__')
+
 const modelData = Symbol('f3.modelData');
 
 
+export function idof(x) {
+    let type = typeof(x);
+    if (type === 'object' && x !== null || type === 'function') {
+        let id = x[__id__];
+        if (id === undefined) {
+            id = x[__id__] = `${x.constructor.name}:${uniqueId()}`;
+        }
+        else if (typeof(id) === 'function') {
+            id = id.call(x);
+        }
+        return id;
+    }
+    else {
+        return `${type}:${x}`;
+    }
+}
+
+
 export class Property {
-    constructor(name) {
+    constructor(name, {inputFactory=null, type=null, label=null, validator=constant(true), choices=null, ...config}={}) {
         this.name = name;
+        this.type = type;
+        this.label = adapt(Label, label || name);
+        this.choices = choices;
+        this.validator = validator;
+        this._inputFactory = inputFactory ? adapt(ComponentFactory, inputFactory) : null;
+    }
+
+    get inputFactory() {
+        return this._inputFactory || this.type.inputFactory;
     }
 
     get(obj) {
@@ -38,6 +73,89 @@ export class Property {
             }
         });
     }
+}
+
+
+export class Type {
+    constructor({inputFactory}) {
+        this.inputFactory = adapt(ComponentFactory, inputFactory || this.constructor.defaultInputFactory);
+    }
+}
+
+
+export class String extends Type {
+    static defaultInputFactory = TextInput;
+
+    constructor({regex=null, ...config}={}) {
+        super({...config});
+        this.regex = regex;
+    }
+
+    coerce(value) {
+        return '' + value;
+    }
+
+    *validate(value) {
+        if (typeof(value) != 'string') {
+            yield 'must be of type string'
+        }
+        if (this.regex && !this.regex.test(value)) {
+            yield `must match ${this.regex}`;
+        }
+    }
+}
+
+export class Boolean extends Type {
+    static defaultInputFactory = Checkbox;
+
+    constructor({...config}={}) {
+        super(config);
+    }
+}
+
+
+export class Number extends Type {
+    static defaultInputFactory = TextInput;
+
+    constructor({min, max, ...config}={}) {
+        super({...config});
+        this.min = min;
+        this.max = max;
+    }
+
+    *validate(value) {
+        yield* super.validate(value);
+        if (this.min !== undefined && value < this.min) {
+            yield `must be bigger than ${this.min}`;
+        }
+        if (this.max !== undefined && value > this.max) {
+            yield `must be smaller than ${this.max}`;
+        }
+    }
+}
+
+
+export class Float extends Number {
+    constructor({...config}) {
+        super({inputFactory: FloatInput, ...config});
+    }
+
+    coerce(value) {
+        return parseFloat(value);
+    }
+
+}
+
+
+export class Integer extends Number {
+    constructor({...config}) {
+        super({...config});
+    }
+
+    coerce(value) {
+        return parseInt(value, 10);
+    }
+
 }
 
 

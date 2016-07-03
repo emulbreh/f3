@@ -11,6 +11,19 @@ let list = new f3.ListModel({
 
 let selectBox, comboBox;
 
+class Todo extends f3.Model{
+    static properties = [
+        new f3.Property('title', {inputFactory: f3.TextInput}),
+        new f3.Property('description', {inputFactory: f3.TextArea}),
+        new f3.Property('done', {type: new f3.Boolean(), label: 'DONE'}),
+        new f3.Property('priority', {type: new f3.Integer(), choices: [
+            {label: 'low', value: 0},
+            {label: 'default', value: 1},
+            {label: 'high', value: 3}
+        ]})
+    ];
+}
+
 let container = new f3.Panel({children: [
     new f3.Display({
         className: 'menu',
@@ -21,9 +34,11 @@ let container = new f3.Panel({children: [
     }),
     new f3.Display({
         model: '<i class="fa fa-circle-o-notch fa-spin" />'
+    }),
+    new f3.Panel({
+        children: [f3.makeModelForm(Todo)]
     })
 ]});
-let canvas = document.createElement('canvas');
 
 let form = new f3.Form({
     children: [
@@ -53,6 +68,10 @@ let form = new f3.Form({
                         name: 'nested',
                         placeholder: 'Foo'
                     }),
+                    new f3.TextArea({
+                        name: 'nested',
+                        placeholder: 'Foo'
+                    })
                 ]
             })
         })
@@ -138,4 +157,17 @@ app.addPage('/foo', new f3.Page({
 app.addPage('/bar', new f3.Page({
     root: new f3.Display({model: "bar page"})
 }));
-console.log("xxxx");
+/*
+console.log(f3.idof("foo"));
+console.log(f3.idof(42));
+console.log(f3.idof(true));
+console.log(f3.idof(null));
+console.log(f3.idof(undefined));
+console.log(f3.idof({}));
+let xxx = {};
+console.log(f3.idof(xxx));
+console.log(f3.idof(xxx));
+console.log(f3.idof(okButton));
+console.log(f3.idof(app));
+console.log(f3.idof(document.body));
+*/
