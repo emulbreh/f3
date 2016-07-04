@@ -1,34 +1,14 @@
 import {Signal} from './signals';
-import {constant, uniqueId} from './utils';
+import {constant} from './utils';
 import {adapt} from './adapters';
 import {Label} from './labels';
 import {ComponentFactory} from './componentFactories';
-import {TextInput, Checkbox} from './inputs';
+import {__value__} from './protocols';
 
 
-export const properties = Symbol('f3.properties');
-export const initialized = Symbol('f3.initialized');
-export const __id__ = Symbol('f3.__id__')
-
-const modelData = Symbol('f3.modelData');
-
-
-export function idof(x) {
-    let type = typeof(x);
-    if (type === 'object' && x !== null || type === 'function') {
-        let id = x[__id__];
-        if (id === undefined) {
-            id = x[__id__] = `${x.constructor.name}:${uniqueId()}`;
-        }
-        else if (typeof(id) === 'function') {
-            id = id.call(x);
-        }
-        return id;
-    }
-    else {
-        return `${type}:${x}`;
-    }
-}
+const initialized = Symbol('f3.initialized');
+const __data__ = Symbol('f3.__data__');
+const __properties__ = Symbol('f3.__properties__')
 
 
 export class Property {
@@ -46,13 +26,13 @@ export class Property {
     }
 
     get(obj) {
-        return obj[modelData][this.name];
+        return obj[__data__][this.name];
     }
 
     set(obj, value) {
-        let oldValue = obj[modelData][this.name];
+        let oldValue = obj[__data__][this.name];
         if (oldValue !== value) {
-            obj[modelData][this.name] = value;
+            obj[__data__][this.name] = value;
             obj.propertyChanged.emit({
                 model: obj,
                 property: this,
@@ -76,92 +56,28 @@ export class Property {
 }
 
 
-export class Type {
-    constructor({inputFactory}) {
-        this.inputFactory = adapt(ComponentFactory, inputFactory || this.constructor.defaultInputFactory);
-    }
-}
-
-
-export class String extends Type {
-    static defaultInputFactory = TextInput;
-
-    constructor({regex=null, ...config}={}) {
-        super({...config});
-        this.regex = regex;
-    }
-
-    coerce(value) {
-        return '' + value;
-    }
-
-    *validate(value) {
-        if (typeof(value) !== 'string') {
-            yield 'must be of type string'
+export function prop(model, name) {
+    let property = model.constructor.getProperty(name);
+    let changed = new Signal();
+    model.propertyChanged.then((e) => {
+        if (e.property === property) {
+            changed.emit(e);
         }
-        if (this.regex && !this.regex.test(value)) {
-            yield `must match ${this.regex}`;
+    });
+    return {
+        changed,
+        get value() {
+            return this[__value__];
+        },
+        get [__value__]() {
+            return property.get(model);
         }
     }
 }
-
-export class Boolean extends Type {
-    static defaultInputFactory = Checkbox;
-
-    constructor({...config}={}) {
-        super(config);
-    }
-}
-
-
-export class Number extends Type {
-    static defaultInputFactory = TextInput;
-
-    constructor({min, max, ...config}={}) {
-        super({...config});
-        this.min = min;
-        this.max = max;
-    }
-
-    *validate(value) {
-        yield* super.validate(value);
-        if (this.min !== undefined && value < this.min) {
-            yield `must be bigger than ${this.min}`;
-        }
-        if (this.max !== undefined && value > this.max) {
-            yield `must be smaller than ${this.max}`;
-        }
-    }
-}
-
-
-export class Float extends Number {
-    constructor({...config}) {
-        super({...config});
-    }
-
-    coerce(value) {
-        return parseFloat(value);
-    }
-
-}
-
-
-export class Integer extends Number {
-    constructor({...config}) {
-        super({...config});
-    }
-
-    coerce(value) {
-        return parseInt(value, 10);
-    }
-
-}
-
 
 export class Model {
     constructor(config) {
-        this[modelData] = {};
+        this[__data__] = {};
         this.constructor.initClass();
         this.propertyChanged = new Signal();
     }
@@ -170,10 +86,17 @@ export class Model {
         if (this[initialized]) {
             return;
         }
+        let properties = {};
         for (let property of this.properties) {
             property.define(this);
+            properties[property.name] = property;
         }
+        this[__properties__] = properties;
         this[initialized] = true;
+    }
+
+    static getProperty(name) {
+        return this[__properties__][name];
     }
 }
 

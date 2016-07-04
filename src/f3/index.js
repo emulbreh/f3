@@ -15,8 +15,9 @@ export {ComponentStructureError, F3Error} from './errors';
 export {TextInput, Checkbox, RawInput, Form, SelectBox, ComboBox, Field, TextArea} from './inputs';
 export {Label, defaultLabels} from './labels';
 export {List} from './lists';
-export {Model, Property, ListModel, properties, idof, __id__} from './models';
-export {Type, Boolean, String, Number, Float, Integer} from './models';
+export {Model, Property, ListModel} from './models';
 export {makeModelForm} from './modelForms';
+export {idof, __id__, valueof, __value__} from './protocols';
+export {Type, Boolean, String, Number, Float, Integer} from './types';
 
 import './defaultConfig';

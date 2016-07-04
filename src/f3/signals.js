@@ -1,4 +1,16 @@
 
+export class MockSignal {
+    then() {
+
+    }
+    remove() {
+
+    }
+    once() {
+        
+    }
+}
+
 export class Signal {
     constructor({name, setup, teardown}={}) {
         this.name = name;
