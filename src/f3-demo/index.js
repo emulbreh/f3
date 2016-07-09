@@ -1,5 +1,7 @@
 import * as f3 from 'f3';
 
+window.f3 = f3;
+
 import './assets/demo.scss';
 import 'mousetrap';
 
@@ -24,6 +26,10 @@ class Todo extends f3.Model{
     ];
 }
 
+let todo = new Todo();
+
+let todoList = new f3.ListModel({});
+
 let container = new f3.Panel({children: [
     new f3.Display({
         className: 'menu',
@@ -36,7 +42,20 @@ let container = new f3.Panel({children: [
         model: '<i class="fa fa-circle-o-notch fa-spin" />'
     }),
     new f3.Panel({
-        children: [f3.makeModelForm(Todo)]
+        children: [
+            f3.makeModelForm(Todo, {model: todo}),
+            f3.makeModelForm(Todo, {model: todo})
+        ]
+    }),
+    new f3.FormSet({
+        model: todoList,
+        cls: Todo
+    }),
+    new f3.List({
+        model: todoList,
+        itemFactory: [f3.Display, {
+            renderer: f3.format('#{title!03i=0} {title="–"} {done} {description!r}')
+        }]
     })
 ]});
 

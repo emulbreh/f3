@@ -19,5 +19,8 @@ export {Model, Property, ListModel} from './models';
 export {makeModelForm} from './modelForms';
 export {idof, __id__, valueof, __value__} from './protocols';
 export {Type, Boolean, String, Number, Float, Integer} from './types';
+export {FormSet} from './formsets.js';
+export {format} from './format.js';
+export {repr, __repr__} from './utils';
 
 import './defaultConfig';

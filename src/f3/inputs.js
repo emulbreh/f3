@@ -66,6 +66,10 @@ export class RawInput extends Input {
             component: this,
             element: this.inputElement
         });
+
+        this.inputElement.addEventListener('input', (e) => {
+            this.value = e.target.value;
+        });
     }
 
     setValue(val) {
@@ -86,9 +90,6 @@ export class RawInput extends Input {
 export class TextInput extends RawInput {
     constructor({...config}={}) {
         super(config);
-        this.inputElement.addEventListener('keypress', (e) => {
-            this.setValue(this.inputElement.value);
-        });
     }
 
     getValue() {
@@ -117,9 +118,13 @@ export class IntegerInput extends TextInput {
 export class Checkbox extends RawInput {
     constructor(config={}) {
         super({inputType: 'checkbox', ...config});
+        this.inputElement.addEventListener('change', (e) => {
+            this.value = this.getValue();
+        });
     }
 
     setValue(val) {
+        super.setValue(val);
         this.inputElement.checked = !!val;
     }
 
@@ -213,12 +218,25 @@ export class ComboBox extends ChoiceInput {
 
 
 export class Form extends Container(Input) {
+    getInputs() {
+        return this.findClosestDecendants((c) => c instanceof Input);
+    }
+    getInput(name) {
+        return [...this.getInputs()].find((c) => c.name === name);
+    }
+
     get value() {
         let obj = {};
-        for (let input of this.findClosestDecendants((c) => c instanceof Input)) {
+        for (let input of this.getInputs()) {
             obj[input.name] = input.value;
         }
         return obj;
+    }
+
+    set value(obj) {
+        for (let input of this.getInputs()) {
+            input.value = obj[input.name];
+        }
     }
 }
 

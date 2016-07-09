@@ -7,7 +7,7 @@ export class MockSignal {
 
     }
     once() {
-        
+
     }
 }
 
@@ -20,6 +20,9 @@ export class Signal {
     }
 
     then(callback) {
+        if (!callback) {
+            throw new Error("Signal callback must be callable");
+        }
         this.listeners.push(callback);
         if (this.listeners.length === 1 && this.setup) {
             this.setup.call(this);

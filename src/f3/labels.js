@@ -44,5 +44,6 @@ export class Label extends ComponentFactory{
 export const defaultLabels = {
     ok: new Label({text: 'Ok', icon: 'check'}),
     cancel: new Label({text: 'Cancel', icon: 'close'}),
-    close: new Label({icon: 'close'})
+    close: new Label({icon: 'close'}),
+    add: new Label({text: 'Add', icon: 'plus'}),
 };

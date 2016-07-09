@@ -13,7 +13,15 @@ export class ModelForm extends Form {
 
     set model(m) {
         this._model = m;
-
+        this.value = m.getData();
+        for (let input of this.getInputs()) {
+            input.valueChanged.then((e) => {
+                m[input.name] = e.value;
+            });
+        }
+        m.propertyChanged.then((e) => {
+            this.getInput(e.property.name).value = e.value;
+        });
     }
 }
 
@@ -23,12 +31,14 @@ export function makeModelForm(cls, config={}) {
         fields.push(new Field({
             name: property.name,
             label: property.label,
-            input: property.inputFactory.create()
+            input: property.inputFactory.create({
+                name: property.name
+            })
         }));
     }
     return new ModelForm({
         children: fields,
-        model: new cls(),
+        model: config.model || new cls(),
         ...config
     });
 }

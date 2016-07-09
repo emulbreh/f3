@@ -45,6 +45,7 @@ export class Property {
     define(cls) {
         const self = this;
         Object.defineProperty(cls.prototype, this.name, {
+            enumerable: true,
             get: function() {
                 return self.get(this);
             },
@@ -76,8 +77,8 @@ export function prop(model, name) {
 }
 
 export class Model {
-    constructor(config) {
-        this[__data__] = {};
+    constructor(data={}) {
+        this[__data__] = data;
         this.constructor.initClass();
         this.propertyChanged = new Signal();
     }
@@ -98,11 +99,15 @@ export class Model {
     static getProperty(name) {
         return this[__properties__][name];
     }
+
+    getData() {
+        return this[__data__];
+    }
 }
 
 
 export class ListModel{
-    constructor({items, ...config}) {
+    constructor({items=[], ...config}) {
         this.items = items;
         this.itemAdded = new Signal();
         this.itemRemoved = new Signal();

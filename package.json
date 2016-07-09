@@ -41,6 +41,7 @@
     "bourbon": "^4.2.7",
     "bourbon-neat": "^1.7.4",
     "chart.js": "^2.1.6",
+    "lodash": "^4.13.1",
     "mousetrap": "^1.6.0",
     "neat": "^1.2.2",
     "sprintf": "^0.1.5"

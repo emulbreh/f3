@@ -185,18 +185,29 @@ export class Display extends Component {
     constructor({model, renderer=toString, ...config}={}) {
         super(config);
         this.renderer = adapt(Renderer, renderer);
+        this._boundUpdate = this.update.bind(this);
         this.model = model;
     }
 
-    set model(model) {
-        this._model = model;
-        if (model instanceof HTMLElement) {
+    update() {
+        if (this._model instanceof HTMLElement) {
             this.element.innerHTML = '';
-            this.element.appendChild(model);
+            this.element.appendChild(this._model);
         }
         else {
-            this.element.innerHTML = this.renderer.render(model);
+            this.element.innerHTML = this.renderer.render(this._model);
         }
+    }
+
+    set model(model) {
+        if (this._model && this._model.propertyChanged) {
+            this._model.propertyChanged.remove(this._boundUpdate);
+        }
+        this._model = model;
+        if (model && model.propertyChanged) {
+            model.propertyChanged.then(this._boundUpdate);
+        }
+        this.update();
     }
 
     get model() {
