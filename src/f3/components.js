@@ -1,5 +1,5 @@
 import {ComponentStructureError} from './errors';
-import {identity} from './utils';
+import {identity, repr} from './utils';
 import {adapt, toString} from './adapters';
 import {Signal, HtmlSignal} from './signals';
 import {Renderer} from './renderers';

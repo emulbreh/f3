@@ -58,7 +58,7 @@ export function format(src) {
             formatFunc = paddedFormat(flags, width, precision, formatFunc);
         }
         replacements.push((args) => {
-            let value = args[attr];
+            let value = args === undefined ? undefined : args[attr];
             if (value === undefined && defaultValue !== undefined) {
                 value = eval(defaultValue);
             }

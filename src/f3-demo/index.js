@@ -36,9 +36,6 @@ let container = new f3.Panel({children: [
         model: 'Demo'
     }),
     new f3.Display({
-        model: 'Lorem ipsum dolor sit amet, <a href="/foo">consetetur</a> sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
-    }),
-    new f3.Display({
         model: '<i class="fa fa-circle-o-notch fa-spin" />'
     }),
     new f3.Panel({
@@ -51,10 +48,14 @@ let container = new f3.Panel({children: [
         model: todoList,
         cls: Todo
     }),
+    new f3.SelectBox({
+        model: todoList,
+        renderer: f3.format('{title="–"}')
+    }),
     new f3.List({
         model: todoList,
         itemFactory: [f3.Display, {
-            renderer: f3.format('#{title!03i=0} {title="–"} {done} {description!r}')
+            renderer: f3.format('<b>#{title!03i=0}</b><br/> {title="–"} {done} {description!r}')
         }]
     })
 ]});

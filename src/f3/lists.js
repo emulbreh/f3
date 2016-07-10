@@ -2,6 +2,7 @@ import {Component, Container} from './components';
 import {ComponentFactory} from './componentFactories';
 import {adapt} from './adapters';
 import {Signal} from './signals';
+import {uniqueId} from './utils';
 
 
 export class List extends Container() {
@@ -13,6 +14,7 @@ export class List extends Container() {
 
         // FIXME: componentMap doesn't work for duplicate list items
         this.itemFactory = adapt(ComponentFactory, itemFactory);
+        this.itemMap = new Map();
         this.componentMap = new Map();
         model.itemAdded.then((e) => {
             this.addItem(e.item);
@@ -30,10 +32,12 @@ export class List extends Container() {
         this.clicked.then((e) => {
             let element = e.event.target;
             while (element) {
-                let item = element.dataset.item;
-                if (item) {
-                    this.onItemClicked(item);
-                    break;
+                if (element.dataset) {
+                    let itemId = element.dataset.itemId;
+                    if (itemId) {
+                        this.onItemClicked(this.itemMap[itemId]);
+                        break;
+                    }
                 }
                 element = element.parentNode;
             }
@@ -125,12 +129,15 @@ export class List extends Container() {
 
     addItem(item) {
         let component = this.itemFactory.create({model: item});
-        component.element.dataset.item = item;
+        let id = uniqueId(item);
+        component.element.dataset.itemId = id;
         this.addComponent(component);
         this.componentMap[item] = component;
+        this.itemMap[id] = item;
     }
 
     removeItem(item) {
         this.removeComponent(this.componentMap[item]);
+        // FIXME: remove from itemMap, componentMap, ...
     }
 }
