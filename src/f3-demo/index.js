@@ -1,11 +1,10 @@
 import * as f3 from 'f3';
+import {CodeMirrorEditor} from 'f3-codemirror';
 
 window.f3 = f3;
 
 import './assets/demo.scss';
 import 'mousetrap';
-
-Mousetrap.bind('alt+f', (e) => {console.log("Mousetrap", e);})
 
 let list = new f3.ListModel({
     items: [1.111, 2.222],
@@ -16,7 +15,7 @@ let selectBox, comboBox;
 class Todo extends f3.Model{
     static properties = [
         new f3.Property('title', {inputFactory: f3.TextInput}),
-        new f3.Property('description', {inputFactory: f3.TextArea}),
+        new f3.Property('description', {inputFactory: CodeMirrorEditor}),
         new f3.Property('done', {type: new f3.Boolean(), label: 'DONE'}),
         new f3.Property('priority', {type: new f3.Integer(), choices: [
             {label: 'low', value: 0},

@@ -7,7 +7,7 @@ import {Label} from './labels';
 
 
 export class Input extends Component {
-    constructor({name, value=null, ...config}={}) {
+    constructor({name, ...config}={}) {
         super(config);
         this.name = name;
         this.valueChanged = new Signal();
